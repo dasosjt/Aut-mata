@@ -1,13 +1,16 @@
+//g++ main.cpp -o testBoost -Lc:\Boostbuild\lib -Ic:\Boostbuild\include\boost-1_6
+
 #include <iostream>
 #include <string>
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/json_parser.hpp>
 
 int main(){
-  /*std::cout << "Have " << argc << " arguments:" << std::endl;
-  for(int i = 0; i < argc; i++){
-    std::cout << argv[i] << std::endl;
-  }*/
-  std::string exprsn;
-  std::cout << "Ingregsar expresion regular ";
-  getline (std::cin, exprsn);
-  std::cout << exprsn << "\n";
+
+  boost::property_tree::ptree tree;
+  tree.put("test_name", "test_value");
+
+  boost::property_tree::write_json("./output.json", tree);
+
+  return 0;
 }
