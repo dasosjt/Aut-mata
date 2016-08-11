@@ -23,12 +23,13 @@ boost::property_tree::ptree parseToTree(std::vector<char> tokens){
 }
 
 int main(){
-
+  //Creamos la raiz principal de arbol
   boost::property_tree::ptree tree;
   tree.put("test_name", "test_value");
 
   std::string str("Spjdst");
   std::vector<char> tokens(str.begin(), str.end());
+
   for(int i = 0; i < tokens.size(); ++i){
     std::cout << tokens[i];
   }
