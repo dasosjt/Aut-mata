@@ -3,12 +3,14 @@
 
 #include <string>
 
+using namespace std;
+
 class Hello{
 
-private:
-    std::string name;
+  private:
+    string name;
 
-public:
+  public:
     Hello();
     void say_hello();
 };
