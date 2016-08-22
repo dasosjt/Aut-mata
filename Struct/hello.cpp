@@ -4,7 +4,7 @@
 
 using namespace std;
 
-Hello::Hello()
+Hello::tree()
 {
     this->name = "Yoppy Yunhasnawa";
 }
