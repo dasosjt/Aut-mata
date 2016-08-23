@@ -15,7 +15,6 @@ class Tree{
   public:
     tree();
     void insert(string key);
-    void add(Tree child);
 
   private:
     node *root;

@@ -20,12 +20,3 @@ void Tree::insert(string key){
     root->right = NULL;
   }
 }
-
-/*void Tree::add(String key, node *leaf){
-  if(leaf->left != NULL){
-    leaf->left->key_value = key;
-  } else {
-    leaf->right->key_value = key;
-  }
-}
-*/
