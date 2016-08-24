@@ -102,12 +102,16 @@ void Tree::parse(string exprsn){
     if(first == "|" || first == "*" || first == "(" || first == "^"){
       if(operations.size() > 0){
         if(first == "|" && (operations.top() == "|" ||  operations.top() == "^" || operations.top() == "*")){
-          expressionRPN.push(operations.top());
-          operations.pop();
+          while (operations.size() != 0){
+            expressionRPN.push(operations.top());
+            operations.pop();
+          };
         };
         if(first == "^" && (operations.top() == "^" || operations.top() == "*")){
-          expressionRPN.push(operations.top());
-          operations.pop();
+          while (operations.size() != 0){
+            expressionRPN.push(operations.top());
+            operations.pop();
+          };
         };
       };
       operations.push(first);
