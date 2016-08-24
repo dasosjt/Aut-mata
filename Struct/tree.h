@@ -21,7 +21,6 @@ class Tree{
     void addOrNode();
     void addMulNode();
     void addBraNode();
-    void generateTree();
     void printLevel(node* root, int level);
     void display();
 
