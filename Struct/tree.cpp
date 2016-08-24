@@ -7,7 +7,7 @@
 using namespace std;
 
 Tree::tree(){
-    root = NULL;
+
 }
 
 void Tree::printLevel(node* root, int indent){
@@ -22,7 +22,7 @@ void Tree::printLevel(node* root, int indent){
 }
 
 void Tree::display(){
-  printLevel(expression.top(), 1);
+  printLevel(expression.top(), 0);
 }
 
 node* Tree::addNode(string key){
@@ -57,17 +57,15 @@ void Tree::addMulNode(){
 }
 
 void Tree::addBraNode(){
-  if(op.size()>1 && expression.size() > 0){
-    cout << "AddBradNode Recursive" << endl;
-    string optodo = op.top();
-    op.pop();
-    if(optodo == "|"){
-      addOrNode();
-    } else if (optodo == "^"){
-      addMulNode();
-    };
-    addBraNode();
-  }else{
+    if(operations.size() > 1){
+      string todo = operations.top();
+      operations.pop();
+      if(todo == "|"){
+        addOrNode();
+      } else if (todo == "^"){
+        addMulNode();
+      };
+    }
     cout << "Agregando nodo ()" <<endl;
     node* braNode = new node;
     braNode->key_value = "()";
@@ -75,69 +73,56 @@ void Tree::addBraNode(){
     expression.pop();
     braNode->right = NULL;
     expression.push(braNode);
-    if(op.size() > 0 && expression.size() > 0){
-      string optodo = op.top();
-      op.pop();
-      if(optodo == "|"){
-        addOrNode();
-      } else if (optodo == "^"){
-        addMulNode();
-      };
-    };
-  };
+}
+
+void Tree::addCleanNode(){
+    cout << "Agregando nodo *" <<endl;
+    node* cleanNode = new node;
+    cleanNode->key_value = "*";
+    cleanNode->left = expression.top();
+    expression.pop();
+    cleanNode->right = NULL;
+    expression.push(cleanNode);
 }
 
 void Tree::parse(string exprsn){
-  if(exprsn.size()>0){
-    cout << "Expresion antes de parsear " << exprsn << endl;
-    cout << "Size Expression Node " << expression.size() << endl;
-    cout << "Size Brackets " << brackets.size() << endl;
-    cout << "Size Operacion " << op.size()<< endl;
+  cout << "size Queue RPN " << expressionRPN.size() << endl
+       << "size Stack Op "  << operations.size() << endl;
+  if(exprsn.size() > 0){
     string first = exprsn.substr(0,1);
     string last = exprsn.substr(1,exprsn.size());
-    if(first == "("){
-      if(op.size() == 0 && expression.size() > 0){
-        cout << "Operacion ^, sin aplicar" <<endl;
-        op.push("^");
-      };
-      brackets.push(first);
-      cout << "Bracket push" <<endl;
-      cout << brackets.size() <<endl;
-      parse(last);
-    }
+    cout << first << endl;
     if(first == ")"){
-      brackets.pop();
-      cout << "Bracket pop" <<endl;
-      cout << brackets.size() <<endl;
-      addBraNode();
-      cout << "Size Expression Node " << expression.size() << endl;
-      cout << "Size Brackets " << brackets.size() << endl;
-      cout << "Size Operacion " << op.size()<< endl;
-      parse(last);
+      while(operations.top() != "("){
+        expressionRPN.push(operations.top());
+        operations.pop();
+      };
+      operations.pop();
+    };
+    if(first == "|" || first == "*" || first == "(" || first == "^"){
+      if(operations.size() > 0){
+        if(first == "|" && (operations.top() == "|" ||  operations.top() == "^" || operations.top() == "*")){
+          expressionRPN.push(operations.top());
+          operations.pop();
+        };
+        if(first == "^" && (operations.top() == "^" || operations.top() == "*")){
+          expressionRPN.push(operations.top());
+          operations.pop();
+        };
+      };
+      operations.push(first);
+    }else if (first != ")"){
+      expressionRPN.push(first);
+    };
+    parse(last);
+  } else {
+    while(operations.size()>0){
+      expressionRPN.push(operations.top());
+      operations.pop();
+    };
+    while(expressionRPN.size()>0){
+      cout << expressionRPN.front() << endl;
+      expressionRPN.pop();
     }
-    if(first == "|"){
-      cout << "Operacion |, sin aplicar" <<endl;
-      op.push(first);
-      parse(last);
-    };
-    if(first == "b" || first == "a"){
-      cout << "Caracter " << first << endl;
-      expression.push(addNode(first));
-      if(op.size() == 0 && expression.size() > 1){
-        cout << "Operacion ^, sin aplicar" <<endl;
-        op.push("^");
-        parse(last);
-      };
-      if(op.size() > 0 && expression.size() > 0 && brackets.size() == 0){
-        string optodo = op.top();
-        op.pop();
-        if(optodo == "|"){
-          addOrNode();
-        } else if (optodo == "^"){
-          addMulNode();
-        }
-      };
-      parse(last);
-    };
   };
 }

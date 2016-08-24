@@ -3,6 +3,7 @@
 
 #include <string>
 #include <stack>
+#include <queue>
 
 using namespace std;
 
@@ -15,20 +16,20 @@ struct node{
 class Tree{
   public:
     tree();
-    void insert(string key);
-    void parse(string exprsn);
     node* addNode(string key);
+    void parse(string exprsn);
     void addOrNode();
     void addMulNode();
     void addBraNode();
+    void addCleanNode();
     void printLevel(node* root, int level);
     void display();
 
   private:
-    node *root;
+    queue<string> expressionRPN;
     stack<node*> expression;
     stack<string> brackets;
-    stack<string> op;
+    stack<string> operations;
 
 };
 

@@ -9,5 +9,4 @@ int main(int argc, char *argv[]){
     string exprsn;
     cin >> exprsn ;
     tree->parse(exprsn);
-    tree->display();
 }
