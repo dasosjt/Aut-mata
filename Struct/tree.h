@@ -22,6 +22,8 @@ class Tree{
     void addMulNode();
     void addBraNode();
     void generateTree();
+    void printLevel(node* root, int level);
+    void display();
 
   private:
     node *root;

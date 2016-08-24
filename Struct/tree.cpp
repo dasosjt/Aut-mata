@@ -1,12 +1,28 @@
 #include "tree.h"
 #include <iostream>
 #include <string>
+#include <iomanip>
 
 
 using namespace std;
 
 Tree::tree(){
     root = NULL;
+}
+
+void Tree::printLevel(node* root, int indent){
+  if (root != NULL)
+   {
+       printLevel(root->left, indent + 4);
+       if (indent > 0)
+           cout << std::setw(indent) << " ";
+       cout << root->key_value << endl;
+       printLevel(root->right, indent + 4);
+   }
+}
+
+void Tree::display(){
+  printLevel(expression.top(), 1);
 }
 
 node* Tree::addNode(string key){
