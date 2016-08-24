@@ -4,5 +4,5 @@
 
 int main(int argc, char *argv[]){
     Tree* tree = new Tree();
-    tree->insert("hi");
+    tree->parse("(a|b(ab))a|b");
 }

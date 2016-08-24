@@ -2,6 +2,7 @@
 #define TREE_H
 
 #include <string>
+#include <stack>
 
 using namespace std;
 
@@ -15,9 +16,18 @@ class Tree{
   public:
     tree();
     void insert(string key);
+    void parse(string exprsn);
+    node* addNode(string key);
+    void addOrNode();
+    void addMulNode();
+    void addBraNode();
+    void generateTree();
 
   private:
     node *root;
+    stack<node*> expression;
+    stack<string> brackets;
+    stack<string> op;
 
 };
 
