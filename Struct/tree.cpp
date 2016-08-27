@@ -7,22 +7,21 @@
 using namespace std;
 
 Tree::tree(){
-
+  root = NULL;
 }
 
 void Tree::printLevel(node* root, int indent){
-  if (root != NULL)
-   {
+  if (root != NULL){
        printLevel(root->left, indent + 5);
        if (indent > 0)
            cout << std::setw(indent) << " ";
        cout << root->key_value << endl;
        printLevel(root->right, indent + 5);
-   }
+   };
 }
 
 void Tree::display(){
-  printLevel(expression.top(), 0);
+  printLevel(root, 0);
 }
 
 node* Tree::addNode(string key){
@@ -34,64 +33,31 @@ node* Tree::addNode(string key){
   return n;
 }
 
-void Tree::addOrNode(){
-  cout << "Agregando nodo |" <<endl;
-  node* orNode = new node;
-  orNode->key_value = "|";
-  orNode->left = expression.top();
+void Tree::addRightNode(node* current){
+  cout << "Creando nodo derecho " << expression.front() << endl;
+  current->right = new node;
+  current->right->key_value = expression.front();
   expression.pop();
-  orNode->right = expression.top();
-  expression.pop();
-  expression.push(orNode);
+  current->right->right = NULL;
+  current->right->left = NULL;
+  current->right->parent = current;
 }
 
-void Tree::addMulNode(){
-  cout << "Agregando nodo ^" <<endl;
-  node* mulNode = new node;
-  mulNode->key_value = "^";
-  mulNode->left = expression.top();
+void Tree::addLeftNode(node* current){
+  cout << "Creando nodo izquierdo " << expression.front() << endl;
+  current->left = new node;
+  current->left->key_value = expression.front();
   expression.pop();
-  mulNode->right = expression.top();
-  expression.pop();
-  expression.push(mulNode);
+  current->left->right = NULL;
+  current->left->left = NULL;
+  current->left->parent = current;
 }
 
-void Tree::addBraNode(){
-    if(operations.size() > 1){
-      string todo = operations.top();
-      operations.pop();
-      if(todo == "|"){
-        addOrNode();
-      } else if (todo == "^"){
-        addMulNode();
-      };
-    }
-    cout << "Agregando nodo ()" <<endl;
-    node* braNode = new node;
-    braNode->key_value = "()";
-    braNode->left = expression.top();
-    expression.pop();
-    braNode->right = NULL;
-    expression.push(braNode);
-}
-
-void Tree::addCleanNode(){
-    cout << "Agregando nodo *" <<endl;
-    node* cleanNode = new node;
-    cleanNode->key_value = "*";
-    cleanNode->left = expression.top();
-    expression.pop();
-    cleanNode->right = NULL;
-    expression.push(cleanNode);
-}
 
 void Tree::parse(string exprsn){
-  cout << "size Queue RPN " << expressionRPN.size() << endl
-       << "size Stack Op "  << operations.size() << endl;
   if(exprsn.size() > 0){
     string first = exprsn.substr(0,1);
     string last = exprsn.substr(1,exprsn.size());
-    cout << first << endl;
     if(first == ")"){
       while(operations.top() != "("){
         expressionRPN.push(operations.top());
@@ -124,9 +90,72 @@ void Tree::parse(string exprsn){
       expressionRPN.push(operations.top());
       operations.pop();
     };
+    root = new node;
+    string str_expression = "";
     while(expressionRPN.size()>0){
-      cout << expressionRPN.front() << endl;
+      str_expression.append(expressionRPN.top());
+      expression.push(expressionRPN.top());
       expressionRPN.pop();
+    }
+    cout << str_expression << endl;
+    parseToTree(root);
+  };
+}
+
+void Tree::parseToTree(node* current){
+  if(expression.size() > 0){
+    cout << expression.size() << endl;
+    if(current->key_value.size() != 0){
+      cout << "current->key_value NOT empty" << endl;
+      if(current->key_value == "|" || current->key_value == "^" || current->key_value == "*"){
+        cout << "Current key value "<< current->key_value << endl;
+        if(current->right == NULL){
+          if(expression.size() > 0){
+            addRightNode(current);
+          };
+          parseToTree(current->right);
+        } else if (current->left == NULL){
+          if(expression.size() > 0){
+            addLeftNode(current);
+          };
+          parseToTree(current->left);
+        } else {
+          cout << "Nos vamos con el padre " << endl;
+          parseToTree(current->parent);
+        }
+      } else {
+        cout << "Current key value "<< current->key_value << endl;
+        if(current->right == NULL && current->parent->left != NULL){
+          if(current->parent->parent->left == NULL){
+              cout << "Nos vamos con el abuelo " << endl;
+              parseToTree(current->parent->parent);
+          }
+          if(expression.size() > 0){
+            addRightNode(current);
+          };
+          parseToTree(current->right);
+        } else if (current->left == NULL && current->parent->left != NULL){
+          if(current->parent->parent->left == NULL){
+              cout << "Nos vamos con el abuelo " << endl;
+              parseToTree(current->parent->parent);
+          }
+          if(expression.size() > 0){
+            addLeftNode(current);
+          };
+          parseToTree(current->left);
+        } else {
+         cout << "Nos vamos con el padre " << endl;
+         parseToTree(current->parent);
+       };
+      }
+    } else {
+      cout << "Creando ROOT " << expression.front() << endl;
+      current->key_value = expression.front();
+      expression.pop();
+      current->right = NULL;
+      current->left = NULL;
+      current->parent = NULL;
+      parseToTree(current);
     }
   };
 }

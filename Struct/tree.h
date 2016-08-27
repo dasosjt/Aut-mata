@@ -11,25 +11,26 @@ struct node{
   string key_value;
   node *left;
   node *right;
+  node *parent;
 };
 
 class Tree{
   public:
     tree();
     node* addNode(string key);
+    void addLeftNode(node* current);
     void parse(string exprsn);
-    void addOrNode();
-    void addMulNode();
-    void addBraNode();
-    void addCleanNode();
+    void parseToTree(node* current);
     void printLevel(node* root, int level);
     void display();
+    void addRightNode(node* current);
 
   private:
-    queue<string> expressionRPN;
-    stack<node*> expression;
+    stack<string> expressionRPN;
+    queue<string> expression;
     stack<string> brackets;
     stack<string> operations;
+    node* root;
 
 };
 
