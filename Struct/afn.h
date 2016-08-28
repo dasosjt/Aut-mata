@@ -26,12 +26,16 @@ class AFN{
     vertex* get_vertex_init();
     vertex* get_vertex_final();
     void set_vertex_final_to(char e, vertex* v);
+    void simulationAFN(string exprsn);
+    vector<vertex*> eclosure(vector<vertex*> v);
 
 
   private:
     vertex* init_vertex;
     vertex* final_vertex;
     AFN* result;
+    stack<vertex* > actual_states;
+    stack<vertex* > new_states;
 };
 
 #endif

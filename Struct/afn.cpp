@@ -11,8 +11,34 @@ AFN::AFN(){
 }
 
 void AFN::createAFN(node* root){
-  AFN* result = new AFN;
+  result = new AFN;
   result = visitAST(root);
+}
+
+void AFN::simulationAFN(string exprsn){
+  //cout << "Init simulation AFN" << endl;
+  vector<vertex*> s0;
+//cout << "s0 init" << endl;
+  s0.push_back(result->init_vertex);
+  //cout << "push back result init_vertex" << endl;
+  vector<vertex*> S;
+  S = eclosure(s0);
+  cout << "Iterator" << endl;
+}
+
+vector<vertex* > AFN::eclosure(vector<vertex* > v){
+  vector<vertex* > result_v;
+  cout << "Size vector input "<< v.size() << endl;
+  for (unsigned int i = 0; i<v.size(); i++){
+    for(unsigned int j = 0; j<v.size(); j++){
+      if(v[i]->vertex_to[j].first == 'e'){
+        result_v.push_back(v[i]->vertex_to[j].second);
+      };
+      cout << "Se mueve con '"<<v[i]->vertex_to[j].first << "' hacia estado "
+           << v[i]->vertex_to[j].second->number_of << endl;
+    }
+  }
+  return result_v;
 }
 
 vertex* AFN::get_vertex_init(){
