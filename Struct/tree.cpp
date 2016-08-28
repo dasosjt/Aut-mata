@@ -10,6 +10,10 @@ Tree::tree(){
   root = NULL;
 }
 
+node* Tree::getRoot(){
+  return root;
+}
+
 void Tree::printLevel(node* root, int indent){
   if (root != NULL){
        printLevel(root->left, indent + 5);
@@ -21,8 +25,6 @@ void Tree::printLevel(node* root, int indent){
 }
 
 void Tree::display(){
-  root = new node;
-  root = nodes.top();
   printLevel(root, 0);
 }
 
@@ -115,4 +117,6 @@ void Tree::parseToTree(){
       nodes.push(nodex);
     };
   };
+  root = new node;
+  root = nodes.top();
 }

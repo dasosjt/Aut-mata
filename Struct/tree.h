@@ -3,7 +3,6 @@
 
 #include <string>
 #include <stack>
-#include <queue>
 
 using namespace std;
 
@@ -22,6 +21,7 @@ class Tree{
     void printLevel(node* root, int level);
     void display();
     int priority(char a);
+    node* getRoot();
 
   private:
     stack<char> expressionRPN;
