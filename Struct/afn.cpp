@@ -16,27 +16,57 @@ void AFN::createAFN(node* root){
 }
 
 void AFN::simulationAFN(string exprsn){
-  //cout << "Init simulation AFN" << endl;
   vector<vertex*> s0;
-//cout << "s0 init" << endl;
   s0.push_back(result->init_vertex);
-  //cout << "push back result init_vertex" << endl;
   vector<vertex*> S;
   S = eclosure(s0);
-  cout << "Iterator" << endl;
+  S = eclosure(S);
+  S = eclosure(move(S, 'a'));
+
 }
 
 vector<vertex* > AFN::eclosure(vector<vertex* > v){
   vector<vertex* > result_v;
-  cout << "Size vector input "<< v.size() << endl;
-  for (unsigned int i = 0; i<v.size(); i++){
-    for(unsigned int j = 0; j<v.size(); j++){
-      if(v[i]->vertex_to[j].first == 'e'){
-        result_v.push_back(v[i]->vertex_to[j].second);
+  cout << "E-CLOSURE "<< endl;
+  cout << "Estados actuales "<< v.size() << endl;
+  if(!v.empty()){
+    for (unsigned int i = 0; i<=v.size()-1; i++){
+      cout <<"   Estado en revision "<< v[i]->number_of << endl;
+      if(!v[i]->vertex_to.empty()){
+        for(unsigned int j = 0; j<=v[i]->vertex_to.size()-1; j++){
+          if(v[i]->vertex_to[j].first == 'e'){
+            result_v.push_back(v[i]->vertex_to[j].second);
+          };
+          cout << "     Se mueve con '"<<v[i]->vertex_to[j].first << "' hacia estado "
+               << v[i]->vertex_to[j].second->number_of << endl;
+        };
+      } else {
+        cout << "     No tiene movimiento, es estado final"<< endl;
       };
-      cout << "Se mueve con '"<<v[i]->vertex_to[j].first << "' hacia estado "
-           << v[i]->vertex_to[j].second->number_of << endl;
-    }
+    };
+  }
+  return result_v;
+}
+
+vector<vertex* > AFN::move(vector<vertex* > v, char c){
+  vector<vertex* > result_v;
+  cout << "MOVE WITH "<< c << endl;
+  cout << "Estados actuales "<< v.size() << endl;
+  if(!v.empty()){
+    for (unsigned int i = 0; i<=v.size()-1; i++){
+      cout <<"   Estado en revision "<< v[i]->number_of << endl;
+      if(!v[i]->vertex_to.empty()){
+        for(unsigned int j = 0; j<=v[i]->vertex_to.size()-1; j++){
+          if(v[i]->vertex_to[j].first == c){
+            result_v.push_back(v[i]->vertex_to[j].second);
+          };
+          cout << "     Se mueve con '"<<v[i]->vertex_to[j].first << "' hacia estado "
+               << v[i]->vertex_to[j].second->number_of << endl;
+        };
+      } else {
+        cout << "     No tiene movimiento, es estado final"<< endl;
+      };
+    };
   }
   return result_v;
 }

@@ -28,6 +28,7 @@ class AFN{
     void set_vertex_final_to(char e, vertex* v);
     void simulationAFN(string exprsn);
     vector<vertex*> eclosure(vector<vertex*> v);
+    vector<vertex*> move(vector<vertex* > v, char c);
 
 
   private:
