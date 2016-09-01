@@ -16,11 +16,11 @@ node* Tree::getRoot(){
 
 void Tree::printLevel(node* root, int indent){
   if (root != NULL){
-       printLevel(root->left, indent + 5);
+       printLevel(root->right, indent + 5);
        if (indent > 0)
            cout << std::setw(indent) << " ";
        cout << root->key_value << endl;
-       printLevel(root->right, indent + 5);
+       printLevel(root->left, indent + 5);
    };
 }
 
