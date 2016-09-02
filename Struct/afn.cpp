@@ -8,12 +8,16 @@
 using namespace std;
 
 AFN::AFN(){
-
+  result = NULL;
 }
 
 void AFN::createAFN(node* root){
   result = new AFN;
   result = visitAST(root);
+}
+
+vertex* AFN::get_vertex_init_result(){
+  return result->init_vertex;
 }
 
 void AFN::simulationAFN(string exprsn){
