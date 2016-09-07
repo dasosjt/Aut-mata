@@ -7,8 +7,16 @@
 
 using namespace std;
 
+int AFN::state;
+
 AFN::AFN(){
   result = NULL;
+}
+
+int AFN::get_new_state(){
+  state+=1;
+  cout << state << endl;
+  return state;
 }
 
 void AFN::createAFN(node* root){
@@ -29,7 +37,7 @@ void AFN::simulationAFN(string exprsn){
   char c = expression[0];
   expression.erase(expression.begin());
   while(c!='f'){
-    cout << c << endl;
+    //cout << c << endl;
     S = eclosure(move(S, c));
     c = expression[0];
     expression.erase(expression.begin());
@@ -53,12 +61,12 @@ vector<vertex* > AFN::eclosure(vector<vertex* > v){
   vector< vertex* > result_v;
   stack< vertex*, vector< vertex* > > states (v);
   vertex* t;
-  cout << "E-CLOSURE "<< endl;
-  cout << "Cantidad de Estados actuales "<< v.size() << endl;
+  //cout << "E-CLOSURE "<< endl;
+  //cout << "Cantidad de Estados actuales "<< v.size() << endl;
   while(!states.empty()){
     t = states.top();
     states.pop();
-    cout <<"   Estado en revision: "<< t->number_of << endl;
+    //cout <<"   Estado en revision: "<< t->number_of << endl;
     if(!t->vertex_to.empty()){
       for(unsigned int j = 0; j<=t->vertex_to.size()-1; j++){
         if(t->vertex_to[j].first == 'e'){
@@ -67,11 +75,11 @@ vector<vertex* > AFN::eclosure(vector<vertex* > v){
               states.push(t->vertex_to[j].second);
           }
         };
-        cout << "     Se mueve con '"<<t->vertex_to[j].first << "' hacia estado "
-             << t->vertex_to[j].second->number_of << endl;
+      //  cout << "     Se mueve con '"<<t->vertex_to[j].first << "' hacia estado "
+      //       << t->vertex_to[j].second->number_of << endl;
       };
     } else {
-      cout << "     No tiene movimiento, es estado final"<< endl;
+      //cout << "     No tiene movimiento, es estado final"<< endl;
     };
   }
   result_v.insert(result_v.end(), v.begin(), v.end());
@@ -80,21 +88,21 @@ vector<vertex* > AFN::eclosure(vector<vertex* > v){
 
 vector<vertex* > AFN::move(vector<vertex* > v, char c){
   vector<vertex* > result_v;
-  cout << "MOVE WITH "<< c << endl;
-  cout << "Cantidad de Estados actuales "<< v.size() << endl;
+  //cout << "MOVE WITH "<< c << endl;
+  //cout << "Cantidad de Estados actuales "<< v.size() << endl;
   if(!v.empty()){
     for (unsigned int i = 0; i<=v.size()-1; i++){
-      cout <<"   Estado en revision: "<< v[i]->number_of << endl;
+    //  cout <<"   Estado en revision: "<< v[i]->number_of << endl;
       if(!v[i]->vertex_to.empty()){
         for(unsigned int j = 0; j<=v[i]->vertex_to.size()-1; j++){
           if(v[i]->vertex_to[j].first == c){
             result_v.push_back(v[i]->vertex_to[j].second);
           };
-          cout << "     Se mueve con '"<<v[i]->vertex_to[j].first << "' hacia estado "
-               << v[i]->vertex_to[j].second->number_of << endl;
+      //    cout << "     Se mueve con '"<<v[i]->vertex_to[j].first << "' hacia estado "
+        //       << v[i]->vertex_to[j].second->number_of << endl;
         };
       } else {
-        cout << "     No tiene movimiento, es estado final"<< endl;
+        //cout << "     No tiene movimiento, es estado final"<< endl;
       };
     };
   }
@@ -134,8 +142,8 @@ AFN* AFN::base(node* current){
   AFN* result = new AFN;
   vertex* v1 = new vertex;
   vertex* v2 = new vertex;
-  v1->number_of = '2';
-  v2->number_of = '3';
+  v1->number_of = get_new_state();
+  v2->number_of = get_new_state();
   v1->vertex_to.push_back(make_pair(current->key_value, v2));
   result->init_vertex = v1;
   result->final_vertex = v2;
@@ -147,8 +155,8 @@ AFN* AFN::orAFN(AFN* a, AFN* b){
   AFN* result = new AFN;
   vertex* v1 = new vertex;
   vertex* v2 = new vertex;
-  v1->number_of = '1';
-  v2->number_of = '6';
+  v1->number_of = get_new_state();
+  v2->number_of = get_new_state();
   v1->vertex_to.push_back(make_pair('e', a->get_vertex_init()));
   v1->vertex_to.push_back(make_pair('e', b->get_vertex_init()));
   a->set_vertex_final_to('e', v2);
@@ -163,8 +171,8 @@ AFN* AFN::kleeneAFN(AFN* a){
   AFN* result = new AFN;
   vertex* v1 = new vertex;
   vertex* v2 = new vertex;
-  v1->number_of = '0';
-  v2->number_of = '7';
+  v1->number_of = get_new_state();
+  v2->number_of = get_new_state();
   a->set_vertex_final_to('e', a->get_vertex_init());
   a->set_vertex_final_to('e', v2);
   v1->vertex_to.push_back(make_pair('e', v2));

@@ -2,6 +2,7 @@
 #include "afn.h"
 #include "afdx.h"
 #include <iostream>
+#include <sstream>
 #include <stack>
 #include <string>
 #include <algorithm>
@@ -31,6 +32,7 @@ AFDX* AFDX::subset_const(vertex* vertex_init, vector<char> L){
     for(unsigned int i = 0; i<=L.size()-1; i++){
       vector<vertex* >  U = eclosure(move(T, L[i]));
       if(count(states_afdx.begin(), states_afdx.end(), U)==0){
+        cout << "Nuevo estado encontrado " << endl;
         states_afdx.push_back(U);
         Dstates.push(U);
       };
@@ -38,12 +40,11 @@ AFDX* AFDX::subset_const(vertex* vertex_init, vector<char> L){
   };
   cout << "Cantidad de estados del AFDX " << states_afdx.size() << endl;
   for(unsigned int k = 0; k <= states_afdx.size()-1; k++){
-    vector<char> temp_substate;
+    vector<int> temp_substate;
     for (unsigned int n = 0; n<=states_afdx[k].size()-1; n++){
       temp_substate.push_back(states_afdx[k][n]->number_of);
     }
-    string temp_state(temp_substate.begin(), temp_substate.end());
-    cout << temp_state << endl;
+    string temp_state;
   }
 }
 

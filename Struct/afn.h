@@ -10,8 +10,8 @@
 using namespace std;
 
 struct vertex{
-  char number_of;
-  vector<char> afdx_set;
+  int number_of;
+  vector<int> afdx_set;
   vector< pair<char, vertex*> > vertex_to;
 };
 
@@ -24,6 +24,7 @@ class AFN{
     AFN* orAFN(AFN* a, AFN* b);
     AFN* kleeneAFN(AFN* a);
     AFN* concAFN(AFN* a, AFN* b);
+    int get_new_state();
     vertex* get_vertex_init_result();
     vertex* get_vertex_init();
     vertex* get_vertex_final();
@@ -32,13 +33,13 @@ class AFN{
     vector<vertex*> eclosure(vector<vertex*> v);
     vector<vertex*> move(vector<vertex* > v, char c);
 
-
   private:
     vertex* init_vertex;
     vertex* final_vertex;
     AFN* result;
     stack<vertex* > actual_states;
     stack<vertex* > new_states;
+    static int state;
 };
 
 #endif
