@@ -2,6 +2,7 @@
 #include "afn.h"
 #include "afdx.h"
 #include <iostream>
+#include <iterator>
 #include <sstream>
 #include <stack>
 #include <string>
@@ -31,8 +32,9 @@ AFDX* AFDX::subset_const(vertex* vertex_init, vector<char> L){
     Dstates.pop();
     for(unsigned int i = 0; i<=L.size()-1; i++){
       vector<vertex* >  U = eclosure(move(T, L[i]));
+      sort(U.begin(), U.end(), compare_vertex_by_number_of());
       if(count(states_afdx.begin(), states_afdx.end(), U)==0){
-        cout << "Nuevo estado encontrado " << endl;
+        cout << "Nuevo estado AFDX encontrado " << endl;
         states_afdx.push_back(U);
         Dstates.push(U);
       };
@@ -41,10 +43,15 @@ AFDX* AFDX::subset_const(vertex* vertex_init, vector<char> L){
   cout << "Cantidad de estados del AFDX " << states_afdx.size() << endl;
   for(unsigned int k = 0; k <= states_afdx.size()-1; k++){
     vector<int> temp_substate;
-    for (unsigned int n = 0; n<=states_afdx[k].size()-1; n++){
-      temp_substate.push_back(states_afdx[k][n]->number_of);
+    if(!states_afdx[k].empty()){
+      for (unsigned int n = 0; n<=states_afdx[k].size()-1; n++){
+        temp_substate.push_back(states_afdx[k][n]->number_of);
+      }
+      copy(temp_substate.begin(), temp_substate.end(), ostream_iterator<int>(cout, " "));
+      cout << endl;
+    } else {
+      cout << "0" <<endl;
     }
-    string temp_state;
   }
 }
 

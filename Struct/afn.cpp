@@ -15,7 +15,7 @@ AFN::AFN(){
 
 int AFN::get_new_state(){
   state+=1;
-  cout << state << endl;
+  cout <<"new state "<< state << endl;
   return state;
 }
 

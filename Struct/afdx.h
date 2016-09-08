@@ -8,6 +8,12 @@
 
 using namespace std;
 
+struct compare_vertex_by_number_of {
+    bool operator()(vertex const * a, vertex const * b) {
+        return a->number_of < b->number_of;
+    }
+};
+
 class AFDX{
   public:
     AFDX();
