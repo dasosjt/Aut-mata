@@ -11,8 +11,16 @@
 
 using namespace std;
 
+int AFN::state;
+
 AFDX::AFDX(){
   result = NULL;
+}
+
+int AFDX::get_new_state(){
+  state+=1;
+  cout <<"new state "<< state << endl;
+  return state;
 }
 
 void AFDX::createAFDX(vertex* vertex_init, vector<char> L){
@@ -25,14 +33,16 @@ AFDX* AFDX::subset_const(vertex* vertex_init, vector<char> L){
   vector<vector<vertex* > > states_afdx;
   vector<vertex* > temp_init;
   temp_init.push_back(vertex_init);
-  states_afdx.push_back(eclosure(temp_init));
-  Dstates.push(eclosure(temp_init));
+  vector<vertex* > t0 = eclosure(temp_init);
+  sort(t0.begin(), t0.end(), compare_by_number_of());
+  states_afdx.push_back(t0);
+  Dstates.push(t0);
   while (!Dstates.empty()){
     vector<vertex* > T = Dstates.top();
     Dstates.pop();
     for(unsigned int i = 0; i<=L.size()-1; i++){
       vector<vertex* >  U = eclosure(move(T, L[i]));
-      sort(U.begin(), U.end(), compare_vertex_by_number_of());
+      sort(U.begin(), U.end(), compare_by_number_of());
       if(count(states_afdx.begin(), states_afdx.end(), U)==0){
         cout << "Nuevo estado AFDX encontrado " << endl;
         states_afdx.push_back(U);

@@ -8,7 +8,7 @@
 
 using namespace std;
 
-struct compare_vertex_by_number_of {
+struct compare_by_number_of {
     bool operator()(vertex const * a, vertex const * b) {
         return a->number_of < b->number_of;
     }
@@ -24,6 +24,7 @@ class AFDX{
     vector<vertex*> eclosure(vector<vertex*> v);
     vector<vertex*> move(vector<vertex* > v, char c);
     vertex* convertToVertex(vector< vertex* > v);
+    int get_new_state();
 
 
   private:
@@ -32,6 +33,7 @@ class AFDX{
     AFDX* result;
     stack<vertex* > actual_states;
     stack<vertex* > new_states;
+    static int state;
 };
 
 #endif
