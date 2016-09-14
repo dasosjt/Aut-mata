@@ -37,23 +37,28 @@ AFDX* AFDX::subset_const(vertex* vertex_init, vector<char> L){
   sort(t0.begin(), t0.end(), compare_by_number_of());
   states_afdx.push_back(subset_to_vertex(t0));
   Dstates.push(t0);
+  cout << "Creating AFDX .... " << endl;
   while (!Dstates.empty()){
     vector<vertex* > T = Dstates.top();
+    vertex* v_init = subset_to_vertex(T);
     Dstates.pop();
     for(unsigned int i = 0; i<L.size(); i++){
       vector<vertex* >  U = eclosure(move(T, L[i]));
       if (U.size()>0){
         sort(U.begin(), U.end(), compare_by_number_of());
-        vertex* v_temp = subset_to_vertex(U);
-        if(count_if(states_afdx.begin(), states_afdx.end(), compare_by_afdx_set(v_temp->afdx_set)) == 0){
-          cout << "Nuevo estado AFDX encontrado " << endl;
-          states_afdx.push_back(v_temp);
+        vertex* v_to = subset_to_vertex(U);
+        if(count_if(states_afdx.begin(), states_afdx.end(), compare_by_afdx_set(v_to->afdx_set)) == 0){
+          cout << "New AFDX state found " << endl;
+          states_afdx.push_back(v_to);
           Dstates.push(U);
-        } else {
-          vector<vertex* >::iterator it = find_if(states_afdx.begin(), states_afdx.end(), compare_by_afdx_set(v_temp->afdx_set));
-          int index = distance( states_afdx.begin(), it );
-          cout << "State index : " << index << endl;
         };
+        vector<vertex* >::iterator it_v_init = find_if(states_afdx.begin(), states_afdx.end(), compare_by_afdx_set(v_init->afdx_set));
+        vector<vertex* >::iterator it_v_to = find_if(states_afdx.begin(), states_afdx.end(), compare_by_afdx_set(v_to->afdx_set));
+        int index_v_init = distance( states_afdx.begin(), it_v_init );
+        int index_v_to = distance( states_afdx.begin(), it_v_to );
+        cout << "State index from -> " << index_v_init << endl;
+        cout << "State index to -> " << index_v_to << endl;
+        cout << "with.. " << L[i] << endl;
       };
     };
   };

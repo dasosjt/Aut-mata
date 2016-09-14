@@ -16,8 +16,7 @@ struct compare_by_number_of {
 
 struct compare_by_afdx_set{
     explicit compare_by_afdx_set(const vector<int>& vint) : afdx_set(vint) {}
-    bool operator () (const vertex* v) const
-    {
+    bool operator () (const vertex* v) const{
         return v->afdx_set == afdx_set;
     }
     vector<int> afdx_set;
