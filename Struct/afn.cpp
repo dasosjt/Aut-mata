@@ -37,14 +37,13 @@ void AFN::simulationAFN(string exprsn){
   char c = expression[0];
   expression.erase(expression.begin());
   while(c!='f'){
-    //cout << c << endl;
     S = eclosure(move(S, c));
     c = expression[0];
     expression.erase(expression.begin());
   };
   bool final_state = false;
   if(S.size() != 0){
-    for(unsigned int i = 0; i<= S.size()-1; i++){
+    for(unsigned int i = 0; i< S.size(); i++){
       if (S[i]->vertex_to.size() == 0){
         final_state = true;
       };

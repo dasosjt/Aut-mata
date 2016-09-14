@@ -27,4 +27,8 @@ int main(int argc, char *argv[]){
     L.push_back('b');
     cout << "AFN TO AFD "<< endl;
     afdx->createAFDX(afn->get_vertex_init_result(), L);
+    cout << "AFDX READY FOR TEST" << endl;
+    cout << "Enter Expression " << endl;
+    cin >> exprsn ;
+    afdx->simulationAFDX(exprsn);
 }

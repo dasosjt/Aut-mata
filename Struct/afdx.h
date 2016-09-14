@@ -33,15 +33,16 @@ class AFDX{
     vector<vertex*> move(vector<vertex* > v, char c);
     vertex* subset_to_vertex(vector<vertex* > v);
     int get_new_state();
+    void simulationAFDX(string exprsn);
 
 
   private:
-    vertex* init_vertex;
-    vertex* final_vertex;
     AFDX* result;
     stack<vertex* > actual_states;
     stack<vertex* > new_states;
     static int state;
+    static vertex* init_vertex;
+    static vertex* final_vertex;
 };
 
 #endif
