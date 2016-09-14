@@ -11,7 +11,7 @@
 
 using namespace std;
 
-int AFN::state;
+int AFDX::state;
 
 AFDX::AFDX(){
   result = NULL;
@@ -30,39 +30,44 @@ void AFDX::createAFDX(vertex* vertex_init, vector<char> L){
 
 AFDX* AFDX::subset_const(vertex* vertex_init, vector<char> L){
   stack<vector<vertex* > > Dstates;
-  vector<vector<vertex* > > states_afdx;
+  vector<vertex* > states_afdx;
   vector<vertex* > temp_init;
   temp_init.push_back(vertex_init);
   vector<vertex* > t0 = eclosure(temp_init);
   sort(t0.begin(), t0.end(), compare_by_number_of());
-  states_afdx.push_back(t0);
+  states_afdx.push_back(subset_to_vertex(t0));
   Dstates.push(t0);
   while (!Dstates.empty()){
     vector<vertex* > T = Dstates.top();
     Dstates.pop();
-    for(unsigned int i = 0; i<=L.size()-1; i++){
+    for(unsigned int i = 0; i<L.size(); i++){
       vector<vertex* >  U = eclosure(move(T, L[i]));
-      sort(U.begin(), U.end(), compare_by_number_of());
-      if(count(states_afdx.begin(), states_afdx.end(), U)==0){
-        cout << "Nuevo estado AFDX encontrado " << endl;
-        states_afdx.push_back(U);
-        Dstates.push(U);
+      if (U.size()>0){
+        sort(U.begin(), U.end(), compare_by_number_of());
+        vertex* v_temp = subset_to_vertex(U);
+        if(count_if(states_afdx.begin(), states_afdx.end(), compare_by_afdx_set(v_temp->afdx_set)) == 0){
+          cout << "Nuevo estado AFDX encontrado " << endl;
+          states_afdx.push_back(v_temp);
+          Dstates.push(U);
+        } else {
+          vector<vertex* >::iterator it = find_if(states_afdx.begin(), states_afdx.end(), compare_by_afdx_set(v_temp->afdx_set));
+          int index = distance( states_afdx.begin(), it );
+          cout << "State index : " << index << endl;
+        };
       };
     };
   };
-  cout << "Cantidad de estados del AFDX " << states_afdx.size() << endl;
-  for(unsigned int k = 0; k <= states_afdx.size()-1; k++){
-    vector<int> temp_substate;
-    if(!states_afdx[k].empty()){
-      for (unsigned int n = 0; n<=states_afdx[k].size()-1; n++){
-        temp_substate.push_back(states_afdx[k][n]->number_of);
-      }
-      copy(temp_substate.begin(), temp_substate.end(), ostream_iterator<int>(cout, " "));
-      cout << endl;
-    } else {
-      cout << "0" <<endl;
+}
+
+vertex* AFDX::subset_to_vertex(vector<vertex* > v){
+  vertex* new_state = new vertex;
+  if(v.size() > 0 ){
+    for(unsigned int k = 0; k<v.size(); k++){
+      cout << v[k]->number_of << endl;
+      new_state->afdx_set.push_back(v[k]->number_of);
     }
   }
+  return new_state;
 }
 
 vector<vertex* > AFDX::eclosure(vector<vertex* > v){

@@ -14,6 +14,15 @@ struct compare_by_number_of {
     }
 };
 
+struct compare_by_afdx_set{
+    explicit compare_by_afdx_set(const vector<int>& vint) : afdx_set(vint) {}
+    bool operator () (const vertex* v) const
+    {
+        return v->afdx_set == afdx_set;
+    }
+    vector<int> afdx_set;
+};
+
 class AFDX{
   public:
     AFDX();
@@ -23,7 +32,7 @@ class AFDX{
     vertex* get_vertex_final();
     vector<vertex*> eclosure(vector<vertex*> v);
     vector<vertex*> move(vector<vertex* > v, char c);
-    vertex* convertToVertex(vector< vertex* > v);
+    vertex* subset_to_vertex(vector<vertex* > v);
     int get_new_state();
 
 
