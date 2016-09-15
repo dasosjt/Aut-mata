@@ -3,6 +3,8 @@
 
 #include <string>
 #include <stack>
+#include <vector>
+
 
 using namespace std;
 
@@ -11,6 +13,11 @@ struct node{
   node *left;
   node *right;
   node *parent;
+  int id_number;
+  bool voidable;
+  vector<int> firstpos;
+  vector<int> lastpos;
+  vector<int> nextpos;
 };
 
 class Tree{

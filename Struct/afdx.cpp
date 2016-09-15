@@ -142,21 +142,21 @@ vector<vertex* > AFDX::eclosure(vector<vertex* > v){
 
 vector<vertex* > AFDX::move(vector<vertex* > v, char c){
   vector<vertex* > result_v;
-  cout << "MOVE WITH "<< c << endl;
-  cout << "Cantidad de Estados actuales "<< v.size() << endl;
+  //cout << "MOVE WITH "<< c << endl;
+  //cout << "Cantidad de Estados actuales "<< v.size() << endl;
   if(!v.empty()){
     for (unsigned int i = 0; i<=v.size()-1; i++){
-      cout <<"   Estado en revision: "<< v[i]->number_of << endl;
+      //cout <<"   Estado en revision: "<< v[i]->number_of << endl;
       if(!v[i]->vertex_to.empty()){
         for(unsigned int j = 0; j<=v[i]->vertex_to.size()-1; j++){
           if(v[i]->vertex_to[j].first == c){
             result_v.push_back(v[i]->vertex_to[j].second);
           };
-          cout << "     Se mueve con '"<<v[i]->vertex_to[j].first << "' hacia estado "
-               << v[i]->vertex_to[j].second->number_of << endl;
+          //cout << "     Se mueve con '"<<v[i]->vertex_to[j].first << "' hacia estado "
+          //     << v[i]->vertex_to[j].second->number_of << endl;
         };
       } else {
-        cout << "     No tiene movimiento, es estado final"<< endl;
+        //cout << "     No tiene movimiento, es estado final"<< endl;
         final_vertex = v[i];
       };
     };

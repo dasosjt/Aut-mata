@@ -1,6 +1,7 @@
 #include "tree.h"
 #include "afn.h"
 #include "afdx.h"
+#include "afd.h"
 #include <string>
 #include <iostream>
 
@@ -31,4 +32,7 @@ int main(int argc, char *argv[]){
     cout << "Enter Expression " << endl;
     cin >> exprsn ;
     afdx->simulationAFDX(exprsn);
+    cout << "AST TO AFD "<< endl;
+    AFD* afd = new AFD();
+    afd->set_root(tree->getRoot());
 }
