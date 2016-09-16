@@ -13,6 +13,8 @@ class AFD{
     bool set_voidable(node* root);
     vector<int> set_firstpos(node* root);
     vector<int> set_lastpos(node* root);
+    node* search_node(node* root, int id_number);
+    void set_nextpos(node* root);
 
   private:
     node* root;
