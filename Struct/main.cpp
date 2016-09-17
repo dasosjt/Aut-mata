@@ -4,10 +4,12 @@
 #include "afd.h"
 #include <string>
 #include <iostream>
+#include <iterator>
 
 using namespace std;
 
 int main(int argc, char *argv[]){
+    vector<char> L;
     Tree* tree = new Tree();
     string exprsn;
     cout << "Enter Regular Expression " << endl;
@@ -15,6 +17,7 @@ int main(int argc, char *argv[]){
     tree->parse(exprsn);
     cout << "AST " << endl;
     tree->display();
+    L = tree->getL();
     cout << "AFN START" << endl;
     AFN* afn = new AFN();
     afn->createAFN(tree->getRoot());
@@ -23,9 +26,6 @@ int main(int argc, char *argv[]){
     cin >> exprsn ;
     afn->simulationAFN(exprsn);
     AFDX* afdx = new AFDX();
-    vector<char> L;
-    L.push_back('a');
-    L.push_back('b');
     cout << "AFN TO AFD "<< endl;
     afdx->createAFDX(afn->get_vertex_init_result(), L);
     cout << "AFDX READY FOR TEST" << endl;
@@ -34,5 +34,9 @@ int main(int argc, char *argv[]){
     afdx->simulationAFDX(exprsn);
     cout << "AST TO AFD "<< endl;
     AFD* afd = new AFD();
-    afd->set_root(tree->getRoot());
+    afd->createAFD(tree->getRoot(), L);
+    cout << "AFD READY FOR TEST" << endl;
+    cout << "Enter Expression " << endl;
+    cin >> exprsn ;
+    afd->simulationAFD(exprsn);
 }

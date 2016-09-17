@@ -10,26 +10,103 @@
 using namespace std;
 
 int AFD::state;
+int AFD::new_id_number;
+vertex* AFD::init_vertex;
+vertex* AFD::final_vertex;
 
 
 AFD::AFD(){
   root = NULL;
   state = 0;
+  new_id_number = 0;
+  init_vertex = new vertex;
+  final_vertex = new vertex;
 }
 
 void AFD::set_root(node* root){
   //cout << root->key_value << endl;
-  this->root = root;
+  node* fsharp = new node;
+  fsharp->key_value = '#';
+  fsharp->left = NULL;
+  fsharp->right = NULL;
+  node* nroot = new node;
+  nroot->key_value = '^';
+  nroot->left = root;
+  nroot->right = fsharp;
+  this->root = nroot;
   cout << "----- Set ID Number -----" << endl;
-  set_id_number(root);
+  set_id_number(this->root);
   cout << "----- Set Voidable -----" << endl;
-  set_voidable(root);
+  set_voidable(this->root);
   cout << "----- Set Firstpos -----" << endl;
-  set_firstpos(root);
+  set_firstpos(this->root);
   cout << "----- Set Lastpos -----" << endl;
-  set_lastpos(root);
+  set_lastpos(this->root);
   cout << "----- Set Nextpos -----" << endl;
-  set_nextpos(root);
+  set_nextpos(this->root);
+}
+
+void AFD::createAFD(node* root, vector<char> L){
+  set_root(root);
+  cout << "----- Creating AFD from AST -----" << endl;
+  stack<vector<int > > Dstates;
+  vector<vertex* > states_afd;
+  cout << "Node with key value "<< this->root->key_value << " with firstpos { ";
+  copy(this->root->firstpos.begin(), this->root->firstpos.end(), ostream_iterator<int>(cout, " "));
+  cout << "}"<< endl;
+  Dstates.push(this->root->firstpos);
+  init_vertex->number_of = get_new_state();
+  init_vertex->afdx_set = this->root->firstpos;
+  states_afd.push_back(init_vertex);
+  //L.push_back('#');
+  while(!Dstates.empty()){
+      vector<int > S  = Dstates.top();
+      vertex* v_from = new vertex;
+      v_from->afdx_set = S;
+      Dstates.pop();
+      for(unsigned int i = 0; i<L.size(); i++){
+        vector<int > U;
+        for(unsigned int j = 0; j<S.size(); j++){
+            node* temp = new node;
+            cout << "Searching id number " << S[j] << " with char '" << L[i] <<"'" <<endl;
+            temp = search_node(this->root, S[j]);
+            if(temp->key_value == L[i]){
+              cout << "Search node done.. found '" << temp->key_value << "' with id number "<< temp->id_number <<endl;
+              cout << "appending to U { " ;
+              copy(temp->nextpos.begin(), temp->nextpos.end(), ostream_iterator<int>(cout, " "));
+              cout << "}" << endl;
+              U.insert(U.end(), temp->nextpos.begin(), temp->nextpos.end());
+            } else {
+              cout << "Search node done.. found incorrect '" << temp->key_value << "' with id number "<< temp->id_number <<endl;
+            }
+        }
+        sort(U.begin(), U.end());
+        vertex* v_to = new vertex;
+        v_to->afdx_set = U;
+        if(count_if(states_afd.begin(), states_afd.end(), compare_by_afdx_set(v_to->afdx_set)) == 0){
+          cout << "New AFD state found { " ;
+          copy(U.begin(), U.end(), ostream_iterator<int>(cout, " "));
+          cout << "}"<< endl;
+          v_to->number_of = get_new_state();
+          states_afd.push_back(v_to);
+          Dstates.push(U);
+        }
+        vector<vertex* >::iterator it_v_from = find_if(states_afd.begin(), states_afd.end(), compare_by_afdx_set(v_from->afdx_set));
+        vector<vertex* >::iterator it_v_to = find_if(states_afd.begin(), states_afd.end(), compare_by_afdx_set(v_to->afdx_set));
+        int index_v_from = distance( states_afd.begin(), it_v_from );
+        int index_v_to = distance( states_afd.begin(), it_v_to );
+        cout << "State index from -> " << index_v_from << endl;
+        cout << "State index to -> " << index_v_to << endl;
+        cout << "with.. " << L[i] << endl;
+        states_afd[index_v_from]->vertex_to.push_back(make_pair(L[i], states_afd[index_v_to]));
+      }
+  }
+}
+
+int AFD::get_new_id_number(){
+  new_id_number+=1;
+  cout <<"new id number "<< new_id_number << endl;
+  return new_id_number;
 }
 
 int AFD::get_new_state(){
@@ -43,7 +120,11 @@ void AFD::set_id_number(node* root){
     if(root->key_value == '|' || root->key_value == '^' || root->key_value == '*'){
         root->id_number = 0;
     } else {
-      root->id_number = get_new_state();
+      root->id_number = get_new_id_number();
+      if(root->key_value == '#'){
+        final_vertex->number_of = new_id_number;
+        cout << "FINAL VERTEX ID NUMBER "<< new_id_number << endl;
+      }
       cout << root->key_value << " with id number " << root->id_number << endl;
     }
     set_id_number(root->left);
@@ -136,7 +217,7 @@ vector<int> AFD::set_lastpos(node* root){
       vector<int> temp_right = set_lastpos(root->right);
       if(root->right->voidable){
         root->lastpos = temp_right;
-        root->lastpos.insert(root->firstpos.end(), temp_left.begin(), temp_left.end());
+        root->lastpos.insert(root->lastpos.end(), temp_left.begin(), temp_left.end());
       } else {
         root->lastpos = temp_right;
       }
@@ -151,6 +232,7 @@ vector<int> AFD::set_lastpos(node* root){
     } else {
       cout << root->key_value << " with id number " << root->id_number << " with lastpos { ";
     }
+    sort(root->lastpos.begin(), root->lastpos.end());
     copy(root->lastpos.begin(), root->lastpos.end(), ostream_iterator<int>(cout, " "));
     cout << "}"<< endl;
     return root->lastpos;
@@ -187,8 +269,8 @@ void AFD::set_nextpos(node* root){
 
 node* AFD::search_node(node* root, int id_number){
   if(root != NULL){
-    cout << "Node key value '"<< root->key_value << "' Node id number " << root->id_number << endl;
-    cout << " ... searching for " << id_number << endl;
+    //cout << "Node key value '"<< root->key_value << "' Node id number " << root->id_number << endl;
+    //cout << " ... searching for " << id_number << endl;
     if(root->key_value == '|' || root->key_value == '^'){
       if(search_node(root->left, id_number) != NULL){
         return search_node(root->left, id_number);
@@ -207,4 +289,53 @@ node* AFD::search_node(node* root, int id_number){
       }
     }
   }
+}
+
+void AFD::simulationAFD(string exprsn){
+  vector<vertex*> S;
+  vector<char> expression(exprsn.begin(), exprsn.end());
+  expression.push_back('f');
+  S.push_back(init_vertex);
+  char c = expression[0];
+  expression.erase(expression.begin());
+  while(c!='f'){
+    S = move(S, c);
+    c = expression[0];
+    expression.erase(expression.begin());
+  };
+  bool final_state = false;
+  for(unsigned int i = 0; i < S[0]->afdx_set.size(); i++){
+    if (S[0]->afdx_set[i] == final_vertex->number_of){
+      final_state = true;
+    };
+  }
+  if(final_state){
+    cout << "YES" << endl;
+  } else {
+    cout << "NO" << endl;
+  }
+}
+
+vector<vertex* > AFD::move(vector<vertex* > v, char c){
+  vector<vertex* > result_v;
+  cout << "MOVE WITH "<< c << endl;
+  cout << "Cantidad de Estados actuales "<< v.size() << endl;
+  if(!v.empty()){
+    for (unsigned int i = 0; i<=v.size()-1; i++){
+      cout <<"   Estado en revision: "<< v[i]->number_of << endl;
+      if(!v[i]->vertex_to.empty()){
+        for(unsigned int j = 0; j<=v[i]->vertex_to.size()-1; j++){
+          if(v[i]->vertex_to[j].first == c){
+            result_v.push_back(v[i]->vertex_to[j].second);
+          };
+          cout << "     Se mueve con '"<<v[i]->vertex_to[j].first << "' hacia estado "
+               << v[i]->vertex_to[j].second->number_of << endl;
+        };
+      } else {
+        cout << "     No tiene movimiento, es estado final"<< endl;
+        final_vertex = v[i];
+      };
+    };
+  }
+  return result_v;
 }

@@ -29,6 +29,7 @@ class Tree{
     void display();
     int priority(char a);
     node* getRoot();
+    vector<char > getL();
 
   private:
     stack<char> expressionRPN;
@@ -36,6 +37,7 @@ class Tree{
     stack<char> expression;
     stack<node*> nodes;
     node* root;
+    vector<char> L;
 
 };
 

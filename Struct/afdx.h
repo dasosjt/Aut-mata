@@ -43,6 +43,7 @@ class AFDX{
     static int state;
     static vertex* init_vertex;
     static vertex* final_vertex;
+    vector<char> L;
 };
 
 #endif

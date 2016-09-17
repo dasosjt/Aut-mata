@@ -2,6 +2,8 @@
 #include <iostream>
 #include <string>
 #include <iomanip>
+#include <algorithm>
+#include <iterator>
 
 
 using namespace std;
@@ -67,6 +69,9 @@ void Tree::parse(string exprsn){
     } else {
       //cout << "Caracter es " << exprsn[i] <<endl;
       expressionRPN.push(exprsn[i]);
+      if(count(L.begin(), L.end(), exprsn[i]) == 0){
+        L.push_back(exprsn[i]);
+      }
     };
   };
   //cout << "Sacando lo ultimo del stack" << endl;
@@ -82,6 +87,10 @@ void Tree::parse(string exprsn){
   }
   //cout << "Parseando al arbol" << endl;
   parseToTree();
+}
+
+vector<char > Tree::getL(){
+  return L;
 }
 
 void Tree::parseToTree(){

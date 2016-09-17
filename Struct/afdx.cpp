@@ -44,8 +44,9 @@ void AFDX::simulationAFDX(string exprsn){
     expression.erase(expression.begin());
   };
   bool final_state = false;
-  std::cout << final_vertex->number_of << std::endl;
+  cout << final_vertex->number_of << endl;
   for(unsigned int i = 0; i < S[0]->afdx_set.size(); i++){
+    cout << S[0]->afdx_set[i] << endl;
     if (S[0]->afdx_set[i] == final_vertex->number_of){
       final_state = true;
     };
@@ -75,24 +76,22 @@ AFDX* AFDX::subset_const(vertex* vertex_init, vector<char> L){
     Dstates.pop();
     for(unsigned int i = 0; i<L.size(); i++){
       vector<vertex* >  U = eclosure(move(T, L[i]));
-      if (U.size()>0){
-        sort(U.begin(), U.end(), compare_by_number_of());
-        vertex* v_to = subset_to_vertex(U);
-        if(count_if(states_afdx.begin(), states_afdx.end(), compare_by_afdx_set(v_to->afdx_set)) == 0){
-          cout << "New AFDX state found " << endl;
-          v_to->number_of = get_new_state();
-          states_afdx.push_back(v_to);
-          Dstates.push(U);
-        };
-        vector<vertex* >::iterator it_v_from = find_if(states_afdx.begin(), states_afdx.end(), compare_by_afdx_set(v_from->afdx_set));
-        vector<vertex* >::iterator it_v_to = find_if(states_afdx.begin(), states_afdx.end(), compare_by_afdx_set(v_to->afdx_set));
-        int index_v_from = distance( states_afdx.begin(), it_v_from );
-        int index_v_to = distance( states_afdx.begin(), it_v_to );
-        cout << "State index from -> " << index_v_from << endl;
-        cout << "State index to -> " << index_v_to << endl;
-        cout << "with.. " << L[i] << endl;
-        states_afdx[index_v_from]->vertex_to.push_back(make_pair(L[i], states_afdx[index_v_to]));
+      sort(U.begin(), U.end(), compare_by_number_of());
+      vertex* v_to = subset_to_vertex(U);
+      if(count_if(states_afdx.begin(), states_afdx.end(), compare_by_afdx_set(v_to->afdx_set)) == 0){
+        cout << "New AFDX state found " << endl;
+        v_to->number_of = get_new_state();
+        states_afdx.push_back(v_to);
+        Dstates.push(U);
       };
+      vector<vertex* >::iterator it_v_from = find_if(states_afdx.begin(), states_afdx.end(), compare_by_afdx_set(v_from->afdx_set));
+      vector<vertex* >::iterator it_v_to = find_if(states_afdx.begin(), states_afdx.end(), compare_by_afdx_set(v_to->afdx_set));
+      int index_v_from = distance( states_afdx.begin(), it_v_from );
+      int index_v_to = distance( states_afdx.begin(), it_v_to );
+      cout << "State index from -> " << index_v_from << endl;
+      cout << "State index to -> " << index_v_to << endl;
+      cout << "with.. " << L[i] << endl;
+      states_afdx[index_v_from]->vertex_to.push_back(make_pair(L[i], states_afdx[index_v_to]));
     };
   };
 }
@@ -103,6 +102,8 @@ vertex* AFDX::subset_to_vertex(vector<vertex* > v){
     for(unsigned int k = 0; k<v.size(); k++){
       new_state->afdx_set.push_back(v[k]->number_of);
     }
+  } else {
+    new_state->afdx_set.push_back(0);
   }
   cout << "{ ";
   copy(new_state->afdx_set.begin(), new_state->afdx_set.end(), ostream_iterator<int>(cout, " "));
