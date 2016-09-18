@@ -34,16 +34,23 @@ class AFDX{
     vertex* subset_to_vertex(vector<vertex* > v);
     int get_new_state();
     void simulationAFDX(string exprsn);
-
+    void tran_to_text(int from, int to, char a);
+    string states_to_text();
+    string symbols_to_text();
+    string final_to_text();
+    string init_to_text();
 
   private:
     AFDX* result;
+    vector<vertex* > states_afdx;
     stack<vertex* > actual_states;
     stack<vertex* > new_states;
     static int state;
     static vertex* init_vertex;
     static vertex* final_vertex;
     vector<char> L;
+    static ofstream AFDX_file;
+    static ostringstream AFDX_output_t;
 };
 
 #endif

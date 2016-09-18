@@ -3,6 +3,7 @@
 #include "afdx.h"
 #include <iostream>
 #include <iterator>
+#include <fstream>
 #include <sstream>
 #include <stack>
 #include <string>
@@ -14,18 +15,69 @@ using namespace std;
 int AFDX::state;
 vertex* AFDX::init_vertex;
 vertex* AFDX::final_vertex;
+ofstream AFDX::AFDX_file;
+ostringstream AFDX::AFDX_output_t;
 
 AFDX::AFDX(){
   result = NULL;
 }
 
+void AFDX::tran_to_text(int from, int to, char a){
+  ostringstream temp;
+  temp << "(" << from << ", " << a << ", " << to << ")";
+  AFDX_output_t << temp.str();
+}
+
+string AFDX::states_to_text(){
+  ostringstream temp;
+  temp << "{";
+  for(unsigned int i = 1; i<=state; i++){
+    temp << i << ", ";
+  }
+  temp << "}";
+  return temp.str();
+}
+
+string AFDX::symbols_to_text(){
+  ostringstream temp;
+  temp << "{";
+  copy(this->L.begin(), this->L.end(), ostream_iterator<char>(temp, ", "));
+  temp << "}";
+  return temp.str();
+}
+
+string AFDX::final_to_text(){
+  ostringstream temp;
+  temp << "{";
+  for(unsigned int i = 0; i<states_afdx.size(); i++){
+    bool final_state = false;
+    for(unsigned int j = 0; j<states_afdx[i]->afdx_set.size(); j++){
+      if(states_afdx[i]->afdx_set[j] == final_vertex->number_of){
+        final_state = true;
+      }
+      if(final_state){
+        temp << states_afdx[i]->number_of << ", ";
+      }
+    }
+  }
+  temp << "}";
+  return temp.str();
+}
+
+string AFDX::init_to_text(){
+  ostringstream temp;
+  temp << "{" << init_vertex->number_of << "}";
+  return temp.str();
+}
+
 int AFDX::get_new_state(){
   state+=1;
-  cout <<"new state "<< state << endl;
+  //cout <<"new state "<< state << endl;
   return state;
 }
 
 void AFDX::createAFDX(vertex* vertex_init, vector<char> L){
+  this->L = L;
   result = new AFDX;
   result = subset_const(vertex_init, L);
 }
@@ -44,9 +96,9 @@ void AFDX::simulationAFDX(string exprsn){
     expression.erase(expression.begin());
   };
   bool final_state = false;
-  cout << final_vertex->number_of << endl;
+  //cout << final_vertex->number_of << endl;
   for(unsigned int i = 0; i < S[0]->afdx_set.size(); i++){
-    cout << S[0]->afdx_set[i] << endl;
+    //cout << S[0]->afdx_set[i] << endl;
     if (S[0]->afdx_set[i] == final_vertex->number_of){
       final_state = true;
     };
@@ -56,11 +108,24 @@ void AFDX::simulationAFDX(string exprsn){
   } else {
     cout << "NO" << endl;
   }
+  AFDX_file.open("AFDX.txt", ios::out);
+  if (AFDX_file.is_open()) {
+    AFDX_file << "ESTADOS = ";
+    AFDX_file << states_to_text() << endl;
+    AFDX_file << "SIMBOLOS = ";
+    AFDX_file << symbols_to_text() << endl;
+    AFDX_file << "INICIO = ";
+    AFDX_file << init_to_text() << endl;
+    AFDX_file << "ACEPTACION = ";
+    AFDX_file << final_to_text() << endl;
+    AFDX_file << "TRANSICION = ";
+    AFDX_file << AFDX_output_t.str() << endl;
+  }
+  AFDX_file.close();
 }
 
 AFDX* AFDX::subset_const(vertex* vertex_init, vector<char> L){
   stack<vector<vertex* > > Dstates;
-  vector<vertex* > states_afdx;
   vector<vertex* > temp_init;
   temp_init.push_back(vertex_init);
   vector<vertex* > t0 = eclosure(temp_init);
@@ -92,6 +157,7 @@ AFDX* AFDX::subset_const(vertex* vertex_init, vector<char> L){
       cout << "State index to -> " << index_v_to << endl;
       cout << "with.. " << L[i] << endl;
       states_afdx[index_v_from]->vertex_to.push_back(make_pair(L[i], states_afdx[index_v_to]));
+      tran_to_text(states_afdx[index_v_from]->number_of, states_afdx[index_v_to]->number_of, L[i]);
     };
   };
 }
@@ -100,7 +166,9 @@ vertex* AFDX::subset_to_vertex(vector<vertex* > v){
   vertex* new_state = new vertex;
   if(v.size() > 0 ){
     for(unsigned int k = 0; k<v.size(); k++){
-      new_state->afdx_set.push_back(v[k]->number_of);
+      if(find(new_state->afdx_set.begin(), new_state->afdx_set.end(), v[k]->number_of) == new_state->afdx_set.end()){
+        new_state->afdx_set.push_back(v[k]->number_of);
+      }
     }
   } else {
     new_state->afdx_set.push_back(0);

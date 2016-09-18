@@ -20,7 +20,7 @@ int main(int argc, char *argv[]){
     L = tree->getL();
     cout << "AFN START" << endl;
     AFN* afn = new AFN();
-    afn->createAFN(tree->getRoot());
+    afn->createAFN(tree->getRoot(), L);
     cout << "AFN READY FOR TEST" << endl;
     cout << "Enter Expression " << endl;
     cin >> exprsn ;
@@ -39,4 +39,6 @@ int main(int argc, char *argv[]){
     cout << "Enter Expression " << endl;
     cin >> exprsn ;
     afd->simulationAFD(exprsn);
+    cout << "AFD to MIN{AFD}" << endl;
+    afd->minAFD();
 }

@@ -17,8 +17,14 @@ class AFD{
     node* search_node(node* root, int id_number);
     void set_nextpos(node* root);
     void createAFD(node* root, vector<char> L);
+    void minAFD();
     void simulationAFD(string exprsn);
     vector<vertex* > move(vector<vertex* > v, char c);
+    void tran_to_text(int from, int to, char a);
+    string states_to_text();
+    string symbols_to_text();
+    string final_to_text();
+    string init_to_text();
 
   private:
     node* root;
@@ -26,6 +32,10 @@ class AFD{
     static vertex* final_vertex;
     static int new_id_number;
     static int state;
+    vector<vertex* > states_afd;
+    vector<char> L;
+    static ofstream AFD_file;
+    static ostringstream AFD_output_t;
 
 };
 

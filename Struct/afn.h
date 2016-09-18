@@ -18,7 +18,7 @@ struct vertex{
 class AFN{
   public:
     AFN();
-    void createAFN(node* root);
+    void createAFN(node* root, vector<char> L);
     AFN* visitAST(node* root);
     AFN* base(node* current);
     AFN* orAFN(AFN* a, AFN* b);
@@ -32,6 +32,11 @@ class AFN{
     void simulationAFN(string exprsn);
     vector<vertex*> eclosure(vector<vertex*> v);
     vector<vertex*> move(vector<vertex* > v, char c);
+    void tran_to_text(int from, int to, char a);
+    string states_to_text();
+    string symbols_to_text();
+    string final_to_text();
+    string init_to_text();
 
   private:
     vertex* init_vertex;
@@ -40,6 +45,9 @@ class AFN{
     stack<vertex* > actual_states;
     stack<vertex* > new_states;
     static int state;
+    static ofstream AFN_file;
+    static ostringstream AFN_output_t;
+    vector<char> L;
 };
 
 #endif

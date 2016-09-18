@@ -3,11 +3,16 @@
 #include <iostream>
 #include <string>
 #include <algorithm>
+#include <fstream>
+#include <sstream>
+#include <iterator>
 
 
 using namespace std;
 
 int AFN::state;
+ofstream AFN::AFN_file;
+ostringstream AFN::AFN_output_t;
 
 AFN::AFN(){
   result = NULL;
@@ -15,11 +20,12 @@ AFN::AFN(){
 
 int AFN::get_new_state(){
   state+=1;
-  cout <<"new state "<< state << endl;
+  //cout <<"new state "<< state << endl;
   return state;
 }
 
-void AFN::createAFN(node* root){
+void AFN::createAFN(node* root, vector<char> L){
+  this->L = L;
   result = new AFN;
   result = visitAST(root);
 }
@@ -54,6 +60,20 @@ void AFN::simulationAFN(string exprsn){
   } else {
     cout << "NO" << endl;
   }
+  AFN_file.open("AFN.txt", ios::out);
+  if (AFN_file.is_open()) {
+    AFN_file << "ESTADOS = ";
+    AFN_file << states_to_text() << endl;
+    AFN_file << "SIMBOLOS = ";
+    AFN_file << symbols_to_text() << endl;
+    AFN_file << "INICIO = ";
+    AFN_file << init_to_text() << endl;
+    AFN_file << "ACEPTACION = ";
+    AFN_file << final_to_text() << endl;
+    AFN_file << "TRANSICION = ";
+    AFN_file << AFN_output_t.str() << endl;
+  }
+  AFN_file.close();
 }
 
 vector<vertex* > AFN::eclosure(vector<vertex* > v){
@@ -136,8 +156,44 @@ AFN* AFN::visitAST(node* current){
   }
 }
 
+void AFN::tran_to_text(int from, int to, char a){
+  ostringstream temp;
+  temp << "(" << from << ", " << a << ", " << to << ")";
+  AFN_output_t << temp.str();
+}
+
+string AFN::states_to_text(){
+  ostringstream temp;
+  temp << "{";
+  for(unsigned int i = 1; i<=state; i++){
+    temp << i << ", ";
+  }
+  temp << "}";
+  return temp.str();
+}
+
+string AFN::symbols_to_text(){
+  ostringstream temp;
+  temp << "{";
+  copy(this->L.begin(), this->L.end(), ostream_iterator<char>(temp, ", "));
+  temp << "}";
+  return temp.str();
+}
+
+string AFN::final_to_text(){
+  ostringstream temp;
+  temp << "{" << result->final_vertex->number_of << "}";
+  return temp.str();
+}
+
+string AFN::init_to_text(){
+  ostringstream temp;
+  temp << "{" << result->init_vertex->number_of << "}";
+  return temp.str();
+}
+
 AFN* AFN::base(node* current){
-  cout << "Creando AFN para " << current->key_value << endl;
+  //cout << "Creando AFN para " << current->key_value << endl;
   AFN* result = new AFN;
   vertex* v1 = new vertex;
   vertex* v2 = new vertex;
@@ -146,11 +202,12 @@ AFN* AFN::base(node* current){
   v1->vertex_to.push_back(make_pair(current->key_value, v2));
   result->init_vertex = v1;
   result->final_vertex = v2;
+  tran_to_text(v1->number_of, v2->number_of, current->key_value);
   return result;
 }
 
 AFN* AFN::orAFN(AFN* a, AFN* b){
-  cout << "Creando AFN para |" << endl;
+  //cout << "Creando AFN para |" << endl;
   AFN* result = new AFN;
   vertex* v1 = new vertex;
   vertex* v2 = new vertex;
@@ -160,13 +217,17 @@ AFN* AFN::orAFN(AFN* a, AFN* b){
   v1->vertex_to.push_back(make_pair('e', b->get_vertex_init()));
   a->set_vertex_final_to('e', v2);
   b->set_vertex_final_to('e', v2);
+  tran_to_text(v1->number_of, a->get_vertex_init()->number_of, 'e');
+  tran_to_text(v1->number_of, b->get_vertex_init()->number_of, 'e');
+  tran_to_text(a->get_vertex_final()->number_of, v2->number_of, 'e');
+  tran_to_text(b->get_vertex_final()->number_of, v2->number_of, 'e');
   result->init_vertex = v1;
   result->final_vertex = v2;
   return result;
 }
 
 AFN* AFN::kleeneAFN(AFN* a){
-  cout << "Creando AFN para *" << endl;
+  //cout << "Creando AFN para *" << endl;
   AFN* result = new AFN;
   vertex* v1 = new vertex;
   vertex* v2 = new vertex;
@@ -178,17 +239,19 @@ AFN* AFN::kleeneAFN(AFN* a){
   v1->vertex_to.push_back(make_pair('e', a->get_vertex_init()));
   result->init_vertex = v1;
   result->final_vertex = v2;
+  tran_to_text(a->get_vertex_final()->number_of, a->get_vertex_init()->number_of, 'e');
+  tran_to_text(a->get_vertex_final()->number_of, v2->number_of, 'e');
+  tran_to_text(v1->number_of, v2->number_of, 'e');
+  tran_to_text(v1->number_of, a->get_vertex_init()->number_of, 'e');
   return result;
 }
 
 AFN* AFN::concAFN(AFN* a, AFN* b){
-  cout << "Creando AFN para ^" << endl;
+  //cout << "Creando AFN para ^" << endl;
   AFN* result = new AFN;
-  //a->set_vertex_final_to('e', b->get_vertex_init());
   b->set_vertex_final_to('e', a->get_vertex_init());
-  //result->init_vertex = a->get_vertex_init();
   result->init_vertex = b->get_vertex_init();
-  //result->final_vertex = b->get_vertex_final();
   result->final_vertex = a->get_vertex_final();
+  tran_to_text(b->get_vertex_init()->number_of, a->get_vertex_final()->number_of, 'e');
   return result;
 }
