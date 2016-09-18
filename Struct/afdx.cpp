@@ -134,7 +134,7 @@ AFDX* AFDX::subset_const(vertex* vertex_init, vector<char> L){
   init_vertex->number_of = get_new_state();
   states_afdx.push_back(init_vertex);
   Dstates.push(t0);
-  cout << "Creating AFDX .... " << endl;
+  //cout << "Creating AFDX .... " << endl;
   while (!Dstates.empty()){
     vector<vertex* > T = Dstates.top();
     vertex* v_from = subset_to_vertex(T);
@@ -144,7 +144,7 @@ AFDX* AFDX::subset_const(vertex* vertex_init, vector<char> L){
       sort(U.begin(), U.end(), compare_by_number_of());
       vertex* v_to = subset_to_vertex(U);
       if(count_if(states_afdx.begin(), states_afdx.end(), compare_by_afdx_set(v_to->afdx_set)) == 0){
-        cout << "New AFDX state found " << endl;
+        //cout << "New AFDX state found " << endl;
         v_to->number_of = get_new_state();
         states_afdx.push_back(v_to);
         Dstates.push(U);
@@ -153,9 +153,9 @@ AFDX* AFDX::subset_const(vertex* vertex_init, vector<char> L){
       vector<vertex* >::iterator it_v_to = find_if(states_afdx.begin(), states_afdx.end(), compare_by_afdx_set(v_to->afdx_set));
       int index_v_from = distance( states_afdx.begin(), it_v_from );
       int index_v_to = distance( states_afdx.begin(), it_v_to );
-      cout << "State index from -> " << index_v_from << endl;
-      cout << "State index to -> " << index_v_to << endl;
-      cout << "with.. " << L[i] << endl;
+      //cout << "State index from -> " << index_v_from << endl;
+      //cout << "State index to -> " << index_v_to << endl;
+      //cout << "with.. " << L[i] << endl;
       states_afdx[index_v_from]->vertex_to.push_back(make_pair(L[i], states_afdx[index_v_to]));
       tran_to_text(states_afdx[index_v_from]->number_of, states_afdx[index_v_to]->number_of, L[i]);
     };
@@ -173,9 +173,9 @@ vertex* AFDX::subset_to_vertex(vector<vertex* > v){
   } else {
     new_state->afdx_set.push_back(0);
   }
-  cout << "{ ";
-  copy(new_state->afdx_set.begin(), new_state->afdx_set.end(), ostream_iterator<int>(cout, " "));
-  cout << "}"<< endl;
+  //cout << "{ ";
+  //copy(new_state->afdx_set.begin(), new_state->afdx_set.end(), ostream_iterator<int>(cout, " "));
+  //cout << "}"<< endl;
   return new_state;
 }
 
@@ -235,4 +235,40 @@ vector<vertex* > AFDX::move(vector<vertex* > v, char c){
 
 vertex* AFDX::get_vertex_init(){
   return init_vertex;
+}
+
+void AFDX::minAFD(){
+  vector<vertex* > F;
+  vector<vertex* > S_F;
+  vector<vector<vertex* > > PI, nPI;
+  for(unsigned int i = 0; i < states_afdx.size(); i++){
+    bool final_state = false;
+    for(unsigned int j = 0; j < states_afdx[i]->afdx_set.size(); j++){
+      if (states_afdx[i]->afdx_set[j] == final_vertex->number_of){
+        final_state = true;
+      };
+    }
+    if(final_state == true){
+      F.push_back(states_afdx[i]);
+    } else {
+      S_F.push_back(states_afdx[i]);
+    }
+  }
+  PI.push_back(F);
+  PI.push_back(S_F);
+  cout << "Size of F " << F.size() << endl;
+  cout << "Size of S-F " << S_F.size() << endl;
+  cout << "Size of PI " << PI.size() << endl;
+
+  while(PI != nPI){
+    cout << "HI" << endl;
+    nPI = PI;
+    for(unsigned int i = 0; i < L.size(); i++){
+      for(unsigned int j = 0; j < PI.size(); j++){
+        if(PI[j].size()>2){
+
+        }
+      }
+    }
+  }
 }

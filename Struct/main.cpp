@@ -39,6 +39,6 @@ int main(int argc, char *argv[]){
     cout << "Enter Expression " << endl;
     cin >> exprsn ;
     afd->simulationAFD(exprsn);
-    cout << "AFD to MIN{AFD}" << endl;
-    afd->minAFD();
+    /*cout << "AFD to MIN{AFD}" << endl;
+    afd->minAFD();*/
 }

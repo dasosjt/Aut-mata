@@ -39,6 +39,7 @@ class AFDX{
     string symbols_to_text();
     string final_to_text();
     string init_to_text();
+    void minAFD();
 
   private:
     AFDX* result;
