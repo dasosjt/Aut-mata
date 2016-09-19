@@ -32,6 +32,7 @@ int main(int argc, char *argv[]){
     cout << "Enter Expression " << endl;
     cin >> exprsn ;
     afdx->simulationAFDX(exprsn);
+    afdx->minAFD();
     cout << "AST TO AFD "<< endl;
     AFD* afd = new AFD();
     afd->createAFD(tree->getRoot(), L);
@@ -39,6 +40,4 @@ int main(int argc, char *argv[]){
     cout << "Enter Expression " << endl;
     cin >> exprsn ;
     afd->simulationAFD(exprsn);
-    /*cout << "AFD to MIN{AFD}" << endl;
-    afd->minAFD();*/
 }

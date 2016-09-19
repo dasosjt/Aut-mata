@@ -389,10 +389,9 @@ void AFD::simulationAFD(string exprsn){
   AFD_file.close();
 }
 
-void AFD::minAFD(){
-  vector<vertex* > F;
+void AFD::minAFD(){vector<vertex* > F;
   vector<vertex* > S_F;
-  vector<vector<vertex* > > PI, nPI;
+  vector<vector<vertex* > > PI, nPI, sPI;
   for(unsigned int i = 0; i < states_afd.size(); i++){
     bool final_state = false;
     for(unsigned int j = 0; j < states_afd[i]->afdx_set.size(); j++){
@@ -411,16 +410,76 @@ void AFD::minAFD(){
   cout << "Size of F " << F.size() << endl;
   cout << "Size of S-F " << S_F.size() << endl;
   cout << "Size of PI " << PI.size() << endl;
-
-  while(PI != nPI){
-    cout << "HI" << endl;
-    nPI = PI;
-    for(unsigned int i = 0; i < L.size(); i++){
-      for(unsigned int j = 0; j < PI.size(); j++){
-        if(PI[j].size()>2){
-
+  nPI = PI;
+  while(nPI != sPI){
+    cout << nPI.size() << endl;
+    cout << sPI.size() << endl;
+    vector<vertex* > belongsMV;
+    vector<vertex* > belongsnMV;
+    sPI = PI;
+    PI = nPI;
+    nPI.clear();
+    for(unsigned int k = 0; k<PI.size(); k++){
+      if(PI[k].size() > 1){
+        vector<int > belongsM;
+        belongsM.resize(PI[k].size());
+        for(unsigned int c = 0; c<L.size(); c++){
+          cout << "c : " << c << endl;
+          for(unsigned int i = 0; i<PI[k].size(); i++){
+            cout << "   i : " << i+1 << endl;
+            for(unsigned int j = 0; j<PI[k].size(); j++){
+              cout << "     j : " << j+1 << endl;
+              vector<vertex* > v_from;
+              vector<vertex* > v_to;
+              v_from.push_back(PI[k][i]);
+              v_to = move(v_from, L[c]);
+              if(v_to[0]->number_of == PI[k][j]->number_of){
+                ostringstream eq;
+                eq << "       moves " << v_from[0]->number_of << " with " << L[c] << " and give us " << v_to[0]->number_of
+                    << " that is equals to " << PI[k][j]->number_of << " that belongs to this set" <<endl;
+                cout << eq.str();
+                belongsM[i] += 1;
+              }
+            }
+          }
         }
+        for(unsigned int n = 0; n<belongsM.size(); n++){
+          if(PI[k].size()>2){
+            if(belongsM[n] == L.size()){
+              belongsMV.push_back(PI[k][n]);
+              cout << "This belongs " << n+1 << endl;
+            } else {
+              belongsnMV.push_back(PI[k][n]);
+              cout << "This does not belong " << n+1 << endl;
+            }
+          } else {
+            if(belongsM[n] == 1){
+              belongsMV.push_back(PI[k][n]);
+              cout << "This belongs " << n+1 << endl;
+            } else {
+              belongsnMV.push_back(PI[k][n]);
+              cout << "This does not belong " << n+1 << endl;
+            }
+          }
+        }
+      } else {
+        nPI.push_back(PI[k]);
       }
+    }
+    if(find(nPI.begin(), nPI.end(), belongsMV) == nPI.end()){
+        nPI.push_back(belongsMV);
+    }
+    if(!belongsnMV.empty()){
+      if(find(nPI.begin(), nPI.end(), belongsnMV) == nPI.end()){
+          nPI.push_back(belongsnMV);
+      }
+    }
+  }
+  cout <<"Min AFD has "<< PI.size() <<" states" <<endl;
+  for(unsigned int i = 0; i<PI.size(); i++){
+    cout << "State " << i << " has "<<endl;
+    for(unsigned int j = 0; j<PI[i].size(); j++){
+      cout << "       State  "<<PI[i][j]->number_of << endl;
     }
   }
 }
