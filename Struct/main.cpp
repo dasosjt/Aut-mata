@@ -40,4 +40,5 @@ int main(int argc, char *argv[]){
     cout << "Enter Expression " << endl;
     cin >> exprsn ;
     afd->simulationAFD(exprsn);
+    //afd->minAFD();
 }

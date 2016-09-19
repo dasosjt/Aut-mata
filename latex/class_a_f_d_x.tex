@@ -1,0 +1,244 @@
+\hypertarget{class_a_f_d_x}{}\section{A\+F\+DX Class Reference}
+\label{class_a_f_d_x}\index{A\+F\+DX@{A\+F\+DX}}
+
+
+{\ttfamily \#include $<$afdx.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_a_f_d_x_a4abb1326f70153217b6f27dc08135e5d}{A\+F\+DX} ()
+\item 
+void \hyperlink{class_a_f_d_x_aaf36a335cbb6d03b46993dc01355f756}{create\+A\+F\+DX} (\hyperlink{structvertex}{vertex} $\ast$v1, vector$<$ char $>$ L)
+\item 
+\hyperlink{class_a_f_d_x}{A\+F\+DX} $\ast$ \hyperlink{class_a_f_d_x_a7f4f46c25fb5a5b3f1be898dde218aa2}{subset\+\_\+const} (\hyperlink{structvertex}{vertex} $\ast$v1, vector$<$ char $>$ L)
+\item 
+\hyperlink{structvertex}{vertex} $\ast$ \hyperlink{class_a_f_d_x_aa78cba34334092271a7cffc86a8cd344}{get\+\_\+vertex\+\_\+init} ()
+\item 
+\hyperlink{structvertex}{vertex} $\ast$ \hyperlink{class_a_f_d_x_ac7b12b227145c478fca9a00f785656ab}{get\+\_\+vertex\+\_\+final} ()
+\item 
+vector$<$ \hyperlink{structvertex}{vertex} $\ast$ $>$ \hyperlink{class_a_f_d_x_af0430e9d0436d6a02e75549d36f46b14}{eclosure} (vector$<$ \hyperlink{structvertex}{vertex} $\ast$$>$ v)
+\item 
+vector$<$ \hyperlink{structvertex}{vertex} $\ast$ $>$ \hyperlink{class_a_f_d_x_a312f7b6465d0a7b906449f01d23f199c}{move} (vector$<$ \hyperlink{structvertex}{vertex} $\ast$ $>$ v, char c)
+\item 
+\hyperlink{structvertex}{vertex} $\ast$ \hyperlink{class_a_f_d_x_a55926260ee08e47aced2343f9672f28f}{subset\+\_\+to\+\_\+vertex} (vector$<$ \hyperlink{structvertex}{vertex} $\ast$ $>$ v)
+\item 
+int \hyperlink{class_a_f_d_x_a5f578f0b5ac5b77d800aa765626f94e1}{get\+\_\+new\+\_\+state} ()
+\item 
+void \hyperlink{class_a_f_d_x_ae47ecdcac8ec88b22d88fa1bfa52f781}{simulation\+A\+F\+DX} (string exprsn)
+\item 
+void \hyperlink{class_a_f_d_x_a7fb827f82eaefdb25a042b50fa2986ce}{tran\+\_\+to\+\_\+text} (int from, int to, char a)
+\item 
+string \hyperlink{class_a_f_d_x_a1fa780c283bf7bafbc63c25102f9ae69}{states\+\_\+to\+\_\+text} ()
+\item 
+string \hyperlink{class_a_f_d_x_a9b8bedc996a82d6539188d3acb573940}{symbols\+\_\+to\+\_\+text} ()
+\item 
+string \hyperlink{class_a_f_d_x_a65d0f9d058236fd49de2ecec65dc35ef}{final\+\_\+to\+\_\+text} ()
+\item 
+string \hyperlink{class_a_f_d_x_a73888a711ee57d75df9069f70bc06815}{init\+\_\+to\+\_\+text} ()
+\item 
+void \hyperlink{class_a_f_d_x_aba731125afd626a8dbdab726dbd441eb}{min\+A\+FD} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Clase \hyperlink{class_a_f_d_x}{A\+F\+DX} generada a partir de un \hyperlink{class_a_f_n}{A\+FN}, un Automata Finito no determinista, por lo tanto puede aceptar cadenas epsilon y estar al mismo tiempo en varios estados. 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{class_a_f_d_x_a4abb1326f70153217b6f27dc08135e5d}{}\label{class_a_f_d_x_a4abb1326f70153217b6f27dc08135e5d} 
+\index{A\+F\+DX@{A\+F\+DX}!A\+F\+DX@{A\+F\+DX}}
+\index{A\+F\+DX@{A\+F\+DX}!A\+F\+DX@{A\+F\+DX}}
+\subsubsection{\texorpdfstring{A\+F\+D\+X()}{AFDX()}}
+{\footnotesize\ttfamily A\+F\+D\+X\+::\+A\+F\+DX (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Constructor 
+
+\subsection{Member Function Documentation}
+\hypertarget{class_a_f_d_x_aaf36a335cbb6d03b46993dc01355f756}{}\label{class_a_f_d_x_aaf36a335cbb6d03b46993dc01355f756} 
+\index{A\+F\+DX@{A\+F\+DX}!create\+A\+F\+DX@{create\+A\+F\+DX}}
+\index{create\+A\+F\+DX@{create\+A\+F\+DX}!A\+F\+DX@{A\+F\+DX}}
+\subsubsection{\texorpdfstring{create\+A\+F\+D\+X()}{createAFDX()}}
+{\footnotesize\ttfamily void A\+F\+D\+X\+::create\+A\+F\+DX (\begin{DoxyParamCaption}\item[{\hyperlink{structvertex}{vertex} $\ast$}]{v1,  }\item[{vector$<$ char $>$}]{L }\end{DoxyParamCaption})}
+
+Metodo que crea el \hyperlink{class_a_f_d}{A\+FD} 
+\begin{DoxyParams}{Parameters}
+{\em v1} & es el vertice inicial del \hyperlink{class_a_f_n}{A\+FN} \\
+\hline
+{\em L} & es el lenguaje que se detecto en el arbol \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\hypertarget{class_a_f_d_x_af0430e9d0436d6a02e75549d36f46b14}{}\label{class_a_f_d_x_af0430e9d0436d6a02e75549d36f46b14} 
+\index{A\+F\+DX@{A\+F\+DX}!eclosure@{eclosure}}
+\index{eclosure@{eclosure}!A\+F\+DX@{A\+F\+DX}}
+\subsubsection{\texorpdfstring{eclosure()}{eclosure()}}
+{\footnotesize\ttfamily vector$<$ \hyperlink{structvertex}{vertex} $\ast$$>$ A\+F\+D\+X\+::eclosure (\begin{DoxyParamCaption}\item[{vector$<$ \hyperlink{structvertex}{vertex} $\ast$$>$}]{v }\end{DoxyParamCaption})}
+
+Movimiento eclosure 
+\begin{DoxyParams}{Parameters}
+{\em v} & es un conjunto de vertices/estados a los cuales se les aplica el movimiento eclosure \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+un grupo de vertices/estados de resultado del movimiento eclosure 
+\end{DoxyReturn}
+\hypertarget{class_a_f_d_x_a65d0f9d058236fd49de2ecec65dc35ef}{}\label{class_a_f_d_x_a65d0f9d058236fd49de2ecec65dc35ef} 
+\index{A\+F\+DX@{A\+F\+DX}!final\+\_\+to\+\_\+text@{final\+\_\+to\+\_\+text}}
+\index{final\+\_\+to\+\_\+text@{final\+\_\+to\+\_\+text}!A\+F\+DX@{A\+F\+DX}}
+\subsubsection{\texorpdfstring{final\+\_\+to\+\_\+text()}{final\_to\_text()}}
+{\footnotesize\ttfamily string A\+F\+D\+X\+::final\+\_\+to\+\_\+text (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Traduce los estados finales a texto \begin{DoxyReturn}{Returns}
+el resultado en forma de string 
+\end{DoxyReturn}
+\hypertarget{class_a_f_d_x_a5f578f0b5ac5b77d800aa765626f94e1}{}\label{class_a_f_d_x_a5f578f0b5ac5b77d800aa765626f94e1} 
+\index{A\+F\+DX@{A\+F\+DX}!get\+\_\+new\+\_\+state@{get\+\_\+new\+\_\+state}}
+\index{get\+\_\+new\+\_\+state@{get\+\_\+new\+\_\+state}!A\+F\+DX@{A\+F\+DX}}
+\subsubsection{\texorpdfstring{get\+\_\+new\+\_\+state()}{get\_new\_state()}}
+{\footnotesize\ttfamily int A\+F\+D\+X\+::get\+\_\+new\+\_\+state (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Metodo que obtiene el primer vertice/estado del \hyperlink{class_a_f_n}{A\+FN} actual \begin{DoxyReturn}{Returns}
+vertex$\ast$ que representa el ultimo vertice/estado del \hyperlink{class_a_f_n}{A\+FN} actual 
+\end{DoxyReturn}
+\hypertarget{class_a_f_d_x_ac7b12b227145c478fca9a00f785656ab}{}\label{class_a_f_d_x_ac7b12b227145c478fca9a00f785656ab} 
+\index{A\+F\+DX@{A\+F\+DX}!get\+\_\+vertex\+\_\+final@{get\+\_\+vertex\+\_\+final}}
+\index{get\+\_\+vertex\+\_\+final@{get\+\_\+vertex\+\_\+final}!A\+F\+DX@{A\+F\+DX}}
+\subsubsection{\texorpdfstring{get\+\_\+vertex\+\_\+final()}{get\_vertex\_final()}}
+{\footnotesize\ttfamily \hyperlink{structvertex}{vertex}$\ast$ A\+F\+D\+X\+::get\+\_\+vertex\+\_\+final (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Metodo que obtiene el ultimo vertice/estado del \hyperlink{class_a_f_n}{A\+FN} actual \begin{DoxyReturn}{Returns}
+vertex$\ast$ que representa el ultimo vertice/estado del \hyperlink{class_a_f_n}{A\+FN} actual 
+\end{DoxyReturn}
+\hypertarget{class_a_f_d_x_aa78cba34334092271a7cffc86a8cd344}{}\label{class_a_f_d_x_aa78cba34334092271a7cffc86a8cd344} 
+\index{A\+F\+DX@{A\+F\+DX}!get\+\_\+vertex\+\_\+init@{get\+\_\+vertex\+\_\+init}}
+\index{get\+\_\+vertex\+\_\+init@{get\+\_\+vertex\+\_\+init}!A\+F\+DX@{A\+F\+DX}}
+\subsubsection{\texorpdfstring{get\+\_\+vertex\+\_\+init()}{get\_vertex\_init()}}
+{\footnotesize\ttfamily \hyperlink{structvertex}{vertex} $\ast$ A\+F\+D\+X\+::get\+\_\+vertex\+\_\+init (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Metodo que obtiene el primer vertice/estado del \hyperlink{class_a_f_n}{A\+FN} actual \begin{DoxyReturn}{Returns}
+vertex$\ast$ que representa el ultimo vertice/estado del \hyperlink{class_a_f_n}{A\+FN} actual 
+\end{DoxyReturn}
+\hypertarget{class_a_f_d_x_a73888a711ee57d75df9069f70bc06815}{}\label{class_a_f_d_x_a73888a711ee57d75df9069f70bc06815} 
+\index{A\+F\+DX@{A\+F\+DX}!init\+\_\+to\+\_\+text@{init\+\_\+to\+\_\+text}}
+\index{init\+\_\+to\+\_\+text@{init\+\_\+to\+\_\+text}!A\+F\+DX@{A\+F\+DX}}
+\subsubsection{\texorpdfstring{init\+\_\+to\+\_\+text()}{init\_to\_text()}}
+{\footnotesize\ttfamily string A\+F\+D\+X\+::init\+\_\+to\+\_\+text (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Traduce los estados iniciales a texto \begin{DoxyReturn}{Returns}
+el resultado en forma de string 
+\end{DoxyReturn}
+\hypertarget{class_a_f_d_x_aba731125afd626a8dbdab726dbd441eb}{}\label{class_a_f_d_x_aba731125afd626a8dbdab726dbd441eb} 
+\index{A\+F\+DX@{A\+F\+DX}!min\+A\+FD@{min\+A\+FD}}
+\index{min\+A\+FD@{min\+A\+FD}!A\+F\+DX@{A\+F\+DX}}
+\subsubsection{\texorpdfstring{min\+A\+F\+D()}{minAFD()}}
+{\footnotesize\ttfamily void A\+F\+D\+X\+::min\+A\+FD (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Metodo que genera un nuevo estado \begin{DoxyReturn}{Returns}
+un nuevo estado integer Metodo que crea el min \hyperlink{class_a_f_d}{A\+FD} 
+
+void 
+\end{DoxyReturn}
+\hypertarget{class_a_f_d_x_a312f7b6465d0a7b906449f01d23f199c}{}\label{class_a_f_d_x_a312f7b6465d0a7b906449f01d23f199c} 
+\index{A\+F\+DX@{A\+F\+DX}!move@{move}}
+\index{move@{move}!A\+F\+DX@{A\+F\+DX}}
+\subsubsection{\texorpdfstring{move()}{move()}}
+{\footnotesize\ttfamily vector$<$ \hyperlink{structvertex}{vertex} $\ast$$>$ A\+F\+D\+X\+::move (\begin{DoxyParamCaption}\item[{vector$<$ \hyperlink{structvertex}{vertex} $\ast$ $>$}]{v,  }\item[{char}]{c }\end{DoxyParamCaption})}
+
+Movimiento move 
+\begin{DoxyParams}{Parameters}
+{\em v} & es un conjunto de vertices/estados a los cuales se les aplica el movimiento move \\
+\hline
+{\em c} & es el caracter con el cual se esta realizando el movimiento \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+un grupo de vertices/estados de resultado del movimiento move 
+\end{DoxyReturn}
+\hypertarget{class_a_f_d_x_ae47ecdcac8ec88b22d88fa1bfa52f781}{}\label{class_a_f_d_x_ae47ecdcac8ec88b22d88fa1bfa52f781} 
+\index{A\+F\+DX@{A\+F\+DX}!simulation\+A\+F\+DX@{simulation\+A\+F\+DX}}
+\index{simulation\+A\+F\+DX@{simulation\+A\+F\+DX}!A\+F\+DX@{A\+F\+DX}}
+\subsubsection{\texorpdfstring{simulation\+A\+F\+D\+X()}{simulationAFDX()}}
+{\footnotesize\ttfamily void A\+F\+D\+X\+::simulation\+A\+F\+DX (\begin{DoxyParamCaption}\item[{string}]{exprsn }\end{DoxyParamCaption})}
+
+Metodo que simula el \hyperlink{class_a_f_d_x}{A\+F\+DX} a partir de una expresion 
+\begin{DoxyParams}{Parameters}
+{\em exprsn} & es un string que se verificara si es o no es aceptada por el \hyperlink{class_a_f_n}{A\+FN} \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\hypertarget{class_a_f_d_x_a1fa780c283bf7bafbc63c25102f9ae69}{}\label{class_a_f_d_x_a1fa780c283bf7bafbc63c25102f9ae69} 
+\index{A\+F\+DX@{A\+F\+DX}!states\+\_\+to\+\_\+text@{states\+\_\+to\+\_\+text}}
+\index{states\+\_\+to\+\_\+text@{states\+\_\+to\+\_\+text}!A\+F\+DX@{A\+F\+DX}}
+\subsubsection{\texorpdfstring{states\+\_\+to\+\_\+text()}{states\_to\_text()}}
+{\footnotesize\ttfamily string A\+F\+D\+X\+::states\+\_\+to\+\_\+text (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Traduce los estados a texto \begin{DoxyReturn}{Returns}
+el resultado en forma de string 
+\end{DoxyReturn}
+\hypertarget{class_a_f_d_x_a7f4f46c25fb5a5b3f1be898dde218aa2}{}\label{class_a_f_d_x_a7f4f46c25fb5a5b3f1be898dde218aa2} 
+\index{A\+F\+DX@{A\+F\+DX}!subset\+\_\+const@{subset\+\_\+const}}
+\index{subset\+\_\+const@{subset\+\_\+const}!A\+F\+DX@{A\+F\+DX}}
+\subsubsection{\texorpdfstring{subset\+\_\+const()}{subset\_const()}}
+{\footnotesize\ttfamily \hyperlink{class_a_f_d_x}{A\+F\+DX} $\ast$ A\+F\+D\+X\+::subset\+\_\+const (\begin{DoxyParamCaption}\item[{\hyperlink{structvertex}{vertex} $\ast$}]{v1,  }\item[{vector$<$ char $>$}]{L }\end{DoxyParamCaption})}
+
+Metodo que crea la construccion de subconjuntos 
+\begin{DoxyParams}{Parameters}
+{\em v1} & es el vertice inicial del \hyperlink{class_a_f_n}{A\+FN} \\
+\hline
+{\em L} & es el lenguaje que se detecto en el arbol \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+devuelve un puntero \hyperlink{class_a_f_d_x}{A\+F\+DX} resultante 
+\end{DoxyReturn}
+\hypertarget{class_a_f_d_x_a55926260ee08e47aced2343f9672f28f}{}\label{class_a_f_d_x_a55926260ee08e47aced2343f9672f28f} 
+\index{A\+F\+DX@{A\+F\+DX}!subset\+\_\+to\+\_\+vertex@{subset\+\_\+to\+\_\+vertex}}
+\index{subset\+\_\+to\+\_\+vertex@{subset\+\_\+to\+\_\+vertex}!A\+F\+DX@{A\+F\+DX}}
+\subsubsection{\texorpdfstring{subset\+\_\+to\+\_\+vertex()}{subset\_to\_vertex()}}
+{\footnotesize\ttfamily \hyperlink{structvertex}{vertex} $\ast$ A\+F\+D\+X\+::subset\+\_\+to\+\_\+vertex (\begin{DoxyParamCaption}\item[{vector$<$ \hyperlink{structvertex}{vertex} $\ast$ $>$}]{v }\end{DoxyParamCaption})}
+
+A partir de un conjunto se crea un vertice/estados 
+\begin{DoxyParams}{Parameters}
+{\em v} & es un conjunto de vertices/estados a los cuales se les quiere crear un conjunto \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+devuelve un vertice que contiene en su interior a v 
+\end{DoxyReturn}
+\hypertarget{class_a_f_d_x_a9b8bedc996a82d6539188d3acb573940}{}\label{class_a_f_d_x_a9b8bedc996a82d6539188d3acb573940} 
+\index{A\+F\+DX@{A\+F\+DX}!symbols\+\_\+to\+\_\+text@{symbols\+\_\+to\+\_\+text}}
+\index{symbols\+\_\+to\+\_\+text@{symbols\+\_\+to\+\_\+text}!A\+F\+DX@{A\+F\+DX}}
+\subsubsection{\texorpdfstring{symbols\+\_\+to\+\_\+text()}{symbols\_to\_text()}}
+{\footnotesize\ttfamily string A\+F\+D\+X\+::symbols\+\_\+to\+\_\+text (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Traduce los simbolos a texto \begin{DoxyReturn}{Returns}
+el resultado en forma de string 
+\end{DoxyReturn}
+\hypertarget{class_a_f_d_x_a7fb827f82eaefdb25a042b50fa2986ce}{}\label{class_a_f_d_x_a7fb827f82eaefdb25a042b50fa2986ce} 
+\index{A\+F\+DX@{A\+F\+DX}!tran\+\_\+to\+\_\+text@{tran\+\_\+to\+\_\+text}}
+\index{tran\+\_\+to\+\_\+text@{tran\+\_\+to\+\_\+text}!A\+F\+DX@{A\+F\+DX}}
+\subsubsection{\texorpdfstring{tran\+\_\+to\+\_\+text()}{tran\_to\_text()}}
+{\footnotesize\ttfamily void A\+F\+D\+X\+::tran\+\_\+to\+\_\+text (\begin{DoxyParamCaption}\item[{int}]{from,  }\item[{int}]{to,  }\item[{char}]{a }\end{DoxyParamCaption})}
+
+Traduce los transiciones a texto 
+\begin{DoxyParams}{Parameters}
+{\em from} & es es un vertice/estado desde donde se realiza la transicion \\
+\hline
+{\em to} & es es un vertice/estado hacia donde se realiza la transicion \\
+\hline
+{\em a} & es el caracter que realiza esa transicion \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\hyperlink{afdx_8h}{afdx.\+h}\item 
+\hyperlink{afdx_8cpp}{afdx.\+cpp}\end{DoxyCompactItemize}

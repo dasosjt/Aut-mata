@@ -239,8 +239,8 @@ vertex* AFDX::get_vertex_init(){
 }
 
 void AFDX::minAFD(){
-  vector<vertex* > F;
-  vector<vertex* > S_F;
+  vector<vertex*> F;
+  vector<vertex*> S_F;
   vector<vector<vertex* > > PI, nPI, sPI;
   for(unsigned int i = 0; i < states_afdx.size(); i++){
     bool final_state = false;
@@ -274,11 +274,11 @@ void AFDX::minAFD(){
         vector<int > belongsM;
         belongsM.resize(PI[k].size());
         for(unsigned int c = 0; c<L.size(); c++){
-          cout << "c : " << c << endl;
+          cout << "c : " << L[c] << endl;
           for(unsigned int i = 0; i<PI[k].size(); i++){
-            cout << "   i : " << i+1 << endl;
+            cout << "   i : " << PI[k][i]->number_of << endl;
             for(unsigned int j = 0; j<PI[k].size(); j++){
-              cout << "     j : " << j+1 << endl;
+              cout << "     j : " << PI[k][j]->number_of << endl;
               vector<vertex* > v_from;
               vector<vertex* > v_to;
               v_from.push_back(PI[k][i]);
@@ -293,44 +293,31 @@ void AFDX::minAFD(){
             }
           }
         }
-        for(unsigned int n = 0; n<belongsM.size(); n++){
-          if(PI[k].size()>2){
-            if(belongsM[n] == L.size()){
-              belongsMV.push_back(PI[k][n]);
-              cout << "This belongs " << n+1 << endl;
-            } else {
-              belongsnMV.push_back(PI[k][n]);
-              cout << "This does not belong " << n+1 << endl;
+        for(unsigned int n = 0; n<PI[k].size(); n++){
+          if(belongsM[n] == L.size()){
+            if(find(belongsMV.begin(), belongsMV.end(), PI[k][n]) == belongsMV.end()){
+                belongsMV.push_back(PI[k][n]);
             }
+            cout << "This belongs " << n+1 << endl;
           } else {
-            if(belongsM[n] == 1){
-              belongsMV.push_back(PI[k][n]);
-              cout << "This belongs " << n+1 << endl;
-            } else {
-              belongsnMV.push_back(PI[k][n]);
-              if(!belongsnMV.empty()){
-                if(find(nPI.begin(), nPI.end(), belongsnMV) == nPI.end()){
-                    nPI.push_back(belongsnMV);
-                }
-              }
-              cout << "This does not belong " << n+1 << endl;
+            if(find(belongsnMV.begin(), belongsnMV.end(), PI[k][n]) == belongsnMV.end()){
+                belongsnMV.push_back(PI[k][n]);
             }
+            cout << "This does not belong " << n+1 << endl;
           }
         }
-      } else {
-        if(!PI[k].empty()){
-            nPI.push_back(PI[k]);
+        if(!belongsMV.empty()){
+          if(find(nPI.begin(), nPI.end(), belongsMV) == nPI.end()){
+              nPI.push_back(belongsMV);
+          }
         }
-      }
-    }
-    if(!belongsMV.empty()){
-      if(find(nPI.begin(), nPI.end(), belongsMV) == nPI.end()){
-          nPI.push_back(belongsMV);
-      }
-    }
-    if(!belongsnMV.empty()){
-      if(find(nPI.begin(), nPI.end(), belongsnMV) == nPI.end()){
-          nPI.push_back(belongsnMV);
+        if(!belongsnMV.empty()){
+          if(find(nPI.begin(), nPI.end(), belongsnMV) == nPI.end()){
+              nPI.push_back(belongsnMV);
+          }
+        }
+      } else if(PI[k].size() == 1) {
+          nPI.push_back(PI[k]);
       }
     }
   }

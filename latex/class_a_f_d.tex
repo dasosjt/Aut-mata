@@ -1,0 +1,295 @@
+\hypertarget{class_a_f_d}{}\section{A\+FD Class Reference}
+\label{class_a_f_d}\index{A\+FD@{A\+FD}}
+
+
+{\ttfamily \#include $<$afd.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_a_f_d_a69ad82d0fe1418e4c141649763a585a6}{A\+FD} ()
+\item 
+void \hyperlink{class_a_f_d_ac2df8498d53da64cef08893ab213db12}{set\+\_\+root} (\hyperlink{structnode}{node} $\ast$root)
+\item 
+int \hyperlink{class_a_f_d_ae5af7aa0559c41a4857d1b81f66ac3a9}{get\+\_\+new\+\_\+id\+\_\+number} ()
+\item 
+int \hyperlink{class_a_f_d_adc0b42986b4299eaaeb0c4384e9c0a2d}{get\+\_\+new\+\_\+state} ()
+\item 
+void \hyperlink{class_a_f_d_a28ca2cf650830a32d1e1716f4a3c4e78}{set\+\_\+id\+\_\+number} (\hyperlink{structnode}{node} $\ast$root)
+\item 
+bool \hyperlink{class_a_f_d_ab5db119b186c71e653e54d4abc82c068}{set\+\_\+voidable} (\hyperlink{structnode}{node} $\ast$root)
+\item 
+vector$<$ int $>$ \hyperlink{class_a_f_d_a9d332b7d65be308507b10e7abf0a9d11}{set\+\_\+firstpos} (\hyperlink{structnode}{node} $\ast$root)
+\item 
+vector$<$ int $>$ \hyperlink{class_a_f_d_a6ebbbeb7971579ee7085730c52ee7dc5}{set\+\_\+lastpos} (\hyperlink{structnode}{node} $\ast$root)
+\item 
+\hyperlink{structnode}{node} $\ast$ \hyperlink{class_a_f_d_a4dfefc5091e8654160f65db0bc4fc0b0}{search\+\_\+node} (\hyperlink{structnode}{node} $\ast$root, int id\+\_\+number)
+\item 
+void \hyperlink{class_a_f_d_a2d612d265dfc6864e7563d4e242ef100}{set\+\_\+nextpos} (\hyperlink{structnode}{node} $\ast$root)
+\item 
+void \hyperlink{class_a_f_d_a9b17ebe33cebd28351196a217b023a0e}{create\+A\+FD} (\hyperlink{structnode}{node} $\ast$root, vector$<$ char $>$ L)
+\item 
+void \hyperlink{class_a_f_d_a1c7d05c678a6cc4e31c2b4cb93b6408e}{min\+A\+FD} ()
+\item 
+void \hyperlink{class_a_f_d_a536493b9063f9e9c4eb734d3560f7a7d}{simulation\+A\+FD} (string exprsn)
+\item 
+vector$<$ \hyperlink{structvertex}{vertex} $\ast$$>$ \hyperlink{class_a_f_d_a4505bb76534ae8c4df01c164912f5c52}{move} (vector$<$ \hyperlink{structvertex}{vertex} $\ast$ $>$ v, char c)
+\item 
+void \hyperlink{class_a_f_d_a5c2a7a1aeb7fc4acba6ad6dd12603112}{tran\+\_\+to\+\_\+text} (int from, int to, char a)
+\item 
+string \hyperlink{class_a_f_d_a8c3da4d57cbc9bae76e775cb6b216d64}{states\+\_\+to\+\_\+text} ()
+\item 
+string \hyperlink{class_a_f_d_afee8c78c7a823e360e8e69136806e7c5}{symbols\+\_\+to\+\_\+text} ()
+\item 
+string \hyperlink{class_a_f_d_a6882d0942eceb2af40e8a1fe7c057d6e}{final\+\_\+to\+\_\+text} ()
+\item 
+string \hyperlink{class_a_f_d_ae2bf9a8a6511e585c911ff1c2416bb3e}{init\+\_\+to\+\_\+text} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Clase \hyperlink{class_a_f_d}{A\+FD} generada a partir del A\+S\+T(\+Abstract Syntax Tree) por lo tanto puede aceptar cadenas no vacias y solamente se encuentra en un estado a la vez 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{class_a_f_d_a69ad82d0fe1418e4c141649763a585a6}{}\label{class_a_f_d_a69ad82d0fe1418e4c141649763a585a6} 
+\index{A\+FD@{A\+FD}!A\+FD@{A\+FD}}
+\index{A\+FD@{A\+FD}!A\+FD@{A\+FD}}
+\subsubsection{\texorpdfstring{A\+F\+D()}{AFD()}}
+{\footnotesize\ttfamily A\+F\+D\+::\+A\+FD (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Constructor 
+
+\subsection{Member Function Documentation}
+\hypertarget{class_a_f_d_a9b17ebe33cebd28351196a217b023a0e}{}\label{class_a_f_d_a9b17ebe33cebd28351196a217b023a0e} 
+\index{A\+FD@{A\+FD}!create\+A\+FD@{create\+A\+FD}}
+\index{create\+A\+FD@{create\+A\+FD}!A\+FD@{A\+FD}}
+\subsubsection{\texorpdfstring{create\+A\+F\+D()}{createAFD()}}
+{\footnotesize\ttfamily void A\+F\+D\+::create\+A\+FD (\begin{DoxyParamCaption}\item[{\hyperlink{structnode}{node} $\ast$}]{root,  }\item[{vector$<$ char $>$}]{L }\end{DoxyParamCaption})}
+
+Metodo que crea el \hyperlink{class_a_f_d}{A\+FD} 
+\begin{DoxyParams}{Parameters}
+{\em root} & es un puntero de un nodo del arbol \\
+\hline
+{\em L} & es el lenguaje que se detecto en el arbol \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\hypertarget{class_a_f_d_a6882d0942eceb2af40e8a1fe7c057d6e}{}\label{class_a_f_d_a6882d0942eceb2af40e8a1fe7c057d6e} 
+\index{A\+FD@{A\+FD}!final\+\_\+to\+\_\+text@{final\+\_\+to\+\_\+text}}
+\index{final\+\_\+to\+\_\+text@{final\+\_\+to\+\_\+text}!A\+FD@{A\+FD}}
+\subsubsection{\texorpdfstring{final\+\_\+to\+\_\+text()}{final\_to\_text()}}
+{\footnotesize\ttfamily string A\+F\+D\+::final\+\_\+to\+\_\+text (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Traduce los estados finales a texto \begin{DoxyReturn}{Returns}
+el resultado en forma de string 
+\end{DoxyReturn}
+\hypertarget{class_a_f_d_ae5af7aa0559c41a4857d1b81f66ac3a9}{}\label{class_a_f_d_ae5af7aa0559c41a4857d1b81f66ac3a9} 
+\index{A\+FD@{A\+FD}!get\+\_\+new\+\_\+id\+\_\+number@{get\+\_\+new\+\_\+id\+\_\+number}}
+\index{get\+\_\+new\+\_\+id\+\_\+number@{get\+\_\+new\+\_\+id\+\_\+number}!A\+FD@{A\+FD}}
+\subsubsection{\texorpdfstring{get\+\_\+new\+\_\+id\+\_\+number()}{get\_new\_id\_number()}}
+{\footnotesize\ttfamily int A\+F\+D\+::get\+\_\+new\+\_\+id\+\_\+number (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Obtenemos un nuevo id number para los nodos del arbol \begin{DoxyReturn}{Returns}
+un integer para el nodo 
+\end{DoxyReturn}
+\hypertarget{class_a_f_d_adc0b42986b4299eaaeb0c4384e9c0a2d}{}\label{class_a_f_d_adc0b42986b4299eaaeb0c4384e9c0a2d} 
+\index{A\+FD@{A\+FD}!get\+\_\+new\+\_\+state@{get\+\_\+new\+\_\+state}}
+\index{get\+\_\+new\+\_\+state@{get\+\_\+new\+\_\+state}!A\+FD@{A\+FD}}
+\subsubsection{\texorpdfstring{get\+\_\+new\+\_\+state()}{get\_new\_state()}}
+{\footnotesize\ttfamily int A\+F\+D\+::get\+\_\+new\+\_\+state (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Obtenemos un nuevo estado para el \hyperlink{class_a_f_d}{A\+FD} \begin{DoxyReturn}{Returns}
+un integer para el vertice/estado 
+\end{DoxyReturn}
+\hypertarget{class_a_f_d_ae2bf9a8a6511e585c911ff1c2416bb3e}{}\label{class_a_f_d_ae2bf9a8a6511e585c911ff1c2416bb3e} 
+\index{A\+FD@{A\+FD}!init\+\_\+to\+\_\+text@{init\+\_\+to\+\_\+text}}
+\index{init\+\_\+to\+\_\+text@{init\+\_\+to\+\_\+text}!A\+FD@{A\+FD}}
+\subsubsection{\texorpdfstring{init\+\_\+to\+\_\+text()}{init\_to\_text()}}
+{\footnotesize\ttfamily string A\+F\+D\+::init\+\_\+to\+\_\+text (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Traduce los estados iniciales a texto \begin{DoxyReturn}{Returns}
+el resultado en forma de string 
+\end{DoxyReturn}
+\hypertarget{class_a_f_d_a1c7d05c678a6cc4e31c2b4cb93b6408e}{}\label{class_a_f_d_a1c7d05c678a6cc4e31c2b4cb93b6408e} 
+\index{A\+FD@{A\+FD}!min\+A\+FD@{min\+A\+FD}}
+\index{min\+A\+FD@{min\+A\+FD}!A\+FD@{A\+FD}}
+\subsubsection{\texorpdfstring{min\+A\+F\+D()}{minAFD()}}
+{\footnotesize\ttfamily void A\+F\+D\+::min\+A\+FD (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Metodo que crea el min \hyperlink{class_a_f_d}{A\+FD} \begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\hypertarget{class_a_f_d_a4505bb76534ae8c4df01c164912f5c52}{}\label{class_a_f_d_a4505bb76534ae8c4df01c164912f5c52} 
+\index{A\+FD@{A\+FD}!move@{move}}
+\index{move@{move}!A\+FD@{A\+FD}}
+\subsubsection{\texorpdfstring{move()}{move()}}
+{\footnotesize\ttfamily vector$<$ \hyperlink{structvertex}{vertex} $\ast$$>$ A\+F\+D\+::move (\begin{DoxyParamCaption}\item[{vector$<$ \hyperlink{structvertex}{vertex} $\ast$ $>$}]{v,  }\item[{char}]{c }\end{DoxyParamCaption})}
+
+Movimiento move 
+\begin{DoxyParams}{Parameters}
+{\em v} & es un conjunto de vertices/estados a los cuales se les aplica el movimiento move \\
+\hline
+{\em c} & es el caracter con el cual se esta realizando el movimiento \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+un grupo de vertices/estados de resultado del movimiento move 
+\end{DoxyReturn}
+\hypertarget{class_a_f_d_a4dfefc5091e8654160f65db0bc4fc0b0}{}\label{class_a_f_d_a4dfefc5091e8654160f65db0bc4fc0b0} 
+\index{A\+FD@{A\+FD}!search\+\_\+node@{search\+\_\+node}}
+\index{search\+\_\+node@{search\+\_\+node}!A\+FD@{A\+FD}}
+\subsubsection{\texorpdfstring{search\+\_\+node()}{search\_node()}}
+{\footnotesize\ttfamily \hyperlink{structnode}{node} $\ast$ A\+F\+D\+::search\+\_\+node (\begin{DoxyParamCaption}\item[{\hyperlink{structnode}{node} $\ast$}]{root,  }\item[{int}]{id\+\_\+number }\end{DoxyParamCaption})}
+
+Buscamos en el arbol a partir de un nodo un nodo con cierto id number 
+\begin{DoxyParams}{Parameters}
+{\em root} & es un puntero de nodo que pertenece al arbol \\
+\hline
+{\em id\+\_\+number} & el id number que estamos buscando \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+el puntero del nodo que estamos buscando 
+\end{DoxyReturn}
+\hypertarget{class_a_f_d_a9d332b7d65be308507b10e7abf0a9d11}{}\label{class_a_f_d_a9d332b7d65be308507b10e7abf0a9d11} 
+\index{A\+FD@{A\+FD}!set\+\_\+firstpos@{set\+\_\+firstpos}}
+\index{set\+\_\+firstpos@{set\+\_\+firstpos}!A\+FD@{A\+FD}}
+\subsubsection{\texorpdfstring{set\+\_\+firstpos()}{set\_firstpos()}}
+{\footnotesize\ttfamily vector$<$ int $>$ A\+F\+D\+::set\+\_\+firstpos (\begin{DoxyParamCaption}\item[{\hyperlink{structnode}{node} $\ast$}]{root }\end{DoxyParamCaption})}
+
+Colocamos a cada nodo del arbol su firstpos 
+\begin{DoxyParams}{Parameters}
+{\em root} & es un puntero de nodo que pertenece al arbol \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+un vector de int que representa su firstpos 
+\end{DoxyReturn}
+\hypertarget{class_a_f_d_a28ca2cf650830a32d1e1716f4a3c4e78}{}\label{class_a_f_d_a28ca2cf650830a32d1e1716f4a3c4e78} 
+\index{A\+FD@{A\+FD}!set\+\_\+id\+\_\+number@{set\+\_\+id\+\_\+number}}
+\index{set\+\_\+id\+\_\+number@{set\+\_\+id\+\_\+number}!A\+FD@{A\+FD}}
+\subsubsection{\texorpdfstring{set\+\_\+id\+\_\+number()}{set\_id\_number()}}
+{\footnotesize\ttfamily void A\+F\+D\+::set\+\_\+id\+\_\+number (\begin{DoxyParamCaption}\item[{\hyperlink{structnode}{node} $\ast$}]{root }\end{DoxyParamCaption})}
+
+Colocamos a cada nodo del arbol un id number 
+\begin{DoxyParams}{Parameters}
+{\em root} & es un puntero de nodo que pertenece al arbol \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\hypertarget{class_a_f_d_a6ebbbeb7971579ee7085730c52ee7dc5}{}\label{class_a_f_d_a6ebbbeb7971579ee7085730c52ee7dc5} 
+\index{A\+FD@{A\+FD}!set\+\_\+lastpos@{set\+\_\+lastpos}}
+\index{set\+\_\+lastpos@{set\+\_\+lastpos}!A\+FD@{A\+FD}}
+\subsubsection{\texorpdfstring{set\+\_\+lastpos()}{set\_lastpos()}}
+{\footnotesize\ttfamily vector$<$ int $>$ A\+F\+D\+::set\+\_\+lastpos (\begin{DoxyParamCaption}\item[{\hyperlink{structnode}{node} $\ast$}]{root }\end{DoxyParamCaption})}
+
+Colocamos a cada nodo del arbol su lastpos 
+\begin{DoxyParams}{Parameters}
+{\em root} & es un puntero de nodo que pertenece al arbol \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+un vector de int que representa su lastpos 
+\end{DoxyReturn}
+\hypertarget{class_a_f_d_a2d612d265dfc6864e7563d4e242ef100}{}\label{class_a_f_d_a2d612d265dfc6864e7563d4e242ef100} 
+\index{A\+FD@{A\+FD}!set\+\_\+nextpos@{set\+\_\+nextpos}}
+\index{set\+\_\+nextpos@{set\+\_\+nextpos}!A\+FD@{A\+FD}}
+\subsubsection{\texorpdfstring{set\+\_\+nextpos()}{set\_nextpos()}}
+{\footnotesize\ttfamily void A\+F\+D\+::set\+\_\+nextpos (\begin{DoxyParamCaption}\item[{\hyperlink{structnode}{node} $\ast$}]{root }\end{DoxyParamCaption})}
+
+Colocamos a cada nodo del arbol su nextpos 
+\begin{DoxyParams}{Parameters}
+{\em root} & es un puntero de nodo que pertenece al arbol \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\hypertarget{class_a_f_d_ac2df8498d53da64cef08893ab213db12}{}\label{class_a_f_d_ac2df8498d53da64cef08893ab213db12} 
+\index{A\+FD@{A\+FD}!set\+\_\+root@{set\+\_\+root}}
+\index{set\+\_\+root@{set\+\_\+root}!A\+FD@{A\+FD}}
+\subsubsection{\texorpdfstring{set\+\_\+root()}{set\_root()}}
+{\footnotesize\ttfamily void A\+F\+D\+::set\+\_\+root (\begin{DoxyParamCaption}\item[{\hyperlink{structnode}{node} $\ast$}]{root }\end{DoxyParamCaption})}
+
+Colocamos el root a partir de un puntero del arbol. 
+\begin{DoxyParams}{Parameters}
+{\em root} & es un puntero de nodo que pertenece al arbol \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\hypertarget{class_a_f_d_ab5db119b186c71e653e54d4abc82c068}{}\label{class_a_f_d_ab5db119b186c71e653e54d4abc82c068} 
+\index{A\+FD@{A\+FD}!set\+\_\+voidable@{set\+\_\+voidable}}
+\index{set\+\_\+voidable@{set\+\_\+voidable}!A\+FD@{A\+FD}}
+\subsubsection{\texorpdfstring{set\+\_\+voidable()}{set\_voidable()}}
+{\footnotesize\ttfamily bool A\+F\+D\+::set\+\_\+voidable (\begin{DoxyParamCaption}\item[{\hyperlink{structnode}{node} $\ast$}]{root }\end{DoxyParamCaption})}
+
+Colocamos a cada nodo del arbol si es voidable 
+\begin{DoxyParams}{Parameters}
+{\em root} & es un puntero de nodo que pertenece al arbol \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+bool que representa 1 si es voidable 
+\end{DoxyReturn}
+\hypertarget{class_a_f_d_a536493b9063f9e9c4eb734d3560f7a7d}{}\label{class_a_f_d_a536493b9063f9e9c4eb734d3560f7a7d} 
+\index{A\+FD@{A\+FD}!simulation\+A\+FD@{simulation\+A\+FD}}
+\index{simulation\+A\+FD@{simulation\+A\+FD}!A\+FD@{A\+FD}}
+\subsubsection{\texorpdfstring{simulation\+A\+F\+D()}{simulationAFD()}}
+{\footnotesize\ttfamily void A\+F\+D\+::simulation\+A\+FD (\begin{DoxyParamCaption}\item[{string}]{exprsn }\end{DoxyParamCaption})}
+
+Metodo que simula el \hyperlink{class_a_f_n}{A\+FN} a partir de una expresion 
+\begin{DoxyParams}{Parameters}
+{\em exprsn} & es un string que se verificara si es o no es aceptada por el \hyperlink{class_a_f_n}{A\+FN} \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\hypertarget{class_a_f_d_a8c3da4d57cbc9bae76e775cb6b216d64}{}\label{class_a_f_d_a8c3da4d57cbc9bae76e775cb6b216d64} 
+\index{A\+FD@{A\+FD}!states\+\_\+to\+\_\+text@{states\+\_\+to\+\_\+text}}
+\index{states\+\_\+to\+\_\+text@{states\+\_\+to\+\_\+text}!A\+FD@{A\+FD}}
+\subsubsection{\texorpdfstring{states\+\_\+to\+\_\+text()}{states\_to\_text()}}
+{\footnotesize\ttfamily string A\+F\+D\+::states\+\_\+to\+\_\+text (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Traduce los estados a texto \begin{DoxyReturn}{Returns}
+el resultado en forma de string 
+\end{DoxyReturn}
+\hypertarget{class_a_f_d_afee8c78c7a823e360e8e69136806e7c5}{}\label{class_a_f_d_afee8c78c7a823e360e8e69136806e7c5} 
+\index{A\+FD@{A\+FD}!symbols\+\_\+to\+\_\+text@{symbols\+\_\+to\+\_\+text}}
+\index{symbols\+\_\+to\+\_\+text@{symbols\+\_\+to\+\_\+text}!A\+FD@{A\+FD}}
+\subsubsection{\texorpdfstring{symbols\+\_\+to\+\_\+text()}{symbols\_to\_text()}}
+{\footnotesize\ttfamily string A\+F\+D\+::symbols\+\_\+to\+\_\+text (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Traduce los simbolos a texto \begin{DoxyReturn}{Returns}
+el resultado en forma de string 
+\end{DoxyReturn}
+\hypertarget{class_a_f_d_a5c2a7a1aeb7fc4acba6ad6dd12603112}{}\label{class_a_f_d_a5c2a7a1aeb7fc4acba6ad6dd12603112} 
+\index{A\+FD@{A\+FD}!tran\+\_\+to\+\_\+text@{tran\+\_\+to\+\_\+text}}
+\index{tran\+\_\+to\+\_\+text@{tran\+\_\+to\+\_\+text}!A\+FD@{A\+FD}}
+\subsubsection{\texorpdfstring{tran\+\_\+to\+\_\+text()}{tran\_to\_text()}}
+{\footnotesize\ttfamily void A\+F\+D\+::tran\+\_\+to\+\_\+text (\begin{DoxyParamCaption}\item[{int}]{from,  }\item[{int}]{to,  }\item[{char}]{a }\end{DoxyParamCaption})}
+
+Traduce los transiciones a texto 
+\begin{DoxyParams}{Parameters}
+{\em from} & es es un vertice/estado desde donde se realiza la transicion \\
+\hline
+{\em to} & es es un vertice/estado hacia donde se realiza la transicion \\
+\hline
+{\em a} & es el caracter que realiza esa transicion \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\hyperlink{afd_8h}{afd.\+h}\item 
+\hyperlink{afd_8cpp}{afd.\+cpp}\end{DoxyCompactItemize}

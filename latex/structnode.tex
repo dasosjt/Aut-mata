@@ -1,0 +1,94 @@
+\hypertarget{structnode}{}\section{node Struct Reference}
+\label{structnode}\index{node@{node}}
+
+
+{\ttfamily \#include $<$tree.\+h$>$}
+
+\subsection*{Public Attributes}
+{\bf }\par
+\begin{DoxyCompactItemize}
+\item 
+char \hyperlink{structnode_a8b75818ceb7869b3685f57334e5c1147}{key\+\_\+value}
+\item 
+\hyperlink{structnode}{node} $\ast$ \hyperlink{structnode_a7cbff55ff448f557223f79299056e9b1}{left}
+\item 
+\hyperlink{structnode}{node} $\ast$ \hyperlink{structnode_abdc86d4c8604c481752953af3235fc47}{right}
+\item 
+\hyperlink{structnode}{node} $\ast$ \hyperlink{structnode_a5e88137f1d0e2f7a940bccf4c3d3a4d3}{parent}
+\item 
+int \hyperlink{structnode_a984474deab8020f018902d50136ec938}{id\+\_\+number}
+\item 
+bool \hyperlink{structnode_a660b4cccc7107b0f760220867e3bb582}{voidable}
+\item 
+vector$<$ int $>$ \hyperlink{structnode_a8a41ddeb557d146334c1b0803cce0b1b}{firstpos}
+\item 
+vector$<$ int $>$ \hyperlink{structnode_a2b8fd11a5fb1366e46dd0a2c7428733d}{lastpos}
+\item 
+vector$<$ int $>$ \hyperlink{structnode_a64dedca0efaaa687a5aef97070f82c74}{nextpos}
+\end{DoxyCompactItemize}
+
+
+
+\subsection{Detailed Description}
+Estructura que representa los nodos de un A\+S\+T(abstract syntax tree) 
+
+\subsection{Member Data Documentation}
+\hypertarget{structnode_a8a41ddeb557d146334c1b0803cce0b1b}{}\label{structnode_a8a41ddeb557d146334c1b0803cce0b1b} 
+\index{node@{node}!firstpos@{firstpos}}
+\index{firstpos@{firstpos}!node@{node}}
+\subsubsection{\texorpdfstring{firstpos}{firstpos}}
+{\footnotesize\ttfamily vector$<$int$>$ node\+::firstpos}
+
+representacion del conjunto firstpos para la construccion de \hyperlink{class_tree}{Tree} -\/$>$ \hyperlink{class_a_f_d}{A\+FD} \hypertarget{structnode_a984474deab8020f018902d50136ec938}{}\label{structnode_a984474deab8020f018902d50136ec938} 
+\index{node@{node}!id\+\_\+number@{id\+\_\+number}}
+\index{id\+\_\+number@{id\+\_\+number}!node@{node}}
+\subsubsection{\texorpdfstring{id\+\_\+number}{id\_number}}
+{\footnotesize\ttfamily int node\+::id\+\_\+number}
+
+representacion del numbero brindado para la construccion de \hyperlink{class_tree}{Tree} -\/$>$ \hyperlink{class_a_f_d}{A\+FD} \hypertarget{structnode_a8b75818ceb7869b3685f57334e5c1147}{}\label{structnode_a8b75818ceb7869b3685f57334e5c1147} 
+\index{node@{node}!key\+\_\+value@{key\+\_\+value}}
+\index{key\+\_\+value@{key\+\_\+value}!node@{node}}
+\subsubsection{\texorpdfstring{key\+\_\+value}{key\_value}}
+{\footnotesize\ttfamily char node\+::key\+\_\+value}
+
+representacion del valor dentro del nodo \hypertarget{structnode_a2b8fd11a5fb1366e46dd0a2c7428733d}{}\label{structnode_a2b8fd11a5fb1366e46dd0a2c7428733d} 
+\index{node@{node}!lastpos@{lastpos}}
+\index{lastpos@{lastpos}!node@{node}}
+\subsubsection{\texorpdfstring{lastpos}{lastpos}}
+{\footnotesize\ttfamily vector$<$int$>$ node\+::lastpos}
+
+representacion del conjunto lastpos para la construccion de \hyperlink{class_tree}{Tree} -\/$>$ \hyperlink{class_a_f_d}{A\+FD} \hypertarget{structnode_a7cbff55ff448f557223f79299056e9b1}{}\label{structnode_a7cbff55ff448f557223f79299056e9b1} 
+\index{node@{node}!left@{left}}
+\index{left@{left}!node@{node}}
+\subsubsection{\texorpdfstring{left}{left}}
+{\footnotesize\ttfamily \hyperlink{structnode}{node}$\ast$ node\+::left}
+
+representacion del puntero de un nodo como un hijo izquierdo \hypertarget{structnode_a64dedca0efaaa687a5aef97070f82c74}{}\label{structnode_a64dedca0efaaa687a5aef97070f82c74} 
+\index{node@{node}!nextpos@{nextpos}}
+\index{nextpos@{nextpos}!node@{node}}
+\subsubsection{\texorpdfstring{nextpos}{nextpos}}
+{\footnotesize\ttfamily vector$<$int$>$ node\+::nextpos}
+
+representacion del conjunto nextpos para la construccion de \hyperlink{class_tree}{Tree} -\/$>$ \hyperlink{class_a_f_d}{A\+FD} \hypertarget{structnode_a5e88137f1d0e2f7a940bccf4c3d3a4d3}{}\label{structnode_a5e88137f1d0e2f7a940bccf4c3d3a4d3} 
+\index{node@{node}!parent@{parent}}
+\index{parent@{parent}!node@{node}}
+\subsubsection{\texorpdfstring{parent}{parent}}
+{\footnotesize\ttfamily \hyperlink{structnode}{node}$\ast$ node\+::parent}
+
+representacion del puntero de un nodo como un padre \hypertarget{structnode_abdc86d4c8604c481752953af3235fc47}{}\label{structnode_abdc86d4c8604c481752953af3235fc47} 
+\index{node@{node}!right@{right}}
+\index{right@{right}!node@{node}}
+\subsubsection{\texorpdfstring{right}{right}}
+{\footnotesize\ttfamily \hyperlink{structnode}{node}$\ast$ node\+::right}
+
+representacion del puntero de un nodo como un hijo derecho \hypertarget{structnode_a660b4cccc7107b0f760220867e3bb582}{}\label{structnode_a660b4cccc7107b0f760220867e3bb582} 
+\index{node@{node}!voidable@{voidable}}
+\index{voidable@{voidable}!node@{node}}
+\subsubsection{\texorpdfstring{voidable}{voidable}}
+{\footnotesize\ttfamily bool node\+::voidable}
+
+representacion del voidable brindado para la construccion de \hyperlink{class_tree}{Tree} -\/$>$ \hyperlink{class_a_f_d}{A\+FD} 
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+\hyperlink{tree_8h}{tree.\+h}\end{DoxyCompactItemize}

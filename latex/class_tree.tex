@@ -1,0 +1,120 @@
+\hypertarget{class_tree}{}\section{Tree Class Reference}
+\label{class_tree}\index{Tree@{Tree}}
+
+
+{\ttfamily \#include $<$tree.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_tree_a7bebcbdd3651d31b2adeb82e8817a720}{tree} ()
+\item 
+void \hyperlink{class_tree_a0a58a389239c81cca1005635279ff5b4}{parse} (string exprsn)
+\item 
+void \hyperlink{class_tree_a732a521b8b2989336a4fb080afb28f52}{parse\+To\+Tree} ()
+\item 
+void \hyperlink{class_tree_a105cab53eb81166b616ed80135de2791}{print\+Level} (\hyperlink{structnode}{node} $\ast$root, int level)
+\item 
+void \hyperlink{class_tree_a90314f21e177371ae8f964c87d126453}{display} ()
+\item 
+int \hyperlink{class_tree_a174fbb13ce6ff6cc899c226ae4d04b02}{priority} (char a)
+\item 
+\hyperlink{structnode}{node} $\ast$ \hyperlink{class_tree_a506b3e509bb7e709cea6f8b07bc24e02}{get\+Root} ()
+\item 
+vector$<$ char $>$ \hyperlink{class_tree_a9acb0c1a6d759b7b74182cc6154ebefb}{getL} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Clase \hyperlink{class_tree}{Tree} generada a partir de una expresion regular 
+
+\subsection{Member Function Documentation}
+\hypertarget{class_tree_a90314f21e177371ae8f964c87d126453}{}\label{class_tree_a90314f21e177371ae8f964c87d126453} 
+\index{Tree@{Tree}!display@{display}}
+\index{display@{display}!Tree@{Tree}}
+\subsubsection{\texorpdfstring{display()}{display()}}
+{\footnotesize\ttfamily void Tree\+::display (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\hypertarget{class_tree_a9acb0c1a6d759b7b74182cc6154ebefb}{}\label{class_tree_a9acb0c1a6d759b7b74182cc6154ebefb} 
+\index{Tree@{Tree}!getL@{getL}}
+\index{getL@{getL}!Tree@{Tree}}
+\subsubsection{\texorpdfstring{get\+L()}{getL()}}
+{\footnotesize\ttfamily vector$<$ char $>$ Tree\+::getL (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Metodo que devuelve el Lenguaje aceptado \begin{DoxyReturn}{Returns}
+vector de caracteres 
+\end{DoxyReturn}
+\hypertarget{class_tree_a506b3e509bb7e709cea6f8b07bc24e02}{}\label{class_tree_a506b3e509bb7e709cea6f8b07bc24e02} 
+\index{Tree@{Tree}!get\+Root@{get\+Root}}
+\index{get\+Root@{get\+Root}!Tree@{Tree}}
+\subsubsection{\texorpdfstring{get\+Root()}{getRoot()}}
+{\footnotesize\ttfamily \hyperlink{structnode}{node} $\ast$ Tree\+::get\+Root (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Metodo que devuelve el root del arbol \begin{DoxyReturn}{Returns}
+puntero del nodo root 
+\end{DoxyReturn}
+\hypertarget{class_tree_a0a58a389239c81cca1005635279ff5b4}{}\label{class_tree_a0a58a389239c81cca1005635279ff5b4} 
+\index{Tree@{Tree}!parse@{parse}}
+\index{parse@{parse}!Tree@{Tree}}
+\subsubsection{\texorpdfstring{parse()}{parse()}}
+{\footnotesize\ttfamily void Tree\+::parse (\begin{DoxyParamCaption}\item[{string}]{exprsn }\end{DoxyParamCaption})}
+
+Metodo que genera el arbol a partir de la expresion 
+\begin{DoxyParams}{Parameters}
+{\em exprsn} & es una cadena de caracteres a arbol \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\hypertarget{class_tree_a732a521b8b2989336a4fb080afb28f52}{}\label{class_tree_a732a521b8b2989336a4fb080afb28f52} 
+\index{Tree@{Tree}!parse\+To\+Tree@{parse\+To\+Tree}}
+\index{parse\+To\+Tree@{parse\+To\+Tree}!Tree@{Tree}}
+\subsubsection{\texorpdfstring{parse\+To\+Tree()}{parseToTree()}}
+{\footnotesize\ttfamily void Tree\+::parse\+To\+Tree (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Metodo que genera el arbol a partir de la expresion \begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\hypertarget{class_tree_a105cab53eb81166b616ed80135de2791}{}\label{class_tree_a105cab53eb81166b616ed80135de2791} 
+\index{Tree@{Tree}!print\+Level@{print\+Level}}
+\index{print\+Level@{print\+Level}!Tree@{Tree}}
+\subsubsection{\texorpdfstring{print\+Level()}{printLevel()}}
+{\footnotesize\ttfamily void Tree\+::print\+Level (\begin{DoxyParamCaption}\item[{\hyperlink{structnode}{node} $\ast$}]{root,  }\item[{int}]{level }\end{DoxyParamCaption})}
+
+Metodo que imprime el arbol generado 
+\begin{DoxyParams}{Parameters}
+{\em root} & es un puntero a un nodo para la impresion del mismo \\
+\hline
+{\em level} & es un numero que ayuda a la impresion revursiva del arbol, brindando la distancia necesaria para su correcta representacion \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+un integer segun la prioridad del caracter ingresado 
+\end{DoxyReturn}
+\hypertarget{class_tree_a174fbb13ce6ff6cc899c226ae4d04b02}{}\label{class_tree_a174fbb13ce6ff6cc899c226ae4d04b02} 
+\index{Tree@{Tree}!priority@{priority}}
+\index{priority@{priority}!Tree@{Tree}}
+\subsubsection{\texorpdfstring{priority()}{priority()}}
+{\footnotesize\ttfamily int Tree\+::priority (\begin{DoxyParamCaption}\item[{char}]{a }\end{DoxyParamCaption})}
+
+Metodo que devuelve la prioridad segun cierto operador 
+\begin{DoxyParams}{Parameters}
+{\em a} & es un caracter operacion \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+un integer segun la prioridad del caracter ingresado 
+\end{DoxyReturn}
+\hypertarget{class_tree_a7bebcbdd3651d31b2adeb82e8817a720}{}\label{class_tree_a7bebcbdd3651d31b2adeb82e8817a720} 
+\index{Tree@{Tree}!tree@{tree}}
+\index{tree@{tree}!Tree@{Tree}}
+\subsubsection{\texorpdfstring{tree()}{tree()}}
+{\footnotesize\ttfamily Tree\+::tree (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Constructor 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\hyperlink{tree_8h}{tree.\+h}\item 
+\hyperlink{tree_8cpp}{tree.\+cpp}\end{DoxyCompactItemize}
