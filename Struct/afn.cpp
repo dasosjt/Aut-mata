@@ -19,6 +19,7 @@ AFN::AFN(){
 }
 
 int AFN::get_new_state(){
+  /*Agrego 1 al estado anterior y lo devuelvo*/
   state+=1;
   //cout <<"new state "<< state << endl;
   return state;
@@ -31,10 +32,12 @@ void AFN::createAFN(node* root, vector<char> L){
 }
 
 vertex* AFN::get_vertex_init_result(){
+  /*Devuelvo es vertice/estado inicial*/
   return result->init_vertex;
 }
 
 void AFN::simulationAFN(string exprsn){
+  /*Agrego un caracter que denota que es el final de leer caracteres, en este caso es el f*/
   vector<vertex*> s0, S;
   vector<char> expression(exprsn.begin(), exprsn.end());
   expression.push_back('f');
@@ -42,12 +45,15 @@ void AFN::simulationAFN(string exprsn){
   S = eclosure(s0);
   char c = expression[0];
   expression.erase(expression.begin());
+  /*mientras no sea f... */
   while(c!='f'){
+    /*Hago el move correspondiente*/
     S = eclosure(move(S, c));
     c = expression[0];
     expression.erase(expression.begin());
   };
   bool final_state = false;
+  /*Si el estado resultante no tiene el estado final, entonces respondo NO; pero si lo tiene entonces SI*/
   if(S.size() != 0){
     for(unsigned int i = 0; i< S.size(); i++){
       if (S[i]->vertex_to.size() == 0){
@@ -60,6 +66,7 @@ void AFN::simulationAFN(string exprsn){
   } else {
     cout << "NO" << endl;
   }
+  /*Guardo en el archivo segun la rubrica*/
   AFN_file.open("AFN.txt", ios::out);
   if (AFN_file.is_open()) {
     AFN_file << "ESTADOS = ";
@@ -129,19 +136,23 @@ vector<vertex* > AFN::move(vector<vertex* > v, char c){
 }
 
 vertex* AFN::get_vertex_init(){
+  /*devuelvo el vertice inicial*/
   return init_vertex;
 }
 
 vertex* AFN::get_vertex_final(){
+  /*devuelvo el vertice final*/
   return final_vertex;
 }
 
 void AFN::set_vertex_final_to(char e, vertex* v){
+  /*agrego al  vertice final un vector y el caracter para hacer el movimiento*/
   final_vertex->vertex_to.push_back(make_pair(e, v));
 }
 
 AFN* AFN::visitAST(node* current){
   if(current != NULL){
+    /*Visito el arbol para conforme lo viste forme el AFN*/
     char key_value = current->key_value;
     //cout << current->key_value << endl;
     if(key_value == '|'){
@@ -158,12 +169,14 @@ AFN* AFN::visitAST(node* current){
 
 void AFN::tran_to_text(int from, int to, char a){
   ostringstream temp;
+  /*agrego a temp en forma ordena la informacion brindada y la devuelvo como string*/
   temp << "(" << from << ", " << a << ", " << to << ")";
   AFN_output_t << temp.str();
 }
 
 string AFN::states_to_text(){
   ostringstream temp;
+  /*agrego a temp en forma ordena la informacion brindada y la devuelvo como string*/
   temp << "{";
   for(unsigned int i = 1; i<=state; i++){
     temp << i << ", ";
@@ -174,6 +187,7 @@ string AFN::states_to_text(){
 
 string AFN::symbols_to_text(){
   ostringstream temp;
+  /*agrego a temp en forma ordena la informacion brindada y la devuelvo como string*/
   temp << "{";
   copy(this->L.begin(), this->L.end(), ostream_iterator<char>(temp, ", "));
   temp << "}";
@@ -182,18 +196,21 @@ string AFN::symbols_to_text(){
 
 string AFN::final_to_text(){
   ostringstream temp;
+  /*agrego a temp en forma ordena la informacion brindada y la devuelvo como string*/
   temp << "{" << result->final_vertex->number_of << "}";
   return temp.str();
 }
 
 string AFN::init_to_text(){
   ostringstream temp;
+  /*agrego a temp en forma ordena la informacion brindada y la devuelvo como string*/
   temp << "{" << result->init_vertex->number_of << "}";
   return temp.str();
 }
 
 AFN* AFN::base(node* current){
   //cout << "Creando AFN para " << current->key_value << endl;
+  /*Creo un AFN base con un caracter*/
   AFN* result = new AFN;
   vertex* v1 = new vertex;
   vertex* v2 = new vertex;
@@ -208,6 +225,7 @@ AFN* AFN::base(node* current){
 
 AFN* AFN::orAFN(AFN* a, AFN* b){
   //cout << "Creando AFN para |" << endl;
+  /*Uno a y b con una transicion or, agrengado dos vertices, final e inicial, para simular el OR*/
   AFN* result = new AFN;
   vertex* v1 = new vertex;
   vertex* v2 = new vertex;
@@ -229,6 +247,7 @@ AFN* AFN::orAFN(AFN* a, AFN* b){
 AFN* AFN::kleeneAFN(AFN* a){
   //cout << "Creando AFN para *" << endl;
   AFN* result = new AFN;
+  /*Le agrego dos vertices/estados al AFN y le coloco transicione e para simular kleene*/
   vertex* v1 = new vertex;
   vertex* v2 = new vertex;
   v1->number_of = get_new_state();
@@ -248,6 +267,7 @@ AFN* AFN::kleeneAFN(AFN* a){
 
 AFN* AFN::concAFN(AFN* a, AFN* b){
   //cout << "Creando AFN para ^" << endl;
+  /*Uno a y b con una transicion e*/
   AFN* result = new AFN;
   b->set_vertex_final_to('e', a->get_vertex_init());
   result->init_vertex = b->get_vertex_init();

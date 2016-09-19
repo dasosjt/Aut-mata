@@ -18,11 +18,13 @@ node* Tree::getRoot(){
 
 void Tree::printLevel(node* root, int indent){
   if (root != NULL){
-       printLevel(root->right, indent + 5);
+    /*Imprimo el nivel si no es NULL*/
+    /*Le agrego cierta identacion*/
+       printLevel(root->right, indent + 6);
        if (indent > 0)
            cout << std::setw(indent) << " ";
        cout << root->key_value << endl;
-       printLevel(root->left, indent + 5);
+       printLevel(root->left, indent + 6);
    };
 }
 
@@ -32,6 +34,7 @@ void Tree::display(){
 
 int Tree::priority(char a){
   int temp;
+  /*Mapa de prioridades*/
   if(a == '*'){
     temp = 1;
   } else if (a == '^'){
@@ -103,7 +106,7 @@ void Tree::parseToTree(){
       nodes.pop();
       nodeop->left = NULL;
       nodeop->key_value = expression.top();
-      ////cout <<"Nodo creado "<< expression.top() << endl;
+      ////cout <<"Nodo creado "<< * << endl;
       expression.pop();
       nodes.push(nodeop);
     } else if(expression.top() == '|' || expression.top() == '^'){
@@ -113,7 +116,7 @@ void Tree::parseToTree(){
       nodeop->left = nodes.top();
       nodes.pop();
       nodeop->key_value = expression.top();
-      ////cout <<"Nodo creado "<< expression.top() << endl;
+      ////cout <<"Nodo creado "<< |  o  ^ << endl;
       expression.pop();
       nodes.push(nodeop);
     }else{
@@ -121,7 +124,7 @@ void Tree::parseToTree(){
       nodex->right = NULL;
       nodex->left = NULL;
       nodex->key_value = expression.top();
-      ////cout <<"Nodo creado "<< expression.top() << endl;
+      ////cout <<"Nodo creado "<< cierto caracter ingresado << endl;
       expression.pop();
       nodes.push(nodex);
     };

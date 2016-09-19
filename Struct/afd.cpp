@@ -29,6 +29,7 @@ AFD::AFD(){
 
 void AFD::set_root(node* root){
   //cout << root->key_value << endl;
+  /*Agrego el sharp y concatenación hasta arriba del arbol para saber que es el final*/
   node* fsharp = new node;
   fsharp->key_value = '#';
   fsharp->left = NULL;
@@ -51,6 +52,7 @@ void AFD::set_root(node* root){
 }
 
 void AFD::createAFD(node* root, vector<char> L){
+  /*Inicializo las variables para crear el AFD*/
   set_root(root);
   //cout << "----- Creating AFD from AST -----" << endl;
   stack<vector<int > > Dstates;
@@ -61,8 +63,9 @@ void AFD::createAFD(node* root, vector<char> L){
   init_vertex->number_of = get_new_state();
   init_vertex->afdx_set = this->root->firstpos;
   states_afd.push_back(init_vertex);
-  //L.push_back('#');
+  L.push_back('#');
   this->L = L;
+  /*Agrego en Dstate los nuevos estados encontrados y en states_afd tambien, solo que en el ultimo mantengo un orden para acceder*/
   while(!Dstates.empty()){
       vector<int > S  = Dstates.top();
       vertex* v_from = new vertex;
@@ -101,6 +104,7 @@ void AFD::createAFD(node* root, vector<char> L){
           states_afd.push_back(v_to);
           Dstates.push(U);
         }
+        /*Coloco las transiciones segun lo que encontre en el vector states_afd*/
         vector<vertex* >::iterator it_v_from = find_if(states_afd.begin(), states_afd.end(), compare_by_afdx_set(v_from->afdx_set));
         vector<vertex* >::iterator it_v_to = find_if(states_afd.begin(), states_afd.end(), compare_by_afdx_set(v_to->afdx_set));
         int index_v_from = distance( states_afd.begin(), it_v_from );
@@ -108,6 +112,7 @@ void AFD::createAFD(node* root, vector<char> L){
         //cout << "State index from -> " << index_v_from << endl;
         //cout << "State index to -> " << index_v_to << endl;
         //cout << "with.. " << L[i] << endl;
+        /*Agrego la transiciones*/
         states_afd[index_v_from]->vertex_to.push_back(make_pair(L[i], states_afd[index_v_to]));
         tran_to_text(states_afd[index_v_from]->number_of, states_afd[index_v_to]->number_of, L[i]);
       }
@@ -115,18 +120,21 @@ void AFD::createAFD(node* root, vector<char> L){
 }
 
 int AFD::get_new_id_number(){
+  /*id number para un nodo de un arbol*/
   new_id_number+=1;
   //cout <<"new id number "<< new_id_number << endl;
   return new_id_number;
 }
 
 int AFD::get_new_state(){
+  /*numero de estado para un vertex/estado del afd*/
   state+=1;
   //cout <<"new state "<< state << endl;
   return state;
 }
 
 void AFD::set_id_number(node* root){
+  /*coloco el numero de id number solo si no es un operador*/
   if(root != NULL){
     if(root->key_value == '|' || root->key_value == '^' || root->key_value == '*'){
         root->id_number = 0;
@@ -145,6 +153,7 @@ void AFD::set_id_number(node* root){
 
 bool AFD::set_voidable(node* root){
   if(root != NULL){
+    /*coloco el voidable segun las reglas de cada operador y caracter */
     char key_value = root->key_value;
     if(key_value == '|'){
       bool temp_right = set_voidable(root->right);
@@ -183,6 +192,7 @@ bool AFD::set_voidable(node* root){
 
 vector<int> AFD::set_firstpos(node* root){
   if(root != NULL){
+    /*coloco el firstpos segun las reglas de cada operador y caracter */
     char key_value = root->key_value;
     if (key_value == '|'){
       vector<int> temp_left = set_firstpos(root->left);
@@ -217,6 +227,7 @@ vector<int> AFD::set_firstpos(node* root){
 
 vector<int> AFD::set_lastpos(node* root){
   if(root != NULL){
+    /*coloco el lastpos segun las reglas de cada operador y caracter */
     char key_value = root->key_value;
     if (key_value == '|'){
       vector<int> temp_left = set_lastpos(root->left);
@@ -252,6 +263,7 @@ vector<int> AFD::set_lastpos(node* root){
 
 void AFD::set_nextpos(node* root){
   if(root != NULL){
+    /*coloco el nextpos segun las reglas de cada operador y caracter */
     if(root->key_value == '^'){
       //cout << "NODE ^" << endl;
       for(unsigned int i = 0; i<root->left->lastpos.size(); i++){
@@ -280,6 +292,7 @@ void AFD::set_nextpos(node* root){
 
 node* AFD::search_node(node* root, int id_number){
   if(root != NULL){
+    /*busco un nodo en cada rama, si no esta en una rama devuelvo un NULL. Si esta entonces devuelve esa rama*/
     //cout << "Node key value '"<< root->key_value << "' Node id number " << root->id_number << endl;
     //cout << " ... searching for " << id_number << endl;
     if(root->key_value == '|' || root->key_value == '^'){
@@ -304,11 +317,13 @@ node* AFD::search_node(node* root, int id_number){
 
 void AFD::tran_to_text(int from, int to, char a){
   ostringstream temp;
+  /*agrego a temp en forma ordena la informacion brindada y la devuelvo como string*/
   temp << "(" << from << ", " << a << ", " << to << ")";
   AFD_output_t << temp.str();
 }
 
 string AFD::states_to_text(){
+  /*agrego a temp en forma ordena la informacion brindada y la devuelvo como string*/
   ostringstream temp;
   temp << "{";
   for(unsigned int i = 1; i<=state; i++){
@@ -319,6 +334,7 @@ string AFD::states_to_text(){
 }
 
 string AFD::symbols_to_text(){
+  /*agrego a temp en forma ordena la informacion brindada y la devuelvo como string*/
   ostringstream temp;
   temp << "{";
   copy(this->L.begin(), this->L.end(), ostream_iterator<char>(temp, ", "));
@@ -327,6 +343,7 @@ string AFD::symbols_to_text(){
 }
 
 string AFD::final_to_text(){
+  /*agrego a temp en forma ordena la informacion brindada y la devuelvo como string*/
   ostringstream temp;
   temp << "{";
   for(unsigned int i = 0; i<states_afd.size(); i++){
@@ -345,24 +362,29 @@ string AFD::final_to_text(){
 }
 
 string AFD::init_to_text(){
+  /*agrego a temp en forma ordena la informacion brindada y la devuelvo como string*/
   ostringstream temp;
   temp << "{" << init_vertex->number_of << "}";
   return temp.str();
 }
 
 void AFD::simulationAFD(string exprsn){
+  /*Agrego un caracter que denota que es el final de leer caracteres, en este caso es el f*/
   vector<vertex*> S;
   vector<char> expression(exprsn.begin(), exprsn.end());
   expression.push_back('f');
   S.push_back(init_vertex);
   char c = expression[0];
   expression.erase(expression.begin());
+  /*mientras no sea f... */
   while(c!='f'){
+    /*Hago el move correspondiente*/
     S = move(S, c);
     c = expression[0];
     expression.erase(expression.begin());
   };
   bool final_state = false;
+  /*Si el estado resultante no tiene el estado final, entonces respondo NO; pero si lo tiene entonces SI*/
   for(unsigned int i = 0; i < S[0]->afdx_set.size(); i++){
     if (S[0]->afdx_set[i] == final_vertex->number_of){
       final_state = true;
@@ -373,6 +395,7 @@ void AFD::simulationAFD(string exprsn){
   } else {
     cout << "NO" << endl;
   }
+  /*Guardo en el archivo segun la rubrica*/
   AFD_file.open("AFD.txt", ios::out);
   if (AFD_file.is_open()) {
     AFD_file << "ESTADOS = ";

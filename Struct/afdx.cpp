@@ -24,12 +24,14 @@ AFDX::AFDX(){
 }
 
 void AFDX::tran_to_text(int from, int to, char a){
+  /*agrego a temp en forma ordena la informacion brindada y la devuelvo como string*/
   ostringstream temp;
   temp << "(" << from << ", " << a << ", " << to << ")";
   AFDX_output_t << temp.str();
 }
 
 string AFDX::states_to_text(){
+  /*agrego a temp en forma ordena la informacion brindada y la devuelvo como string*/
   ostringstream temp;
   temp << "{";
   for(unsigned int i = 1; i<=state; i++){
@@ -40,6 +42,7 @@ string AFDX::states_to_text(){
 }
 
 string AFDX::symbols_to_text(){
+  /*agrego a temp en forma ordena la informacion brindada y la devuelvo como string*/
   ostringstream temp;
   temp << "{";
   copy(this->L.begin(), this->L.end(), ostream_iterator<char>(temp, ", "));
@@ -48,6 +51,7 @@ string AFDX::symbols_to_text(){
 }
 
 string AFDX::final_to_text(){
+  /*agrego a temp en forma ordena la informacion brindada y la devuelvo como string*/
   ostringstream temp;
   temp << "{";
   for(unsigned int i = 0; i<states_afdx.size(); i++){
@@ -66,6 +70,7 @@ string AFDX::final_to_text(){
 }
 
 string AFDX::init_to_text(){
+  /*agrego a temp en forma ordena la informacion brindada y la devuelvo como string*/
   ostringstream temp;
   temp << "{" << init_vertex->number_of << "}";
   return temp.str();
@@ -78,12 +83,14 @@ int AFDX::get_new_state(){
 }
 
 void AFDX::createAFDX(vertex* vertex_init, vector<char> L){
+  /*Guardo atributos e inicializo la construccion de subconjuntos*/
   this->L = L;
   result = new AFDX;
   result = subset_const(vertex_init, L);
 }
 
 void AFDX::simulationAFDX(string exprsn){
+  /*Agrego un caracter que denota que es el final de leer caracteres, en este caso es el f*/
   vector<vertex*> s0, S;
   vector<char> expression(exprsn.begin(), exprsn.end());
   expression.push_back('f');
@@ -91,6 +98,7 @@ void AFDX::simulationAFDX(string exprsn){
   S = eclosure(s0);
   char c = expression[0];
   expression.erase(expression.begin());
+  /*mientras no sea f... */
   while(c!='f'){
     S = move(S, c);
     c = expression[0];
@@ -98,6 +106,7 @@ void AFDX::simulationAFDX(string exprsn){
   };
   bool final_state = false;
   //cout << final_vertex->number_of << endl;
+  /*Si el estado resultante no tiene el estado final, entonces respondo NO; pero si lo tiene entonces SI*/
   for(unsigned int i = 0; i < S[0]->afdx_set.size(); i++){
     //cout << S[0]->afdx_set[i] << endl;
     if (S[0]->afdx_set[i] == final_vertex->number_of){
@@ -109,6 +118,7 @@ void AFDX::simulationAFDX(string exprsn){
   } else {
     cout << "NO" << endl;
   }
+  /*Guardo en el archivo segun la rubrica*/
   AFDX_file.open("AFDX.txt", ios::out);
   if (AFDX_file.is_open()) {
     AFDX_file << "ESTADOS = ";
@@ -164,6 +174,7 @@ AFDX* AFDX::subset_const(vertex* vertex_init, vector<char> L){
 }
 
 vertex* AFDX::subset_to_vertex(vector<vertex* > v){
+  /*agrego todos los vertices en un subconjunto a un vertice final*/
   vertex* new_state = new vertex;
   if(v.size() > 0 ){
     for(unsigned int k = 0; k<v.size(); k++){
@@ -235,6 +246,7 @@ vector<vertex* > AFDX::move(vector<vertex* > v, char c){
 }
 
 vertex* AFDX::get_vertex_init(){
+  /*Devuelvo el vertice/estado inicial*/
   return init_vertex;
 }
 
