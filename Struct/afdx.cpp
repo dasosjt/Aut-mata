@@ -8,7 +8,6 @@
 #include <stack>
 #include <string>
 #include <algorithm>
-#include <numeric>
 
 
 using namespace std;
@@ -281,6 +280,10 @@ void AFDX::minAFD(){
     sPI = PI;
     PI = nPI;
     nPI.clear();
+    vector<char>::iterator pos = find(L.begin(), L.end(), 'e');
+    if(pos != L.end()){
+      L.erase(pos);
+    }
     for(unsigned int k = 0; k<PI.size(); k++){ //Revisando grupo por grupo
       if(PI[k].size() > 1){ //Si es mayor que uno, entonces puede dividirse
         vector<int > control(PI[k].size()); //vector de control
