@@ -251,8 +251,8 @@ vertex* AFDX::get_vertex_init(){
 }
 
 void AFDX::minAFD(){
-  vector<vertex*> F;
-  vector<vertex*> S_F;
+  vector<vertex* > F;
+  vector<vertex* > S_F;
   vector<vector<vertex* > > PI, nPI, sPI;
   for(unsigned int i = 0; i < states_afdx.size(); i++){
     bool final_state = false;
@@ -269,75 +269,81 @@ void AFDX::minAFD(){
   }
   PI.push_back(F);
   PI.push_back(S_F);
-  cout << "Size of F " << F.size() << endl;
-  cout << "Size of S-F " << S_F.size() << endl;
-  cout << "Size of PI " << PI.size() << endl;
+  //cout << "Size of F " << F.size() << endl;
+  //cout << "Size of S-F " << S_F.size() << endl;
+  //cout << "Size of PI " << PI.size() << endl;
   nPI = PI;
   while(nPI != sPI){
-    cout << nPI.size() << endl;
-    cout << sPI.size() << endl;
+    //cout << "Size NPI " <<nPI.size() << endl;
+    //cout << "Size sPI " << sPI.size() << endl;
     vector<vertex* > belongsMV;
     vector<vertex* > belongsnMV;
     sPI = PI;
     PI = nPI;
     nPI.clear();
-    for(unsigned int k = 0; k<PI.size(); k++){
-      if(PI[k].size() > 1){
-        vector<int > belongsM;
-        belongsM.resize(PI[k].size());
-        for(unsigned int c = 0; c<L.size(); c++){
-          cout << "c : " << L[c] << endl;
-          for(unsigned int i = 0; i<PI[k].size(); i++){
-            cout << "   i : " << PI[k][i]->number_of << endl;
-            for(unsigned int j = 0; j<PI[k].size(); j++){
-              cout << "     j : " << PI[k][j]->number_of << endl;
-              vector<vertex* > v_from;
-              vector<vertex* > v_to;
-              v_from.push_back(PI[k][i]);
-              v_to = move(v_from, L[c]);
-              if(v_to[0]->number_of == PI[k][j]->number_of){
-                ostringstream eq;
-                eq << "       moves " << v_from[0]->number_of << " with " << L[c] << " and give us " << v_to[0]->number_of
-                    << " that is equals to " << PI[k][j]->number_of << " that belongs to this set" <<endl;
-                cout << eq.str();
-                belongsM[i] += 1;
+    for(unsigned int k = 0; k<PI.size(); k++){ //Revisando grupo por grupo
+      if(PI[k].size() > 1){ //Si es mayor que uno, entonces puede dividirse
+        vector<int > control(PI[k].size()); //vector de control
+        vector<vector<vector<vertex* > > > belongsMatrix(PI[k].size(), vector<vector<vertex* > >(L.size())); //matriz de pertenencia
+        for(unsigned int i = 0; i<PI[k].size(); i++){ //Recorremos segun el grupo, ABCD
+          for(unsigned int c = 0; c<L.size(); c++){ //Recorremos segun caracter, a b
+            vector<vertex* > temp_PIKI;
+            temp_PIKI.push_back(PI[k][i]);
+            belongsMatrix[i][c] = searchForBelong(PI, move(temp_PIKI, L[c])[0]->number_of); //buscamos al grupo que pertenece y lo guardamos en la matriz
+          }
+        }
+        vector<vector<vertex* > > G(PI[k].size()); //creamos todos los grupos posibles
+        for(unsigned int i = 0; i<PI[k].size(); i++){ //Verfificamos para A
+          if(control[i] != 1){ //Si el control aun es 0, entonces no hemos hecho ese grupo
+            //cout << "Estado " << i << endl;
+            if(find(G[i].begin(), G[i].end(), PI[k][i]) == G[i].end()){
+                G[i].push_back(PI[k][i]); //Metemos a A
+            }
+            control[i] = 1; //Marcamos A
+            for(unsigned int j = i+1; j<PI[k].size(); j++){ //Verificamos B, C, D
+              if(control[j] != 1){
+                //cout << "     con Estado "<< j << endl;
+                if(belongsMatrix[i] == belongsMatrix[j]){ // Si es igual a A, entonces pertenece al mismo grupo
+                  //cout << "       Estado " <<i << " es igual a  Estado " << j << endl;
+                  if(find(G[i].begin(), G[i].end(), PI[k][j]) == G[i].end()){
+                      G[i].push_back(PI[k][j]); //Metemos a B
+                  }
+                  control[j] = 1; //Marcamos B
+                }
               }
             }
           }
         }
-        for(unsigned int n = 0; n<PI[k].size(); n++){
-          if(belongsM[n] == L.size()){
-            if(find(belongsMV.begin(), belongsMV.end(), PI[k][n]) == belongsMV.end()){
-                belongsMV.push_back(PI[k][n]);
-            }
-            cout << "This belongs " << n+1 << endl;
-          } else {
-            if(find(belongsnMV.begin(), belongsnMV.end(), PI[k][n]) == belongsnMV.end()){
-                belongsnMV.push_back(PI[k][n]);
-            }
-            cout << "This does not belong " << n+1 << endl;
+        //cout << "Ingresamos los siguientes grupos: " << endl;
+        for(unsigned int g = 0; g<G.size(); g++){
+          if(!G[g].empty()){
+              //cout << "   Metemos grupo " << g << endl;
+              if(find(nPI.begin(), nPI.end(), G[g]) == nPI.end()){
+                  nPI.push_back(G[g]);
+              }
           }
         }
-        if(!belongsMV.empty()){
-          if(find(nPI.begin(), nPI.end(), belongsMV) == nPI.end()){
-              nPI.push_back(belongsMV);
-          }
-        }
-        if(!belongsnMV.empty()){
-          if(find(nPI.begin(), nPI.end(), belongsnMV) == nPI.end()){
-              nPI.push_back(belongsnMV);
-          }
-        }
-      } else if(PI[k].size() == 1) {
-          nPI.push_back(PI[k]);
+      } else { //si es 1 entonces simplemente lo agrego
+        nPI.push_back(PI[k]);
       }
     }
   }
-  cout <<"Min AFD has "<< PI.size() <<" states" <<endl;
+  //cout << "Last size sPI " << sPI.size() << endl;
+  cout << "MIN AFD" << endl;
+  for(unsigned int i = 0; i<sPI.size(); i++){
+    cout << "Group " << i << endl;
+    for(unsigned int j = 0; j<sPI[i].size(); j++){
+      cout << "   " <<sPI[i][j]->number_of << endl;
+    }
+  }
+}
+
+vector<vertex* > AFDX::searchForBelong(vector<vector<vertex* > > PI, int state){
   for(unsigned int i = 0; i<PI.size(); i++){
-    cout << "State " << i << " has "<<endl;
     for(unsigned int j = 0; j<PI[i].size(); j++){
-      cout << "       State  "<<PI[i][j]->number_of << endl;
+      if(PI[i][j]->number_of == state){
+        return PI[i];
+      }
     }
   }
 }

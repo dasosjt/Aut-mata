@@ -101,6 +101,7 @@ class AFD{
     \return el resultado en forma de string
     */
     string init_to_text();
+    vector<vertex* > searchForBelong(vector<vector<vertex* > > PI, int state);
 
   private:
     node* root;

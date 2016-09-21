@@ -111,6 +111,7 @@ class AFDX{
     \return void
     */
     void minAFD();
+    vector<vertex* > searchForBelong(vector<vector<vertex* > > PI, int state);
 
   private:
     AFDX* result; /**< representacion del AFDX resultado */

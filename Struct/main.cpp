@@ -5,6 +5,7 @@
 #include <string>
 #include <iostream>
 #include <iterator>
+#include <ctype.h>
 
 using namespace std;
 
@@ -40,5 +41,5 @@ int main(int argc, char *argv[]){
     cout << "Enter Expression " << endl;
     cin >> exprsn ;
     afd->simulationAFD(exprsn);
-    //afd->minAFD();
+    afd->minAFD();
 }

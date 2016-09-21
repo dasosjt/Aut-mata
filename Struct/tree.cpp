@@ -46,6 +46,16 @@ int Tree::priority(char a){
 }
 
 void Tree::parse(string exprsn){
+  for(unsigned int i = 0; i<exprsn.size(); i++){
+    if(isalpha(exprsn.at(i)) || exprsn.at(i) == ')' || exprsn.at(i) == '*'){
+      if(i+1<exprsn.size()){
+        if(isalpha(exprsn.at(i+1)) || exprsn.at(i+1) == '(' ){
+          exprsn.insert(i+1, 1, '^');
+        }
+      }
+    }
+  }
+  cout << exprsn << endl;
   for(int i = 0; i<exprsn.length(); i++){
     //cout << "stack RPN size " << expressionRPN.size() << endl;
     //cout << "stack operations size " << operations.size() << endl;
