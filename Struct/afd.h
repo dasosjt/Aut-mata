@@ -101,6 +101,11 @@ class AFD{
     \return el resultado en forma de string
     */
     string init_to_text();
+    /** Busca en PI hacia donde pertence segun un numero de estado
+    \param PI el grupo de conjunto de estados
+    \param state el estado que se esta buscando
+    \return el resultado en forma de grupo
+    */
     vector<vertex* > searchForBelong(vector<vector<vertex* > > PI, int state);
 
   private:
@@ -113,6 +118,7 @@ class AFD{
     vector<char> L; /**< representacion del lenguaje aceptado */
     static ofstream AFD_file; /**< genera el archivo de texto */
     static ostringstream AFD_output_t; /**< guardar en memoria las transiciones antes de guardarlas en texto */
+    bool final_state; /**< guardar en memoria la aceptacion */
 
 };
 

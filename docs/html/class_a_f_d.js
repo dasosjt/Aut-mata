@@ -9,6 +9,7 @@ var class_a_f_d =
     [ "minAFD", "class_a_f_d.html#a1c7d05c678a6cc4e31c2b4cb93b6408e", null ],
     [ "move", "class_a_f_d.html#a4505bb76534ae8c4df01c164912f5c52", null ],
     [ "search_node", "class_a_f_d.html#a4dfefc5091e8654160f65db0bc4fc0b0", null ],
+    [ "searchForBelong", "class_a_f_d.html#a894aafa23513f5b6dbdcbf3109281b4e", null ],
     [ "set_firstpos", "class_a_f_d.html#a9d332b7d65be308507b10e7abf0a9d11", null ],
     [ "set_id_number", "class_a_f_d.html#a28ca2cf650830a32d1e1716f4a3c4e78", null ],
     [ "set_lastpos", "class_a_f_d.html#a6ebbbeb7971579ee7085730c52ee7dc5", null ],

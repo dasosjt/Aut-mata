@@ -29,7 +29,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Compilador C++
-   &#160;<span id="projectnumber">version 1.0</span>
+   &#160;<span id="projectnumber">version 1.1</span>
    </div>
    <div id="projectbrief">Proyecto de Diseño de Lenguajes</div>
   </td>
@@ -131,6 +131,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a6882d0942eceb2af40e8a1fe7c057d6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae2bf9a8a6511e585c911ff1c2416bb3e"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_f_d.html#ae2bf9a8a6511e585c911ff1c2416bb3e">init_to_text</a> ()</td></tr>
 <tr class="separator:ae2bf9a8a6511e585c911ff1c2416bb3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a894aafa23513f5b6dbdcbf3109281b4e"><td class="memItemLeft" align="right" valign="top">vector&lt; <a class="el" href="structvertex.html">vertex</a> *&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_f_d.html#a894aafa23513f5b6dbdcbf3109281b4e">searchForBelong</a> (vector&lt; vector&lt; <a class="el" href="structvertex.html">vertex</a> * &gt; &gt; PI, int state)</td></tr>
+<tr class="separator:a894aafa23513f5b6dbdcbf3109281b4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Clase <a class="el" href="class_a_f_d.html">AFD</a> generada a partir del AST(Abstract Syntax Tree) por lo tanto puede aceptar cadenas no vacias y solamente se encuentra en un estado a la vez </p>
@@ -349,6 +351,42 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>el puntero del nodo que estamos buscando </dd></dl>
+
+</div>
+</div>
+<a id="a894aafa23513f5b6dbdcbf3109281b4e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a894aafa23513f5b6dbdcbf3109281b4e">&sect;&nbsp;</a></span>searchForBelong()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">vector&lt; <a class="el" href="structvertex.html">vertex</a> *&gt; AFD::searchForBelong </td>
+          <td>(</td>
+          <td class="paramtype">vector&lt; vector&lt; <a class="el" href="structvertex.html">vertex</a> * &gt; &gt;&#160;</td>
+          <td class="paramname"><em>PI</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>state</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Busca en PI hacia donde pertence segun un numero de estado </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">PI</td><td>el grupo de conjunto de estados </td></tr>
+    <tr><td class="paramname">state</td><td>el estado que se esta buscando </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>el resultado en forma de grupo </dd></dl>
 
 </div>
 </div>
@@ -607,8 +645,8 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li><a class="el" href="afd_8h_source.html">afd.h</a></li>
-<li><a class="el" href="afd_8cpp.html">afd.cpp</a></li>
+<li>C:/Users/Diego Sosa/Aut-mata/Struct/<a class="el" href="afd_8h_source.html">afd.h</a></li>
+<li>C:/Users/Diego Sosa/Aut-mata/Struct/<a class="el" href="afd_8cpp.html">afd.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

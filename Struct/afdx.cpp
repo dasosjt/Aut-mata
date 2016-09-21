@@ -55,12 +55,12 @@ string AFDX::final_to_text(){
   ostringstream temp;
   temp << "{";
   for(unsigned int i = 0; i<states_afdx.size(); i++){
-    bool final_state = false;
+    bool final_state_t = false;
     for(unsigned int j = 0; j<states_afdx[i]->afdx_set.size(); j++){
       if(states_afdx[i]->afdx_set[j] == final_vertex->number_of){
-        final_state = true;
+        final_state_t = true;
       }
-      if(final_state){
+      if(final_state_t){
         temp << states_afdx[i]->number_of << ", ";
       }
     }
@@ -104,7 +104,7 @@ void AFDX::simulationAFDX(string exprsn){
     c = expression[0];
     expression.erase(expression.begin());
   };
-  bool final_state = false;
+  final_state = false;
   //cout << final_vertex->number_of << endl;
   /*Si el estado resultante no tiene el estado final, entonces respondo NO; pero si lo tiene entonces SI*/
   for(unsigned int i = 0; i < S[0]->afdx_set.size(); i++){
@@ -335,6 +335,11 @@ void AFDX::minAFD(){
     for(unsigned int j = 0; j<sPI[i].size(); j++){
       cout << "   " <<sPI[i][j]->number_of << endl;
     }
+  }
+  if(final_state){
+    cout << "YES" << endl;
+  } else {
+    cout << "NO" << endl;
   }
 }
 

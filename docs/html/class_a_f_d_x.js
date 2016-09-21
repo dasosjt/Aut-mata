@@ -10,6 +10,7 @@ var class_a_f_d_x =
     [ "init_to_text", "class_a_f_d_x.html#a73888a711ee57d75df9069f70bc06815", null ],
     [ "minAFD", "class_a_f_d_x.html#aba731125afd626a8dbdab726dbd441eb", null ],
     [ "move", "class_a_f_d_x.html#a312f7b6465d0a7b906449f01d23f199c", null ],
+    [ "searchForBelong", "class_a_f_d_x.html#a333de4006f306b7ebfa295b95ebb6626", null ],
     [ "simulationAFDX", "class_a_f_d_x.html#ae47ecdcac8ec88b22d88fa1bfa52f781", null ],
     [ "states_to_text", "class_a_f_d_x.html#a1fa780c283bf7bafbc63c25102f9ae69", null ],
     [ "subset_const", "class_a_f_d_x.html#a7f4f46c25fb5a5b3f1be898dde218aa2", null ],
