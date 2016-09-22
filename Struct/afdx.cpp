@@ -339,9 +339,9 @@ void AFDX::minAFD(){
     }
   }
   if(final_state){
-    cout << "YES" << endl;
+    cout << "MIN AFD - YES" << endl;
   } else {
-    cout << "NO" << endl;
+    cout << "MIN AFD - NO" << endl;
   }
 }
 
