@@ -65,6 +65,11 @@ void AFD::createAFD(node* root, vector<char> L){
   states_afd.push_back(init_vertex);
   //L.push_back('#');
   this->L = L;
+  vector<char>::iterator pos = find(this->L.begin(), this->L.end(), 'e');
+  if(pos != this->L.end()){
+    this->L.erase(pos);
+  }
+  L = this->L;
   /*Agrego en Dstate los nuevos estados encontrados y en states_afd tambien, solo que en el ultimo mantengo un orden para acceder*/
   while(!Dstates.empty()){
       vector<int > S  = Dstates.top();

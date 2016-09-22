@@ -84,8 +84,12 @@ int AFDX::get_new_state(){
 void AFDX::createAFDX(vertex* vertex_init, vector<char> L){
   /*Guardo atributos e inicializo la construccion de subconjuntos*/
   this->L = L;
+  vector<char>::iterator pos = find(this->L.begin(), this->L.end(), 'e');
+  if(pos != this->L.end()){
+    this->L.erase(pos);
+  }
   result = new AFDX;
-  result = subset_const(vertex_init, L);
+  result = subset_const(vertex_init, this->L);
 }
 
 void AFDX::simulationAFDX(string exprsn){
@@ -94,7 +98,7 @@ void AFDX::simulationAFDX(string exprsn){
   vector<char> expression(exprsn.begin(), exprsn.end());
   expression.push_back('f');
   s0.push_back(init_vertex);
-  S = eclosure(s0);
+  S = s0;//eclosure(s0);
   char c = expression[0];
   expression.erase(expression.begin());
   /*mientras no sea f... */
@@ -107,7 +111,6 @@ void AFDX::simulationAFDX(string exprsn){
   //cout << final_vertex->number_of << endl;
   /*Si el estado resultante no tiene el estado final, entonces respondo NO; pero si lo tiene entonces SI*/
   for(unsigned int i = 0; i < S[0]->afdx_set.size(); i++){
-    //cout << S[0]->afdx_set[i] << endl;
     if (S[0]->afdx_set[i] == final_vertex->number_of){
       final_state = true;
     };
@@ -280,10 +283,6 @@ void AFDX::minAFD(){
     sPI = PI;
     PI = nPI;
     nPI.clear();
-    vector<char>::iterator pos = find(L.begin(), L.end(), 'e');
-    if(pos != L.end()){
-      L.erase(pos);
-    }
     for(unsigned int k = 0; k<PI.size(); k++){ //Revisando grupo por grupo
       if(PI[k].size() > 1){ //Si es mayor que uno, entonces puede dividirse
         vector<int > control(PI[k].size()); //vector de control
