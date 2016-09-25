@@ -8,7 +8,7 @@
 
 using namespace std;
 
-Tree::tree(){
+Tree::Tree(){
   root = NULL;
 }
 

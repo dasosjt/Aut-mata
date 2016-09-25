@@ -31,7 +31,7 @@ struct node{
 class Tree{
   public:
     /** Constructor */
-    tree();
+    Tree();
     /** Metodo que genera el arbol a partir de la expresion
     \param exprsn es una cadena de caracteres a arbol
     \return void
