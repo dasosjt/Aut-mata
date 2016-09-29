@@ -102,16 +102,24 @@ void AFDX::simulationAFDX(string exprsn){
   char c = expression[0];
   expression.erase(expression.begin());
   /*mientras no sea f... */
+  bool all_belongs = true;
   while(c!='f'){
-    S = move(S, c);
-    c = expression[0];
-    expression.erase(expression.begin());
+    if (find(this->L.begin(), this->L.end(), c) != this->L.end()){
+      S = move(S, c);
+      c = expression[0];
+      expression.erase(expression.begin());
+    } else {
+      S = move(S, c);
+      c = expression[0];
+      expression.erase(expression.begin());
+      all_belongs = false;
+    }
   };
   final_state = false;
   //cout << final_vertex->number_of << endl;
   /*Si el estado resultante no tiene el estado final, entonces respondo NO; pero si lo tiene entonces SI*/
   for(unsigned int i = 0; i < S[0]->afdx_set.size(); i++){
-    if (S[0]->afdx_set[i] == final_vertex->number_of){
+    if (S[0]->afdx_set[i] == final_vertex->number_of && all_belongs){
       final_state = true;
     };
   }
