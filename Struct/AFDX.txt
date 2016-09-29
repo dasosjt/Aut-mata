@@ -1,5 +1,5 @@
 ESTADOS = {1, 2, 3, 4, }
 SIMBOLOS = {a, b, }
 INICIO = {1}
-ACEPTACION = {2, 3, }
-TRANSICION = (1, a, 2)(1, b, 3)(3, a, 4)(3, b, 4)(4, a, 4)(4, b, 4)(2, a, 4)(2, b, 4)
+ACEPTACION = {2, 4, }
+TRANSICION = (1, a, 2)(1, b, 3)(3, a, 3)(3, b, 3)(2, a, 3)(2, b, 4)(4, a, 3)(4, b, 4)

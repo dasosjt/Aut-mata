@@ -69,20 +69,20 @@ void AFD::createAFD(node* root, vector<char> L){
   if(pos != this->L.end()){
     this->L.erase(pos);
   }
-  L = this->L;
+  //L = this->L;
   /*Agrego en Dstate los nuevos estados encontrados y en states_afd tambien, solo que en el ultimo mantengo un orden para acceder*/
   while(!Dstates.empty()){
       vector<int > S  = Dstates.top();
       vertex* v_from = new vertex;
       v_from->afdx_set = S;
       Dstates.pop();
-      for(unsigned int i = 0; i<L.size(); i++){
+      for(unsigned int i = 0; i<this->L.size(); i++){
         vector<int > U;
         for(unsigned int j = 0; j<S.size(); j++){
             node* temp = new node;
             //cout << "Searching id number " << S[j] << " with char '" << L[i] <<"'" <<endl;
             temp = search_node(this->root, S[j]);
-            if(temp->key_value == L[i]){
+            if(temp->key_value == this->L[i]){
               //cout << "Search node done.. found '" << temp->key_value << "' with id number "<< temp->id_number <<endl;
               //cout << "appending to U { " ;
               //copy(temp->nextpos.begin(), temp->nextpos.end(), ostream_iterator<int>(cout, " "));
