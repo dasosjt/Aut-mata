@@ -39,15 +39,15 @@ void AFD::set_root(node* root){
   nroot->left = root;
   nroot->right = fsharp;
   this->root = nroot;
-  //cout << "----- Set ID Number -----" << endl;
+  cout << "----- Set ID Number -----" << endl;
   set_id_number(this->root);
-  //cout << "----- Set Voidable -----" << endl;
+  cout << "----- Set Voidable -----" << endl;
   set_voidable(this->root);
-  //cout << "----- Set Firstpos -----" << endl;
+  cout << "----- Set Firstpos -----" << endl;
   set_firstpos(this->root);
-  //cout << "----- Set Lastpos -----" << endl;
+  cout << "----- Set Lastpos -----" << endl;
   set_lastpos(this->root);
-  //cout << "----- Set Nextpos -----" << endl;
+  cout << "----- Set Nextpos -----" << endl;
   set_nextpos(this->root);
 }
 
@@ -69,7 +69,7 @@ void AFD::createAFD(node* root, vector<char> L){
   if(pos != this->L.end()){
     this->L.erase(pos);
   }
-  //L = this->L;
+  L = this->L;
   /*Agrego en Dstate los nuevos estados encontrados y en states_afd tambien, solo que en el ultimo mantengo un orden para acceder*/
   while(!Dstates.empty()){
       vector<int > S  = Dstates.top();
