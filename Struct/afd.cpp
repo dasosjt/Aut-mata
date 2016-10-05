@@ -39,15 +39,15 @@ void AFD::set_root(node* root){
   nroot->left = root;
   nroot->right = fsharp;
   this->root = nroot;
-  cout << "----- Set ID Number -----" << endl;
+  //cout << "----- Set ID Number -----" << endl;
   set_id_number(this->root);
-  cout << "----- Set Voidable -----" << endl;
+  //cout << "----- Set Voidable -----" << endl;
   set_voidable(this->root);
-  cout << "----- Set Firstpos -----" << endl;
+  //cout << "----- Set Firstpos -----" << endl;
   set_firstpos(this->root);
-  cout << "----- Set Lastpos -----" << endl;
+  //cout << "----- Set Lastpos -----" << endl;
   set_lastpos(this->root);
-  cout << "----- Set Nextpos -----" << endl;
+  //cout << "----- Set Nextpos -----" << endl;
   set_nextpos(this->root);
 }
 
@@ -69,7 +69,7 @@ void AFD::createAFD(node* root, vector<char> L){
   if(pos != this->L.end()){
     this->L.erase(pos);
   }
-  L = this->L;
+  //L = this->L;
   /*Agrego en Dstate los nuevos estados encontrados y en states_afd tambien, solo que en el ultimo mantengo un orden para acceder*/
   while(!Dstates.empty()){
       vector<int > S  = Dstates.top();
@@ -118,8 +118,8 @@ void AFD::createAFD(node* root, vector<char> L){
         //cout << "State index to -> " << index_v_to << endl;
         //cout << "with.. " << L[i] << endl;
         /*Agrego la transiciones*/
-        states_afd[index_v_from]->vertex_to.push_back(make_pair(L[i], states_afd[index_v_to]));
-        tran_to_text(states_afd[index_v_from]->number_of, states_afd[index_v_to]->number_of, L[i]);
+        states_afd[index_v_from]->vertex_to.push_back(make_pair(this->L[i], states_afd[index_v_to]));
+        tran_to_text(states_afd[index_v_from]->number_of, states_afd[index_v_to]->number_of, this->L[i]);
       }
   }
 }
@@ -463,9 +463,9 @@ void AFD::minAFD(){
     for(unsigned int k = 0; k<PI.size(); k++){ //Revisando grupo por grupo
       if(PI[k].size() > 1){ //Si es mayor que uno, entonces puede dividirse
         vector<int > control(PI[k].size()); //vector de control
-        vector<vector<vector<vertex* > > > belongsMatrix(PI[k].size(), vector<vector<vertex* > >(L.size())); //matriz de pertenencia
+        vector<vector<vector<vertex* > > > belongsMatrix(PI[k].size(), vector<vector<vertex* > >(this->L.size())); //matriz de pertenencia
         for(unsigned int i = 0; i<PI[k].size(); i++){ //Recorremos segun el grupo, ABCD
-          for(unsigned int c = 0; c<L.size(); c++){ //Recorremos segun caracter, a b
+          for(unsigned int c = 0; c<this->L.size(); c++){ //Recorremos segun caracter, a b
             vector<vertex* > temp_PIKI;
             temp_PIKI.push_back(PI[k][i]);
             belongsMatrix[i][c] = searchForBelong(PI, move(temp_PIKI, L[c])[0]->number_of); //buscamos al grupo que pertenece y lo guardamos en la matriz

@@ -1,3 +1,4 @@
+
 #include "tree.h"
 #include <iostream>
 #include <string>
@@ -46,6 +47,45 @@ int Tree::priority(char a){
 }
 
 void Tree::parse(string exprsn){
+  // .. as range
+  for (unsigned int i = 0; i<exprsn.size(); i++){
+    if(exprsn.at(i) == '.'){
+      if(exprsn.at(i+1) == '.'){
+        int from = (int) exprsn.at(i-1);
+        int to = (int) exprsn.at(i+2);
+        exprsn.erase(exprsn.begin()+i+1);
+        exprsn.erase(exprsn.begin()+i);
+        for (unsigned int j = 1; j< to - from; j++){
+            int current = from+j;
+            exprsn.insert(i+j-1, 1, current);
+        }
+      }
+    }
+  }
+  //braces as ?
+  for (unsigned int i = 0; i<exprsn.size(); i++){
+    if(exprsn.at(i) == '['){
+      exprsn.insert(i+1, 1, '(');
+      exprsn.erase(exprsn.begin()+i);
+    } else if(exprsn.at(i) == ']'){
+      exprsn.insert(i+1, 1, '|');
+      exprsn.insert(i+2, 1, 'e');
+      exprsn.insert(i+3, 1, ')');
+      exprsn.erase(exprsn.begin()+i);
+    }
+  }
+  //braces as a kleene
+  for (unsigned int i = 0; i<exprsn.size(); i++){
+    if(exprsn.at(i) == '{'){
+      exprsn.insert(i+1, 1, '(');
+      exprsn.erase(exprsn.begin()+i);
+    } else if(exprsn.at(i) == '}'){
+      exprsn.insert(i+1, 1, ')');
+      exprsn.insert(i+2, 1, '*');
+      exprsn.erase(exprsn.begin()+i);
+    }
+  }
+  //add concatenation
   for(unsigned int i = 0; i<exprsn.size(); i++){
     if(isalpha(exprsn.at(i)) || exprsn.at(i) == ')' || exprsn.at(i) == '*'){
       if(i+1<exprsn.size()){
