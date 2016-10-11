@@ -47,6 +47,8 @@ int Tree::priority(char a){
 }
 
 void Tree::parse(string exprsn){
+  // delete whitespace
+  exprsn.erase(remove(exprsn.begin(), exprsn.end(), ' '), exprsn.end());
   // .. as range
   for (unsigned int i = 0; i<exprsn.size(); i++){
     if(exprsn.at(i) == '.'){
@@ -58,8 +60,16 @@ void Tree::parse(string exprsn){
         for (unsigned int j = 1; j< to - from; j++){
             int current = from+j;
             exprsn.insert(i+j-1, 1, current);
+            exprsn.insert(i+j, 1, '|');
         }
       }
+    }
+  }
+  // + as |
+  for (unsigned int i = 0; i<exprsn.size(); i++){
+    if(exprsn.at(i) == '+'){
+      exprsn.insert(i+1, 1, '|');
+      exprsn.erase(exprsn.begin()+i);
     }
   }
   //braces as ?
@@ -74,7 +84,7 @@ void Tree::parse(string exprsn){
       exprsn.erase(exprsn.begin()+i);
     }
   }
-  //braces as a kleene
+  //brackets as a kleene
   for (unsigned int i = 0; i<exprsn.size(); i++){
     if(exprsn.at(i) == '{'){
       exprsn.insert(i+1, 1, '(');
@@ -95,22 +105,23 @@ void Tree::parse(string exprsn){
       }
     }
   }
+  //print the result after the first parse
   cout << exprsn << endl;
-  for(int i = 0; i<exprsn.length(); i++){
+  for(int i = 0; i<exprsn.size(); i++){
     //cout << "stack RPN size " << expressionRPN.size() << endl;
     //cout << "stack operations size " << operations.size() << endl;
-    if(exprsn[i] == '|' || exprsn[i] == '^' || exprsn[i] == '*'){
+    if(exprsn.at(i) == '|' || exprsn.at(i) == '^' || exprsn.at(i) == '*'){
       //cout << "Caracter es " << exprsn[i] <<endl;
       while (!operations.empty() && (priority(operations.top()) <= priority(exprsn[i])) && operations.top() != '('){
         //cout << "Sacando del stack " << operations.top() <<endl;
         expressionRPN.push(operations.top());
         operations.pop();
       };
-      operations.push(exprsn[i]);
-    } else if (exprsn[i] == '('){
+      operations.push(exprsn.at(i));
+    } else if (exprsn.at(i) == '('){
       //cout << "Caracter es " << exprsn[i] <<endl;
-      operations.push(exprsn[i]);
-    } else if(exprsn[i] == ')'){
+      operations.push(exprsn.at(i));
+    } else if(exprsn.at(i) == ')'){
       //cout << "Caracter es " << exprsn[i] <<endl;
       while (operations.top() != '('){
         //cout << "Sacando del stack " << operations.top() <<endl;
@@ -121,9 +132,9 @@ void Tree::parse(string exprsn){
       operations.pop();
     } else {
       //cout << "Caracter es " << exprsn[i] <<endl;
-      expressionRPN.push(exprsn[i]);
+      expressionRPN.push(exprsn.at(i));
       if(count(L.begin(), L.end(), exprsn[i]) == 0){
-        L.push_back(exprsn[i]);
+        L.push_back(exprsn.at(i));
       }
     };
   };

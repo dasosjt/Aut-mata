@@ -1,0 +1,17 @@
+COMPILER Ejemplo
+(.
+/*--------------Scanner Specification----------*/
+.)
+CHARACTERS
+letter = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".
+digit = "0123456789".
+hexdigit = digit+"ABCDEF".
+KEYWORDS
+if="if".
+while="while".
+TOKENS
+id = letter{letter} EXCEPT KEYWORDS.
+number = digit{digit}.
+hexnumber = hexdigit{hexdigit}"(H)".
+PRODUCTIONS
+END Ejemplo
