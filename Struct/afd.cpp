@@ -7,7 +7,7 @@
 #include <algorithm>
 #include <iterator>
 #include <fstream>
-#include <sstream> 
+#include <sstream>
 
 using namespace std;
 
@@ -35,7 +35,7 @@ void AFD::set_root(node* root){
   fsharp->left = NULL;
   fsharp->right = NULL;
   node* nroot = new node;
-  nroot->key_value = '^';
+  nroot->key_value = char(167);
   nroot->left = root;
   nroot->right = fsharp;
   this->root = nroot;
@@ -65,7 +65,7 @@ void AFD::createAFD(node* root, vector<char> L){
   states_afd.push_back(init_vertex);
   //L.push_back('#');
   this->L = L;
-  vector<char>::iterator pos = find(this->L.begin(), this->L.end(), 'e');
+  vector<char>::iterator pos = find(this->L.begin(), this->L.end(), char(238));
   if(pos != this->L.end()){
     this->L.erase(pos);
   }
@@ -141,7 +141,7 @@ int AFD::get_new_state(){
 void AFD::set_id_number(node* root){
   /*coloco el numero de id number solo si no es un operador*/
   if(root != NULL){
-    if(root->key_value == '|' || root->key_value == '^' || root->key_value == '*'){
+    if(root->key_value == char(179) || root->key_value == char(167) || root->key_value == char(241)){
         root->id_number = 0;
     } else {
       root->id_number = get_new_id_number();
@@ -160,7 +160,7 @@ bool AFD::set_voidable(node* root){
   if(root != NULL){
     /*coloco el voidable segun las reglas de cada operador y caracter */
     char key_value = root->key_value;
-    if(key_value == '|'){
+    if(key_value == char(179)){
       bool temp_right = set_voidable(root->right);
       bool temp_left = set_voidable(root->left);
       if(temp_right || temp_left){
@@ -168,7 +168,7 @@ bool AFD::set_voidable(node* root){
       } else {
         root->voidable = false;
       }
-    } else if(key_value == '^'){
+    } else if(key_value == char(167)){
       bool temp_right = set_voidable(root->right);
       bool temp_left = set_voidable(root->left);
       if(temp_right && temp_left){
@@ -176,11 +176,11 @@ bool AFD::set_voidable(node* root){
       } else {
         root->voidable = false;
       }
-    } else if ( key_value == '*'){
+    } else if ( key_value == char(241)){
       root->voidable = true;
       set_voidable(root->right);
       set_voidable(root->left);
-    } else if ( key_value == 'e'){
+    } else if ( key_value == char(238)){
       root->voidable = true;
     } else {
       root->voidable = false;
@@ -199,12 +199,12 @@ vector<int> AFD::set_firstpos(node* root){
   if(root != NULL){
     /*coloco el firstpos segun las reglas de cada operador y caracter */
     char key_value = root->key_value;
-    if (key_value == '|'){
+    if (key_value == char(179)){
       vector<int> temp_left = set_firstpos(root->left);
       vector<int> temp_right = set_firstpos(root->right);
       root->firstpos = temp_left;
       root->firstpos.insert(root->firstpos.end(), temp_right.begin(), temp_right.end());
-    } else if (key_value == '^'){
+    } else if (key_value == char(167)){
       vector<int> temp_left = set_firstpos(root->left);
       vector<int> temp_right = set_firstpos(root->right);
       if(root->left->voidable){
@@ -213,7 +213,7 @@ vector<int> AFD::set_firstpos(node* root){
       } else {
         root->firstpos = temp_left;
       }
-    } else if (key_value == '*'){
+    } else if (key_value == char(241)){
       vector<int> temp_right = set_firstpos(root->right);
       root->firstpos = temp_right;
     } else {
@@ -234,12 +234,12 @@ vector<int> AFD::set_lastpos(node* root){
   if(root != NULL){
     /*coloco el lastpos segun las reglas de cada operador y caracter */
     char key_value = root->key_value;
-    if (key_value == '|'){
+    if (key_value == char(179)){
       vector<int> temp_left = set_lastpos(root->left);
       vector<int> temp_right = set_lastpos(root->right);
       root->lastpos = temp_left;
       root->lastpos.insert(root->lastpos.end(), temp_right.begin(), temp_right.end());
-    } else if (key_value == '^'){
+    } else if (key_value == char(167)){
       vector<int> temp_left = set_lastpos(root->left);
       vector<int> temp_right = set_lastpos(root->right);
       if(root->right->voidable){
@@ -248,7 +248,7 @@ vector<int> AFD::set_lastpos(node* root){
       } else {
         root->lastpos = temp_right;
       }
-    } else if (key_value == '*'){
+    } else if (key_value == char(241)){
       vector<int> temp_right = set_lastpos(root->right);
       root->lastpos = temp_right;
     } else {
@@ -269,7 +269,7 @@ vector<int> AFD::set_lastpos(node* root){
 void AFD::set_nextpos(node* root){
   if(root != NULL){
     /*coloco el nextpos segun las reglas de cada operador y caracter */
-    if(root->key_value == '^'){
+    if(root->key_value == char(167)){
       //cout << "NODE ^" << endl;
       for(unsigned int i = 0; i<root->left->lastpos.size(); i++){
         node* temp = search_node(root->left, root->left->lastpos[i]);
@@ -279,7 +279,7 @@ void AFD::set_nextpos(node* root){
         //copy(root->right->firstpos.begin(), root->right->firstpos.end(), ostream_iterator<int>(cout, " "));
         //cout << "}"<< endl;
       }
-    } else if (root->key_value == '*'){
+    } else if (root->key_value == char(241)){
       //cout << "NODE *" << endl;
       for(unsigned int i = 0; i<root->lastpos.size(); i++){
         node* temp = search_node(root, root->lastpos[i]);
@@ -300,7 +300,7 @@ node* AFD::search_node(node* root, int id_number){
     /*busco un nodo en cada rama, si no esta en una rama devuelvo un NULL. Si esta entonces devuelve esa rama*/
     //cout << "Node key value '"<< root->key_value << "' Node id number " << root->id_number << endl;
     //cout << " ... searching for " << id_number << endl;
-    if(root->key_value == '|' || root->key_value == '^'){
+    if(root->key_value == char(179) || root->key_value == char(167)){
       node* temp_left = new node;
       temp_left = search_node(root->left, id_number);
       if(temp_left != NULL){
@@ -308,7 +308,7 @@ node* AFD::search_node(node* root, int id_number){
       } else if (search_node(root->right, id_number) != NULL){
         return search_node(root->right, id_number);
       }
-    } else if (root->key_value == '*'){
+    } else if (root->key_value == char(241)){
       node* temp_right = new node;
       temp_right = search_node(root->right, id_number);
       if(temp_right != NULL){
@@ -381,14 +381,15 @@ void AFD::simulationAFD(string exprsn){
   /*Agrego un caracter que denota que es el final de leer caracteres, en este caso es el f*/
   vector<vertex*> S;
   vector<char> expression(exprsn.begin(), exprsn.end());
-  expression.push_back('f');
+  expression.push_back(char(254));
   S.push_back(init_vertex);
   char c = expression[0];
   expression.erase(expression.begin());
   bool all_belongs = true;
   /*mientras no sea f... */
-  while(c!='f'){
+  while(c!=char(254)){
     /*Hago el move correspondiente*/
+    cout << c << endl;
     if (find(this->L.begin(), this->L.end(), c) != this->L.end()){
       S = move(S, c);
       c = expression[0];

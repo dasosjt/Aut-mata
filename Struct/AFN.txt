@@ -1,5 +1,5 @@
-ESTADOS = {1, 2, 3, 4, 5, 6, }
-SIMBOLOS = {a, b, }
-INICIO = {5}
-ACEPTACION = {6}
-TRANSICION = (1, a, 2)(3, b, 4)(5, e, 3)(5, e, 1)(4, e, 6)(2, e, 6)
+ESTADOS = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, }
+SIMBOLOS = {a, b, c, }
+INICIO = {9}
+ACEPTACION = {12}
+TRANSICION = (1, a, 2)(3, b, 4)(5, î, 3)(5, î, 1)(4, î, 6)(2, î, 6)(7, c, 8)(9, î, 7)(9, î, 5)(8, î, 10)(6, î, 10)(11, a, 12)(9, î, 12)

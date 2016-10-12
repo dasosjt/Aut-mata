@@ -84,7 +84,7 @@ int AFDX::get_new_state(){
 void AFDX::createAFDX(vertex* vertex_init, vector<char> L){
   /*Guardo atributos e inicializo la construccion de subconjuntos*/
   this->L = L;
-  vector<char>::iterator pos = find(this->L.begin(), this->L.end(), 'e');
+  vector<char>::iterator pos = find(this->L.begin(), this->L.end(), char(238));
   if(pos != this->L.end()){
     this->L.erase(pos);
   }
@@ -96,14 +96,14 @@ void AFDX::simulationAFDX(string exprsn){
   /*Agrego un caracter que denota que es el final de leer caracteres, en este caso es el f*/
   vector<vertex*> s0, S;
   vector<char> expression(exprsn.begin(), exprsn.end());
-  expression.push_back('f');
+  expression.push_back(char(254));
   s0.push_back(init_vertex);
   S = s0;//eclosure(s0);
   char c = expression[0];
   expression.erase(expression.begin());
   /*mientras no sea f... */
   bool all_belongs = true;
-  while(c!='f'){
+  while(c!=char(254)){
     if (find(this->L.begin(), this->L.end(), c) != this->L.end()){
       S = move(S, c);
       c = expression[0];
@@ -213,7 +213,7 @@ vector<vertex* > AFDX::eclosure(vector<vertex* > v){
     //cout <<"   Estado en revision: "<< t->number_of << endl;
     if(!t->vertex_to.empty()){
       for(unsigned int j = 0; j<=t->vertex_to.size()-1; j++){
-        if(t->vertex_to[j].first == 'e'){
+        if(t->vertex_to[j].first == char(238)){
           if(count(result_v.begin(), result_v.end(), t->vertex_to[j].second)==0){
               result_v.push_back(t->vertex_to[j].second);
               states.push(t->vertex_to[j].second);

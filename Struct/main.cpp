@@ -25,11 +25,16 @@ int main(int argc, char *argv[]){
   /*string letter = "a..z";
   string digit = "0|1|2|3|4|5|6|7|8|9";
   string hexdigit = digit+"A..F";*/
-  /*vector<char> L;
+  vector<char> L;
   Tree* tree = new Tree();
   string exprsn;
   cout << "Enter Regular Expression " << endl;
   getline(cin, exprsn);
+  string orp, open_p, close_p;
+  orp = char(179);
+  open_p = char(244);
+  close_p = char(245);
+  exprsn = open_p+"a"+orp+"b"+orp+"c"+close_p+"a";
   tree->parse(exprsn);
   cout << "AST " << endl;
   tree->display();
@@ -56,5 +61,5 @@ int main(int argc, char *argv[]){
   cout << "Enter Expression " << endl;
   cin >> exprsn ;
   afd->simulationAFD(exprsn);
-  afd->minAFD();*/
+  afd->minAFD();
 }

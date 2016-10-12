@@ -95,7 +95,7 @@ vector<vertex* > AFN::eclosure(vector<vertex* > v){
     //cout <<"   Estado en revision: "<< t->number_of << endl;
     if(!t->vertex_to.empty()){
       for(unsigned int j = 0; j<=t->vertex_to.size()-1; j++){
-        if(t->vertex_to[j].first == 'e'){
+        if(t->vertex_to[j].first == char(238)){
           if(count(result_v.begin(), result_v.end(), t->vertex_to[j].second)==0){
               result_v.push_back(t->vertex_to[j].second);
               states.push(t->vertex_to[j].second);
@@ -155,9 +155,9 @@ AFN* AFN::visitAST(node* current){
     /*Visito el arbol para conforme lo viste forme el AFN*/
     char key_value = current->key_value;
     //cout << current->key_value << endl;
-    if(key_value == '|'){
+    if(key_value == char(179)){
       return orAFN(visitAST(current->right), visitAST(current->left));
-    } else if( key_value == '^' ) {
+    } else if( key_value == char(167) ) {
       return concAFN(visitAST(current->right), visitAST(current->left));
     } else if ( key_value == '*'){
       return kleeneAFN(visitAST(current->right));
@@ -231,14 +231,14 @@ AFN* AFN::orAFN(AFN* a, AFN* b){
   vertex* v2 = new vertex;
   v1->number_of = get_new_state();
   v2->number_of = get_new_state();
-  v1->vertex_to.push_back(make_pair('e', a->get_vertex_init()));
-  v1->vertex_to.push_back(make_pair('e', b->get_vertex_init()));
-  a->set_vertex_final_to('e', v2);
-  b->set_vertex_final_to('e', v2);
-  tran_to_text(v1->number_of, a->get_vertex_init()->number_of, 'e');
-  tran_to_text(v1->number_of, b->get_vertex_init()->number_of, 'e');
-  tran_to_text(a->get_vertex_final()->number_of, v2->number_of, 'e');
-  tran_to_text(b->get_vertex_final()->number_of, v2->number_of, 'e');
+  v1->vertex_to.push_back(make_pair(char(238), a->get_vertex_init()));
+  v1->vertex_to.push_back(make_pair(char(238), b->get_vertex_init()));
+  a->set_vertex_final_to(char(238), v2);
+  b->set_vertex_final_to(char(238), v2);
+  tran_to_text(v1->number_of, a->get_vertex_init()->number_of, char(238));
+  tran_to_text(v1->number_of, b->get_vertex_init()->number_of, char(238));
+  tran_to_text(a->get_vertex_final()->number_of, v2->number_of, char(238));
+  tran_to_text(b->get_vertex_final()->number_of, v2->number_of, char(238));
   result->init_vertex = v1;
   result->final_vertex = v2;
   return result;
@@ -252,16 +252,16 @@ AFN* AFN::kleeneAFN(AFN* a){
   vertex* v2 = new vertex;
   v1->number_of = get_new_state();
   v2->number_of = get_new_state();
-  a->set_vertex_final_to('e', a->get_vertex_init());
-  a->set_vertex_final_to('e', v2);
-  v1->vertex_to.push_back(make_pair('e', v2));
-  v1->vertex_to.push_back(make_pair('e', a->get_vertex_init()));
+  a->set_vertex_final_to(char(238), a->get_vertex_init());
+  a->set_vertex_final_to(char(238), v2);
+  v1->vertex_to.push_back(make_pair(char(238), v2));
+  v1->vertex_to.push_back(make_pair(char(238), a->get_vertex_init()));
   result->init_vertex = v1;
   result->final_vertex = v2;
-  tran_to_text(a->get_vertex_final()->number_of, a->get_vertex_init()->number_of, 'e');
-  tran_to_text(a->get_vertex_final()->number_of, v2->number_of, 'e');
-  tran_to_text(v1->number_of, v2->number_of, 'e');
-  tran_to_text(v1->number_of, a->get_vertex_init()->number_of, 'e');
+  tran_to_text(a->get_vertex_final()->number_of, a->get_vertex_init()->number_of, char(238));
+  tran_to_text(a->get_vertex_final()->number_of, v2->number_of, char(238));
+  tran_to_text(v1->number_of, v2->number_of, char(238));
+  tran_to_text(v1->number_of, a->get_vertex_init()->number_of, char(238));
   return result;
 }
 
@@ -269,9 +269,9 @@ AFN* AFN::concAFN(AFN* a, AFN* b){
   //cout << "Creando AFN para ^" << endl;
   /*Uno a y b con una transicion e*/
   AFN* result = new AFN;
-  b->set_vertex_final_to('e', a->get_vertex_init());
+  b->set_vertex_final_to(char(238), a->get_vertex_init());
   result->init_vertex = b->get_vertex_init();
   result->final_vertex = a->get_vertex_final();
-  tran_to_text(b->get_vertex_init()->number_of, a->get_vertex_final()->number_of, 'e');
+  tran_to_text(b->get_vertex_init()->number_of, a->get_vertex_final()->number_of, char(238));
   return result;
 }
