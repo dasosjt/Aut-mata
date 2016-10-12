@@ -13,11 +13,25 @@ class Lexer{
     bool SetDecl(string expression);
     bool Set(string expression);
     bool Ident(string expression);
+    bool BasicSet(string expression);
+    bool String(string expression);
+    bool Char(string expression);
+    bool KeywordDecl(string expression);
+    bool TokenDecl(string expression);
+    bool TokenExpr(string expression);
+    bool TokenTerm(string expression);
+    bool TokenFactor(string expression);
+    bool Symbol(string expression);
+    bool Number(string expression);
   private:
     ifstream file;
     const char* file_name;
     string letter;
     string digit;
+    string ident;
+    string number;
+    string string_;
+    string character;
 };
 
 #endif
