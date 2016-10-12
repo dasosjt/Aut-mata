@@ -1,14 +1,14 @@
 # Aut-mata
 Diseño Lenguajes de Programación
 
-concatenation char(167)__
-or            char(179)__
-(             char(244)__
-)             char(245)__
-[             char(191)__
-]             char(192)__
-{             char(212)__
-}             char(213)__
-kleene        char(241)__
-epsilon       char(238)__
-end-of-string char(254)__
+concatenation char(167)</br>
+or            char(179)</br>
+(             char(244)</br>
+)             char(245)</br>
+[             char(191)</br>
+]             char(192)</br>
+{             char(212)</br>
+}             char(213)</br>
+kleene        char(241)</br>
+epsilon       char(238)</br>
+end-of-string char(254)</br>
