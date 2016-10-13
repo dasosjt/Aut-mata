@@ -118,10 +118,12 @@ void AFDX::simulationAFDX(string exprsn){
   final_state = false;
   //cout << final_vertex->number_of << endl;
   /*Si el estado resultante no tiene el estado final, entonces respondo NO; pero si lo tiene entonces SI*/
-  for(unsigned int i = 0; i < S[0]->afdx_set.size(); i++){
-    if (S[0]->afdx_set[i] == final_vertex->number_of && all_belongs){
-      final_state = true;
-    };
+  if(!S.empty()){
+    for(unsigned int i = 0; i < S[0]->afdx_set.size(); i++){
+      if (S[0]->afdx_set[i] == final_vertex->number_of && all_belongs){
+        final_state = true;
+      };
+    }
   }
   if(final_state){
     cout << "YES" << endl;
