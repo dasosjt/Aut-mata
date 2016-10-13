@@ -1,17 +1,49 @@
 #include "lexer.h"
+#include "tree.h"
+#include "afn.h"
+#include "afdx.h"
+#include "afd.h"
 #include "string"
 #include <algorithm>
 #include <iterator>
 
 Lexer::Lexer(const char* file_name){
+  or_operation = char(179);
+  open_paranthesis = char(244);
+  close_paranthesis = char(245);
+  open_braces = char(191);
+  close_braces =  char(192);
+  open_brackets = char(212);
+  close_brackets = char(213);
   this->file_name = file_name;
-  this->letter = "(a..z)";
-  this->digit = "(0|1|2|3|4|5|6|7|8|9)";
-  this->ident = this->letter+"{"+this->letter+"|"+this->digit+"}";
-  this->number = this->digit+"{"+this->digit+"}";
+  this->letter = open_paranthesis+"a..c"+close_paranthesis;
+  this->digit = open_paranthesis+"0..3"+close_paranthesis;
+  this->ident = this->letter+open_brackets+this->letter+or_operation+this->digit+close_brackets;
+  this->number = this->digit+open_brackets+this->digit+close_brackets;
   cout << ident << endl;
-  cout << number << endl;
-
+  //cout << number << endl;
+  string exprsn;
+  vector<char> L;
+  Tree* tree = new Tree();
+  tree->parse(ident);
+  cout << "AST " << endl;
+  tree->display();
+  L = tree->getL();
+  /*cout << "AFN START" << endl;
+  AFN* afn = new AFN();
+  afn->createAFN(tree->getRoot(), L);
+  cout << "AFN READY FOR TEST" << endl;
+  cout << "Enter Expression " << endl;
+  cin >> exprsn ;
+  afn->simulationAFN(exprsn);*/
+  cout << "AST TO AFD "<< endl;
+  AFD* afd = new AFD();
+  afd->createAFD(tree->getRoot(), L);
+  cout << "AFD READY FOR TEST" << endl;
+  cout << "Enter Expression " << endl;
+  cin >> exprsn ;
+  afd->simulationAFD(exprsn);
+  afd->minAFD();
 }
 
 void Lexer::Parse(){

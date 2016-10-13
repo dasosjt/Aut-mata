@@ -13,7 +13,7 @@ using namespace std;
 int main(int argc, char *argv[]){
   Lexer* lex = new Lexer("cocol.txt");
   //lex->Parse();
-  if(lex->SetDecl("aaaa = bbbb.")){
+  /*if(lex->SetDecl("aaaa = bbbb.")){
     cout << "SetDecl.. check" << endl;
   };
   if(lex->KeywordDecl("aaaa = bbbb .")){
@@ -21,11 +21,11 @@ int main(int argc, char *argv[]){
   };
   if(lex->TokenDecl("aaaa = {aaa} | [abb].")){
     cout << "TokenDecl.. check" << endl;
-  };
+  };*/
   /*string letter = "a..z";
   string digit = "0|1|2|3|4|5|6|7|8|9";
   string hexdigit = digit+"A..F";*/
-  vector<char> L;
+  /*vector<char> L;
   Tree* tree = new Tree();
   string exprsn;
   cout << "Enter Regular Expression " << endl;
@@ -61,5 +61,5 @@ int main(int argc, char *argv[]){
   cout << "Enter Expression " << endl;
   cin >> exprsn ;
   afd->simulationAFD(exprsn);
-  afd->minAFD();
+  afd->minAFD();*/
 }

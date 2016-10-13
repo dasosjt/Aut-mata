@@ -159,7 +159,7 @@ AFN* AFN::visitAST(node* current){
       return orAFN(visitAST(current->right), visitAST(current->left));
     } else if( key_value == char(167) ) {
       return concAFN(visitAST(current->right), visitAST(current->left));
-    } else if ( key_value == '*'){
+    } else if ( key_value == char(241)){
       return kleeneAFN(visitAST(current->right));
     } else {
       return base(current);

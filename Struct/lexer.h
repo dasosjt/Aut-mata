@@ -32,6 +32,7 @@ class Lexer{
     string number;
     string string_;
     string character;
+    string or_operation, open_paranthesis, close_paranthesis, open_braces, close_braces, open_brackets, close_brackets;
 };
 
 #endif

@@ -64,6 +64,7 @@ void AFD::createAFD(node* root, vector<char> L){
   init_vertex->afdx_set = this->root->firstpos;
   states_afd.push_back(init_vertex);
   //L.push_back('#');
+  //copy(L.begin(), L.end(), ostream_iterator<char>(cout, " "));
   this->L = L;
   vector<char>::iterator pos = find(this->L.begin(), this->L.end(), char(238));
   if(pos != this->L.end()){
@@ -389,7 +390,9 @@ void AFD::simulationAFD(string exprsn){
   /*mientras no sea f... */
   while(c!=char(254)){
     /*Hago el move correspondiente*/
-    cout << c << endl;
+    //cout << "while " << c << endl;
+    //copy(expression.begin(), expression.end(), ostream_iterator<char>(cout, " "));
+    //cout << endl;
     if (find(this->L.begin(), this->L.end(), c) != this->L.end()){
       S = move(S, c);
       c = expression[0];
@@ -403,10 +406,12 @@ void AFD::simulationAFD(string exprsn){
   };
   final_state = false;
   /*Si el estado resultante no tiene el estado final, entonces respondo NO; pero si lo tiene entonces SI*/
-  for(unsigned int i = 0; i < S[0]->afdx_set.size(); i++){
-    if (S[0]->afdx_set[i] == final_vertex->number_of && all_belongs){
-      final_state = true;
-    };
+  if(!S.empty()){
+    for(unsigned int i = 0; i < S[0]->afdx_set.size(); i++){
+      if (S[0]->afdx_set[i] == final_vertex->number_of && all_belongs){
+        final_state = true;
+      };
+    }
   }
   if(final_state){
     cout << "YES" << endl;

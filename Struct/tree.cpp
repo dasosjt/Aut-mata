@@ -57,19 +57,24 @@ int Tree::priority(char a){
 void Tree::parse(string exprsn){
   // delete whitespace
   exprsn.erase(remove(exprsn.begin(), exprsn.end(), ' '), exprsn.end());
+  cout << exprsn << endl;
   // .. as range
   for (unsigned int i = 0; i<exprsn.size(); i++){
     if(exprsn.at(i) == '.'){
       if(exprsn.at(i+1) == '.'){
         int from = (int) exprsn.at(i-1);
         int to = (int) exprsn.at(i+2);
+        //cout << exprsn.at(i-1) << endl;
+        //cout << exprsn.at(i+2) << endl;
         exprsn.erase(exprsn.begin()+i+1);
         exprsn.erase(exprsn.begin()+i);
         for (unsigned int j = 1; j< to - from; j++){
-            int current = from+j;
-            exprsn.insert(i+j-1, 1, current);
-            exprsn.insert(i+j, 1, char(179));
+            int current = to-j;
+            exprsn.insert(i, 1, char(179));
+            exprsn.insert(i, 1, current);
+            //cout << exprsn << endl;
         }
+        exprsn.insert(i, 1, char(179));
       }
     }
   }
@@ -81,6 +86,7 @@ void Tree::parse(string exprsn){
     }
   }*/
   //braces as ?
+  cout << "After Range "<< exprsn << endl;
   for (unsigned int i = 0; i<exprsn.size(); i++){
     if(exprsn.at(i) == char(191)){
       exprsn.insert(i+1, 1, char(244));
@@ -93,6 +99,7 @@ void Tree::parse(string exprsn){
     }
   }
   //brackets as a kleene
+  cout << "After braces as ? " << exprsn << endl;
   for (unsigned int i = 0; i<exprsn.size(); i++){
     if(exprsn.at(i) == char(212)){
       exprsn.insert(i+1, 1, char(244));
@@ -104,6 +111,7 @@ void Tree::parse(string exprsn){
     }
   }
   //add concatenation
+  cout << "After brackets as kleene " <<exprsn << endl;
   for(unsigned int i = 0; i<exprsn.size(); i++){
     if(isalpha(exprsn.at(i)) || exprsn.at(i) == char(245) || exprsn.at(i) == char(241)){
       if(i+1<exprsn.size()){
@@ -114,7 +122,7 @@ void Tree::parse(string exprsn){
     }
   }
   //print the result after the first parse
-  cout << exprsn << endl;
+  cout << "After concatenation " << exprsn << endl;
   for(int i = 0; i<exprsn.size(); i++){
     //cout << "stack RPN size " << expressionRPN.size() << endl;
     //cout << "stack operations size " << operations.size() << endl;
