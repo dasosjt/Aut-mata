@@ -30,6 +30,8 @@ void Tree::printLevel(node* root, int indent){
          cout << '|' << endl;
        } else if(root->key_value == char(241)){
          cout << '*' << endl;
+       } else if(root->key_value == char(238)){
+         cout << "epsilon" << endl;
        } else {
         cout << root->key_value << endl;
        }
@@ -60,8 +62,8 @@ void Tree::parse(string exprsn){
   cout << exprsn << endl;
   // .. as range
   for (unsigned int i = 0; i<exprsn.size(); i++){
-    if(exprsn.at(i) == '.'){
-      if(exprsn.at(i+1) == '.'){
+    if(exprsn.at(i) == char(176)){
+      if(exprsn.at(i+1) == char(176)){
         int from = (int) exprsn.at(i-1);
         int to = (int) exprsn.at(i+2);
         //cout << exprsn.at(i-1) << endl;
@@ -78,13 +80,6 @@ void Tree::parse(string exprsn){
       }
     }
   }
-  // + as |
-  /*for (unsigned int i = 0; i<exprsn.size(); i++){
-    if(exprsn.at(i) == '+'){
-      exprsn.insert(i+1, 1, char(179));
-      exprsn.erase(exprsn.begin()+i);
-    }
-  }*/
   //braces as ?
   cout << "After Range "<< exprsn << endl;
   for (unsigned int i = 0; i<exprsn.size(); i++){
@@ -111,11 +106,11 @@ void Tree::parse(string exprsn){
     }
   }
   //add concatenation
-  cout << "After brackets as kleene " <<exprsn << endl;
+  cout << "After brackets as kleene " << exprsn << endl;
   for(unsigned int i = 0; i<exprsn.size(); i++){
-    if(isalpha(exprsn.at(i)) || exprsn.at(i) == char(245) || exprsn.at(i) == char(241)){
+    if(isalpha(exprsn.at(i)) || exprsn.at(i) == char(245) || exprsn.at(i) == char(241) || exprsn.at(i) == '(' || exprsn.at(i) == ')' || exprsn.at(i) == '.' || exprsn.at(i) == '+' || exprsn.at(i) == '-' || exprsn.at(i) == char(34) || exprsn.at(i) == '='){
       if(i+1<exprsn.size()){
-        if(isalpha(exprsn.at(i+1)) || exprsn.at(i+1) == char(244) ){
+        if(isalpha(exprsn.at(i+1)) || exprsn.at(i+1) == char(244) || exprsn.at(i+1) == '(' || exprsn.at(i+1) == ')' || exprsn.at(i+1) == '.' || exprsn.at(i+1) == '+' || exprsn.at(i+1) == '-' || exprsn.at(i+1) == char(34) || exprsn.at(i+1) == '='){
           exprsn.insert(i+1, 1, char(167));
         }
       }

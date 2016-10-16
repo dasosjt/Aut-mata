@@ -1,6 +1,7 @@
 # Aut-mata
 Diseño Lenguajes de Programación
 
+.             char(176)</br>
 concatenation char(167)</br>
 or            char(179)</br>
 (             char(244)</br>
