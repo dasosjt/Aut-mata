@@ -17,12 +17,16 @@ Lexer::Lexer(const char* file_name){
   open_brackets = char(212);
   close_brackets = char(213);
   quote = char(34);
+  apostrophe = char(39);
+  cout << apostrophe << endl;
   this->file_name = file_name;
   this->letter = open_paranthesis+"a"+point+point+"z"+close_paranthesis;
   this->digit = open_paranthesis+"0"+point+point+"9"+close_paranthesis;
   this->ident = open_paranthesis+this->letter+open_brackets+this->letter+or_operation+this->digit+close_brackets+close_paranthesis;
   this->number = this->digit+open_brackets+this->digit+close_brackets;
-  this->char_ = "CHR("+open_paranthesis+this->number+close_paranthesis+")";
+  this->char_ = open_paranthesis+"CHR("+open_paranthesis+this->number+close_paranthesis+")"+close_paranthesis;
+  this->character = open_paranthesis+apostrophe+open_paranthesis+this->letter+or_operation+this->number+close_paranthesis+apostrophe+close_paranthesis;
+  this->character_ = open_paranthesis+char_+or_operation+character+close_paranthesis;
   this->string_ = quote+this->letter+open_brackets+this->letter+close_brackets+quote;
   this->basicSet = open_paranthesis+open_paranthesis+char_+open_braces+".."+char_+close_braces+close_paranthesis+or_operation+ident+or_operation+string_+close_paranthesis;
   this->set = open_paranthesis+basicSet+open_brackets+open_paranthesis+"+"+or_operation+"-"+close_paranthesis+basicSet+close_brackets+close_paranthesis;
@@ -30,7 +34,7 @@ Lexer::Lexer(const char* file_name){
   string exprsn;
   vector<char> L;
   Tree* tree = new Tree();
-  tree->parse(setDecl);
+  tree->parse(character_);
   cout << "AST " << endl;
   tree->display();
   L = tree->getL();//aaddasefvaawevGGFEWQ2

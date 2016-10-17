@@ -31,8 +31,9 @@ class Lexer{
     string ident;
     string number;
     string string_;
+    string or_operation, open_paranthesis, close_paranthesis, open_braces, close_braces, open_brackets, close_brackets, quote, apostrophe;
     string character;
-    string or_operation, open_paranthesis, close_paranthesis, open_braces, close_braces, open_brackets, close_brackets, quote;
+    string character_;
     string char_;
     string basicSet;
     string point;
