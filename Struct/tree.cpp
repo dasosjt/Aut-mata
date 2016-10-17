@@ -110,7 +110,7 @@ void Tree::parse(string exprsn){
   for(unsigned int i = 0; i<exprsn.size(); i++){
     if(isalpha(exprsn.at(i)) || exprsn.at(i) == char(245) || exprsn.at(i) == char(241) || exprsn.at(i) == '(' || exprsn.at(i) == ')' || exprsn.at(i) == '.' || exprsn.at(i) == '+' || exprsn.at(i) == '-' || exprsn.at(i) == char(34) || exprsn.at(i) == '=' || exprsn.at(i) == char(39)){
       if(i+1<exprsn.size()){
-        if(isalpha(exprsn.at(i+1)) || exprsn.at(i+1) == char(244) || exprsn.at(i+1) == '(' || exprsn.at(i+1) == ')' || exprsn.at(i+1) == '.' || exprsn.at(i+1) == '+' || exprsn.at(i+1) == '-' || exprsn.at(i+1) == char(34) || exprsn.at(i+1) == '=' || exprsn.at(i+1) == char(39)){
+        if(isalpha(exprsn.at(i+1)) || exprsn.at(i+1) == char(244) || exprsn.at(i+1) == '(' || exprsn.at(i+1) == ')' || exprsn.at(i+1) == '.' || exprsn.at(i+1) == '+' || exprsn.at(i+1) == '-' || exprsn.at(i+1) == char(34) || exprsn.at(i+1) == '=' || exprsn.at(i) == char(39)){
           exprsn.insert(i+1, 1, char(167));
         }
       }

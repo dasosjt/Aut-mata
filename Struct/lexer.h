@@ -26,14 +26,14 @@ class Lexer{
   private:
     ifstream file;
     const char* file_name;
+    string or_operation, open_paranthesis, close_paranthesis, open_braces, close_braces, open_brackets, close_brackets, quote, apostrophe;
     string letter;
     string digit;
     string ident;
     string number;
     string string_;
-    string or_operation, open_paranthesis, close_paranthesis, open_braces, close_braces, open_brackets, close_brackets, quote, apostrophe;
     string character;
-    string character_;
+    string character0;
     string char_;
     string basicSet;
     string point;
