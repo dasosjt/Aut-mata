@@ -119,6 +119,8 @@ class AFD{
     static ofstream AFD_file; /**< genera el archivo de texto */
     static ostringstream AFD_output_t; /**< guardar en memoria las transiciones antes de guardarlas en texto */
     bool final_state; /**< guardar en memoria la aceptacion */
+    node* temp_search_node_left;
+    node* temp_search_node_right;
 
 };
 

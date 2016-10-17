@@ -19,7 +19,7 @@ Lexer::Lexer(const char* file_name){
   quote = char(34);
   apostrophe = char(39);
   this->file_name = file_name;
-  this->letter = open_paranthesis+"a"+point+point+"z"+close_paranthesis;
+  this->letter = open_paranthesis+"a"+point+point+"z"+or_operation+"A"+point+point+"z"+close_paranthesis;
   this->digit = open_paranthesis+"0"+point+point+"9"+close_paranthesis;
   this->ident = open_paranthesis+this->letter+open_brackets+this->letter+or_operation+this->digit+close_brackets+close_paranthesis;
   this->number = this->digit+open_brackets+this->digit+close_brackets;
@@ -33,7 +33,7 @@ Lexer::Lexer(const char* file_name){
   string exprsn;
   vector<char> L;
   Tree* tree = new Tree();
-  tree->parse(basicSet);
+  tree->parse(setDecl);
   cout << "AST " << endl;
   tree->display();
   L = tree->getL();//aaddasefvaawevGGFEWQ2

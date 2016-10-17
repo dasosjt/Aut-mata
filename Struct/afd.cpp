@@ -1,4 +1,4 @@
-#include "tree.h"
+  #include "tree.h"
 #include "afn.h"
 #include "afdx.h"
 #include "afd.h"
@@ -25,6 +25,8 @@ AFD::AFD(){
   new_id_number = 0;
   init_vertex = new vertex;
   final_vertex = new vertex;
+  temp_search_node_left = new node;
+  temp_search_node_right = new node;
 }
 
 void AFD::set_root(node* root){
@@ -148,7 +150,7 @@ void AFD::set_id_number(node* root){
       root->id_number = get_new_id_number();
       if(root->key_value == '#'){
         final_vertex->number_of = new_id_number;
-        //cout << "FINAL VERTEX ID NUMBER "<< new_id_number << endl;
+        cout << "FINAL VERTEX ID NUMBER "<< new_id_number << endl;
       }
       //cout << root->key_value << " with id number " << root->id_number << endl;
     }
@@ -302,18 +304,17 @@ node* AFD::search_node(node* root, int id_number){
     //cout << "Node key value '"<< root->key_value << "' Node id number " << root->id_number << endl;
     //cout << " ... searching for " << id_number << endl;
     if(root->key_value == char(179) || root->key_value == char(167)){
-      node* temp_left = new node;
-      temp_left = search_node(root->left, id_number);
-      if(temp_left != NULL){
-        return temp_left;
+      temp_search_node_left = search_node(root->left, id_number);
+      if(temp_search_node_left != NULL){
+        return temp_search_node_left;
       } else if (search_node(root->right, id_number) != NULL){
+        //destroy_tree(temp_left);
         return search_node(root->right, id_number);
       }
     } else if (root->key_value == char(241)){
-      node* temp_right = new node;
-      temp_right = search_node(root->right, id_number);
-      if(temp_right != NULL){
-        return temp_right;
+      temp_search_node_right = search_node(root->right, id_number);
+      if(temp_search_node_right != NULL){
+        return temp_search_node_right;
       }
     } else {
       if(root->id_number == id_number){
@@ -324,7 +325,14 @@ node* AFD::search_node(node* root, int id_number){
     }
   }
 }
-
+/*void AFD::destroy_tree(node* leaf){
+  if(leaf != NULL){
+    //destroy_tree(leaf->left);
+    //destroy_tree(leaf->right);
+    //destroy_tree(leaf->parent);
+    free(leaf);
+  }
+}*/
 void AFD::tran_to_text(int from, int to, char a){
   ostringstream temp;
   /*agrego a temp en forma ordena la informacion brindada y la devuelvo como string*/
