@@ -7,6 +7,13 @@
 #include <algorithm>
 #include <iterator>
 
+AFD* Lexer::ident_AFD;
+Tree* Lexer::ident_tree;
+vector<char> Lexer::ident_lang;
+AFD* Lexer::number_AFD;
+Tree* Lexer::number_tree;
+vector<char> Lexer::number_lang;
+
 Lexer::Lexer(const char* file_name){
   point = char(176);
   or_operation = char(179);
@@ -19,31 +26,20 @@ Lexer::Lexer(const char* file_name){
   quote = char(34);
   apostrophe = char(39);
   this->file_name = file_name;
-  this->letter = open_paranthesis+"a"+point+point+"z"+or_operation+"A"+point+point+"z"+close_paranthesis;
+  this->letter = open_paranthesis+"a"+point+point+"z"+or_operation+"A"+point+point+"Z"+close_paranthesis;
   this->digit = open_paranthesis+"0"+point+point+"9"+close_paranthesis;
   this->ident = open_paranthesis+this->letter+open_brackets+this->letter+or_operation+this->digit+close_brackets+close_paranthesis;
   this->number = this->digit+open_brackets+this->digit+close_brackets;
-  this->char_ = open_paranthesis+"CHR("+open_paranthesis+this->number+close_paranthesis+")"+close_paranthesis;
-  this->character = open_paranthesis+apostrophe+open_paranthesis+this->letter+or_operation+this->number+close_paranthesis+apostrophe+close_paranthesis;
-  this->character0 = open_paranthesis+this->char_+or_operation+this->character+close_paranthesis;
-  this->string_ = quote+this->letter+open_brackets+this->letter+close_brackets+quote;
-  this->basicSet = open_paranthesis+open_paranthesis+this->character0+open_braces+".."+this->character0+close_braces+close_paranthesis+or_operation+this->ident+or_operation+this->string_+close_paranthesis;
-  this->set = open_paranthesis+this->basicSet+open_brackets+open_paranthesis+"+"+or_operation+"-"+close_paranthesis+this->basicSet+close_brackets+close_paranthesis;
-  this->setDecl = ident+"="+set;
-  string exprsn;
-  vector<char> L;
-  Tree* tree = new Tree();
-  tree->parse(setDecl);
-  cout << "AST " << endl;
-  tree->display();
-  L = tree->getL();//aaddasefvaawevGGFEWQ2
-  cout << "AST TO AFD "<< endl;
-  AFD* afd = new AFD();
-  afd->createAFD(tree->getRoot(), L);
-  cout << "AFD READY FOR TEST" << endl;
-  cout << "Enter Expression " << endl;
-  cin >> exprsn;
-  afd->simulationAFD(exprsn);
+  ident_tree = new Tree();
+  ident_tree->parse(this->ident);
+  ident_lang = ident_tree->getL();
+  ident_AFD = new AFD();
+  ident_AFD->createAFD(ident_tree->getRoot(), ident_lang);
+  number_tree = new Tree();
+  number_tree->parse(this->number);
+  number_lang = number_tree->getL();
+  number_AFD = new AFD();
+  number_AFD->createAFD(number_tree->getRoot(), number_lang);
 }
 
 void Lexer::Parse(){
@@ -65,14 +61,14 @@ bool Lexer::SetDecl(string expression){
   expression.erase(remove(expression.begin(), expression.end(), ' '), expression.end());
   if(expression.at(expression.size()-1) == '.'){
     expression.pop_back();
-    //cout << "found ." << endl;
+    cout << "found ." << endl;
     unsigned int delimeter = expression.find('=');
     string ident;
     string set;
     if(delimeter < expression.size()){
-      //cout << "found =" << endl;
+      cout << "found =" << endl;
       ident = expression.substr(0, delimeter);
-      set = expression.substr(delimeter+1, expression.size());
+      set = expression.substr(delimeter+1, expression.size()-delimeter-1);
       if(Ident(ident) && Set(set)){
           return true;
       }
@@ -87,20 +83,20 @@ bool Lexer::SetDecl(string expression){
 
 bool Lexer::Ident(string expression){
   cout << "ident " << expression << endl;
-  return true;
+  return ident_AFD->simulationAFD(expression);
 }
 
 bool Lexer::Set(string expression){
   unsigned int np = count(expression.begin(), expression.end(), '+');
   unsigned int mp = count(expression.begin(), expression.end(), '-');
+  cout << "Set " << expression << endl;
   if(np > 0 || mp > 0){
     unsigned int delimeter = expression.find_first_of("+-");
     string basicset0;
     string basicset1;
-    cout << "Set " << expression << endl;
     if(delimeter < expression.size()){
       basicset0 = expression.substr(0, delimeter);
-      basicset1 = expression.substr(delimeter+1, expression.size());
+      basicset1 = expression.substr(delimeter+1, expression.size()-delimeter-1);
       cout << basicset0 << endl;
       cout << basicset1 << endl;
       if(BasicSet(basicset0) && Set(basicset1)){
@@ -115,13 +111,20 @@ bool Lexer::Set(string expression){
 
 bool Lexer::BasicSet(string expression){
   // revisar los ..
+  cout << "BasicSet " << expression << endl;
   unsigned int pp = expression.find("..");
-  if(pp < expression.size()){
-    if(String(expression)){
+  if(pp > expression.size()){
+    if(String(expression) || Ident(expression) || Char(expression)){
       return true;
     }
   } else {
-    if(String(expression) || Ident(expression) || Char(expression)){
+    string char0;
+    string char1;
+    char0 = expression.substr(0, pp);
+    char1 = expression.substr(pp+2, expression.size()-pp-2);
+    cout << char0 << endl;
+    cout << char1 << endl;
+    if(Char(char0) && Char(char1)){
       return true;
     }
   }
@@ -130,26 +133,29 @@ bool Lexer::BasicSet(string expression){
 
 bool Lexer::String(string expression){
   unsigned int n = count(expression.begin(), expression.end(), '"');
-  if(n==0){
+  cout << "String " << expression << endl;
+  if(n==2){
     return true;
   }
   return false;
 }
 
 bool Lexer::Number(string expression){
-  return true;
+  cout << "number " << expression << endl;
+  return number_AFD->simulationAFD(expression);
 }
 
 bool Lexer::Char(string expression){
   unsigned int n = count(expression.begin(), expression.end(), '\'');
-  if(n==0){
+  if(n==2){
+    cout << "Char " << expression << endl;
     return true;
   } else {
     unsigned int pp = expression.find("CHR(");
     if(pp < expression.size()){
       unsigned int p1 = expression.find("(");
       unsigned int p2 = expression.find(")");
-      string number = expression.substr(p1+1, p2-1);
+      string number = expression.substr(p1+1, expression.size()-p2);
       if(Number(number)){
         return true;
       }
@@ -168,7 +174,9 @@ bool Lexer::KeywordDecl(string expression){
     string str;
     if(delimeter < string::npos){
       ident = expression.substr(0, delimeter);
-      str = expression.substr(delimeter, expression.size());
+      str = expression.substr(delimeter+1, expression.size()-delimeter-1);
+      cout << ident << endl;
+      cout << str << endl;
       if(Ident(ident) && String(str)){
           return true;
       }
@@ -193,7 +201,7 @@ bool Lexer::TokenDecl(string expression){
     if(delimeter < expression.size()){
       cout << "found =" << endl;
       ident = expression.substr(0, delimeter);
-      tokenexpr = expression.substr(delimeter+1, expression.size());
+      tokenexpr = expression.substr(delimeter+1, expression.size()-delimeter-1);
       cout << ident << endl;
       cout << tokenexpr << endl;
       if(Ident(ident) && TokenExpr(tokenexpr)){
@@ -219,7 +227,7 @@ bool Lexer::TokenExpr(string expression){
     cout << "TokenExpr " << expression << endl;
     if(delimeter < expression.size()){
       tokenterm0 = expression.substr(0, delimeter);
-      tokenterm1 = expression.substr(delimeter+1, expression.size());
+      tokenterm1 = expression.substr(delimeter+1, expression.size()-delimeter-1);
       cout << tokenterm0 << endl;
       cout << tokenterm1 << endl;
       if(TokenTerm(tokenterm0) && TokenExpr(tokenterm1)){
@@ -248,7 +256,7 @@ bool Lexer::TokenTerm(string expression){
     } else {
       cout << "Well.. multiple token" << endl;
       tokenfactor0 = expression.substr(0, delimeter);
-      tokenfactor1 = expression.substr(delimeter, expression.size());
+      tokenfactor1 = expression.substr(delimeter, expression.size()-delimeter);
       cout << tokenfactor0 << endl;
       cout << tokenfactor1 << endl;
       if(TokenFactor(tokenfactor0) && TokenFactor(tokenfactor1)){

@@ -13,15 +13,15 @@ using namespace std;
 int main(int argc, char *argv[]){
   Lexer* lex = new Lexer("cocol.txt");
   //lex->Parse();
-  /*if(lex->SetDecl("aaaa = bbbb.")){
+  /*if(lex->SetDecl("aaaa = CHR(9)..CHR(10)+CHR(11)..CHR(11).")){
     cout << "SetDecl.. check" << endl;
   };
-  if(lex->KeywordDecl("aaaa = bbbb .")){
+  if(lex->KeywordDecl("aaaa = \"bbbb\" .")){
     cout << "KeywordDecl.. check" << endl;
-  };
-  if(lex->TokenDecl("aaaa = {aaa} | [abb].")){
-    cout << "TokenDecl.. check" << endl;
   };*/
+  if(lex->TokenDecl("aaaa = {aaa | [bbbb] } | [abb].")){
+    cout << "TokenDecl.. check" << endl;
+  };
   /*string letter = "a..z";
   string digit = "0|1|2|3|4|5|6|7|8|9";
   string hexdigit = digit+"A..F";*/

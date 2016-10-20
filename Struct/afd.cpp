@@ -1,4 +1,4 @@
-  #include "tree.h"
+#include "tree.h"
 #include "afn.h"
 #include "afdx.h"
 #include "afd.h"
@@ -11,12 +11,12 @@
 
 using namespace std;
 
-int AFD::state;
-int AFD::new_id_number;
-vertex* AFD::init_vertex;
-vertex* AFD::final_vertex;
+
 ofstream AFD::AFD_file;
 ostringstream AFD::AFD_output_t;
+node* AFD::temp_search_node_left;
+node* AFD::temp_search_node_right;
+node* AFD::temp_node_nextpos;
 
 
 AFD::AFD(){
@@ -27,6 +27,8 @@ AFD::AFD(){
   final_vertex = new vertex;
   temp_search_node_left = new node;
   temp_search_node_right = new node;
+  temp_node_nextpos = new node;
+
 }
 
 void AFD::set_root(node* root){
@@ -74,9 +76,9 @@ void AFD::createAFD(node* root, vector<char> L){
   }
   //L = this->L;
   /*Agrego en Dstate los nuevos estados encontrados y en states_afd tambien, solo que en el ultimo mantengo un orden para acceder*/
+  vertex* v_from = new vertex;
   while(!Dstates.empty()){
       vector<int > S  = Dstates.top();
-      vertex* v_from = new vertex;
       v_from->afdx_set = S;
       Dstates.pop();
       for(unsigned int i = 0; i<this->L.size(); i++){
@@ -193,7 +195,8 @@ bool AFD::set_voidable(node* root){
     } else {
       //cout << root->key_value << " with id number " << root->id_number << " is voidable " << root->voidable << endl;
     }
-
+    bool temp_left;
+    bool temp_right;
     return root->voidable;
   }
 }
@@ -225,10 +228,12 @@ vector<int> AFD::set_firstpos(node* root){
     if (root->id_number == 0){
       //cout << root->key_value << " with firstpos { ";
     } else {
-      //cout << root->key_value << " with id number " << root->id_number << " with firstpos { ";
+      //cout << root->key_value << " with id number " << root->id_number << " with firstpos  ";*/
     }
     //copy(root->firstpos.begin(), root->firstpos.end(), ostream_iterator<int>(cout, " "));
     //cout << "}"<< endl;
+    vector<int> temp_left;
+    vector<int> temp_right;
     return root->firstpos;
   }
 }
@@ -258,13 +263,15 @@ vector<int> AFD::set_lastpos(node* root){
       root->lastpos.push_back(root->id_number);
     }
     if (root->id_number == 0){
-      //cout << root->key_value << " with lastpos { ";
+      //cout << root->key_value << " with lastpos  ";
     } else {
-      //cout << root->key_value << " with id number " << root->id_number << " with lastpos { ";
+      //cout << root->key_value << " with id number " << root->id_number << " with lastpos  ";
     }
     sort(root->lastpos.begin(), root->lastpos.end());
     //copy(root->lastpos.begin(), root->lastpos.end(), ostream_iterator<int>(cout, " "));
-    //cout << "}"<< endl;
+    //cout << ""<< endl;
+    vector<int> temp_left;
+    vector<int> temp_right;
     return root->lastpos;
   }
 }
@@ -275,9 +282,9 @@ void AFD::set_nextpos(node* root){
     if(root->key_value == char(167)){
       //cout << "NODE ^" << endl;
       for(unsigned int i = 0; i<root->left->lastpos.size(); i++){
-        node* temp = search_node(root->left, root->left->lastpos[i]);
-        temp->nextpos.insert(temp->nextpos.end(), root->right->firstpos.begin(), root->right->firstpos.end());
-        sort(temp->nextpos.begin(), temp->nextpos.end());
+        temp_node_nextpos = search_node(root->left, root->left->lastpos[i]);
+        temp_node_nextpos->nextpos.insert(temp_node_nextpos->nextpos.end(), root->right->firstpos.begin(), root->right->firstpos.end());
+        sort(temp_node_nextpos->nextpos.begin(), temp_node_nextpos->nextpos.end());
         //cout << "Node with key value "<< temp->key_value << " with id number " << temp->id_number << " with nextpos { ";
         //copy(root->right->firstpos.begin(), root->right->firstpos.end(), ostream_iterator<int>(cout, " "));
         //cout << "}"<< endl;
@@ -285,9 +292,9 @@ void AFD::set_nextpos(node* root){
     } else if (root->key_value == char(241)){
       //cout << "NODE *" << endl;
       for(unsigned int i = 0; i<root->lastpos.size(); i++){
-        node* temp = search_node(root, root->lastpos[i]);
-        temp->nextpos.insert(temp->nextpos.end(), root->firstpos.begin(), root->firstpos.end());
-        sort(temp->nextpos.begin(), temp->nextpos.end());
+        temp_node_nextpos = search_node(root, root->lastpos[i]);
+        temp_node_nextpos->nextpos.insert(temp_node_nextpos->nextpos.end(), root->firstpos.begin(), root->firstpos.end());
+        sort(temp_node_nextpos->nextpos.begin(), temp_node_nextpos->nextpos.end());
         //cout << "Node with key value "<< temp->key_value << " with id number " << temp->id_number << " with nextpos { ";
         //copy(temp->nextpos.begin(), temp->nextpos.end(), ostream_iterator<int>(cout, " "));
         //cout << "}"<< endl;
@@ -325,14 +332,7 @@ node* AFD::search_node(node* root, int id_number){
     }
   }
 }
-/*void AFD::destroy_tree(node* leaf){
-  if(leaf != NULL){
-    //destroy_tree(leaf->left);
-    //destroy_tree(leaf->right);
-    //destroy_tree(leaf->parent);
-    free(leaf);
-  }
-}*/
+
 void AFD::tran_to_text(int from, int to, char a){
   ostringstream temp;
   /*agrego a temp en forma ordena la informacion brindada y la devuelvo como string*/
@@ -386,7 +386,7 @@ string AFD::init_to_text(){
   return temp.str();
 }
 
-void AFD::simulationAFD(string exprsn){
+bool AFD::simulationAFD(string exprsn){
   /*Agrego un caracter que denota que es el final de leer caracteres, en este caso es el f*/
   vector<vertex*> S;
   vector<char> expression(exprsn.begin(), exprsn.end());
@@ -441,6 +441,7 @@ void AFD::simulationAFD(string exprsn){
     AFD_file << AFD_output_t.str() << endl;
   }
   AFD_file.close();
+  return final_state;
 }
 
 void AFD::minAFD(){

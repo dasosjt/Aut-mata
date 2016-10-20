@@ -71,7 +71,7 @@ class AFD{
     \param exprsn es un string que se verificara si es o no es aceptada por el AFN
     \return void
     */
-    void simulationAFD(string exprsn);
+    bool simulationAFD(string exprsn);
     /** Movimiento move
     \param v es un conjunto de vertices/estados a los cuales se les aplica el movimiento move
     \param c es el caracter con el cual se esta realizando el movimiento
@@ -110,17 +110,18 @@ class AFD{
 
   private:
     node* root;
-    static vertex* init_vertex; /**< representacion del estado inicial */
-    static vertex* final_vertex; /**< representacion del estado final */
-    static int new_id_number; /**< representacion del id number actual */
-    static int state; /**< representacion del estado actual */
+    vertex* init_vertex; /**< representacion del estado inicial */
+    vertex* final_vertex; /**< representacion del estado final */
+    int new_id_number; /**< representacion del id number actual */
+    int state; /**< representacion del estado actual */
     vector<vertex* > states_afd; /**< representacion de los estados actuales */
     vector<char> L; /**< representacion del lenguaje aceptado */
+    bool final_state; /**< guardar en memoria la aceptacion */
     static ofstream AFD_file; /**< genera el archivo de texto */
     static ostringstream AFD_output_t; /**< guardar en memoria las transiciones antes de guardarlas en texto */
-    bool final_state; /**< guardar en memoria la aceptacion */
-    node* temp_search_node_left;
-    node* temp_search_node_right;
+    static node* temp_search_node_left;
+    static node* temp_search_node_right;
+    static node* temp_node_nextpos;
 
 };
 

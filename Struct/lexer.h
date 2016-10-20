@@ -1,6 +1,11 @@
 #ifndef LEXER_H
 #define LEXER_H
 
+#include "lexer.h"
+#include "tree.h"
+#include "afn.h"
+#include "afdx.h"
+#include "afd.h"
 #include <iostream>
 #include <fstream>
 
@@ -29,7 +34,6 @@ class Lexer{
     string or_operation, open_paranthesis, close_paranthesis, open_braces, close_braces, open_brackets, close_brackets, quote, apostrophe;
     string letter;
     string digit;
-    string ident;
     string number;
     string string_;
     string character;
@@ -39,6 +43,13 @@ class Lexer{
     string point;
     string set;
     string setDecl;
+    string ident;
+    static AFD* ident_AFD;
+    static Tree* ident_tree;
+    static vector<char> ident_lang;
+    static AFD* number_AFD;
+    static Tree* number_tree;
+    static vector<char> number_lang;
 };
 
 #endif
