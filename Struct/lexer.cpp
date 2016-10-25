@@ -6,6 +6,7 @@
 #include "string"
 #include <algorithm>
 #include <iterator>
+#include <unordered_map>
 
 AFD* Lexer::ident_AFD;
 Tree* Lexer::ident_tree;
@@ -13,6 +14,7 @@ vector<char> Lexer::ident_lang;
 AFD* Lexer::number_AFD;
 Tree* Lexer::number_tree;
 vector<char> Lexer::number_lang;
+unordered_map<string,string> Lexer::symbol_table;
 
 Lexer::Lexer(const char* file_name){
   point = char(176);
@@ -56,6 +58,14 @@ void Lexer::Parse(){
   }
 }
 
+void Lexer::cout_symbol_table(){
+  cout << endl;
+  cout << "symbol_table: " << endl;
+  for ( auto it = symbol_table.begin(); it != symbol_table.end(); ++it )
+  cout << " " << it->first << " : " << it->second << endl;
+  cout << endl;
+}
+
 bool Lexer::SetDecl(string expression){
   cout << "SetDecl" << endl;
   expression.erase(remove(expression.begin(), expression.end(), ' '), expression.end());
@@ -70,7 +80,9 @@ bool Lexer::SetDecl(string expression){
       ident = expression.substr(0, delimeter);
       set = expression.substr(delimeter+1, expression.size()-delimeter-1);
       if(Ident(ident) && Set(set)){
-          return true;
+        symbol_table[ident]=set;
+        cout_symbol_table();
+        return true;
       }
     } else {
       cout << "fuckin.. = " << endl;
@@ -82,7 +94,7 @@ bool Lexer::SetDecl(string expression){
 }
 
 bool Lexer::Ident(string expression){
-  cout << "ident " << expression << endl;
+  cout << "Ident " << expression << endl;
   return ident_AFD->simulationAFD(expression);
 }
 
@@ -141,7 +153,7 @@ bool Lexer::String(string expression){
 }
 
 bool Lexer::Number(string expression){
-  cout << "number " << expression << endl;
+  cout << "Number " << expression << endl;
   return number_AFD->simulationAFD(expression);
 }
 
@@ -172,7 +184,7 @@ bool Lexer::KeywordDecl(string expression){
     unsigned int delimeter = expression.find('=');
     string ident;
     string str;
-    if(delimeter < string::npos){
+    if(delimeter < expression.size()){
       ident = expression.substr(0, delimeter);
       str = expression.substr(delimeter+1, expression.size()-delimeter-1);
       cout << ident << endl;
@@ -202,8 +214,8 @@ bool Lexer::TokenDecl(string expression){
       cout << "found =" << endl;
       ident = expression.substr(0, delimeter);
       tokenexpr = expression.substr(delimeter+1, expression.size()-delimeter-1);
-      cout << ident << endl;
-      cout << tokenexpr << endl;
+      cout << "Ident " << ident << endl;
+      cout << "Token expression " << tokenexpr << endl;
       if(Ident(ident) && TokenExpr(tokenexpr)){
         return true;
       }
@@ -219,52 +231,74 @@ bool Lexer::TokenDecl(string expression){
 }
 
 bool Lexer::TokenExpr(string expression){
-  unsigned int nor = count(expression.begin(), expression.end(), '|');
-  if(nor > 0){
-    unsigned int delimeter = expression.find_first_of("|");
-    string tokenterm0;
-    string tokenterm1;
-    cout << "TokenExpr " << expression << endl;
-    if(delimeter < expression.size()){
-      tokenterm0 = expression.substr(0, delimeter);
-      tokenterm1 = expression.substr(delimeter+1, expression.size()-delimeter-1);
-      cout << tokenterm0 << endl;
-      cout << tokenterm1 << endl;
-      if(TokenTerm(tokenterm0) && TokenExpr(tokenterm1)){
-        return true;
-      }
+  cout << "TokenExpression " << expression << endl;
+  string tokenterm0;
+  string tokenterm1;
+  unsigned int i = 0;
+  bool stop = false;
+  while(i<expression.size() && !stop){
+    if(expression.at(i) == '|' and pbb_signs.empty()){
+      tokenterm0 = expression.substr(0, i);
+      tokenterm1 = expression.substr(i+1, expression.size()-i-1);
+      stop = true;
     }
-  } else if(TokenTerm(expression)){
-    return true;
+    if(expression.at(i) == '(' || expression.at(i) == '{' || expression.at(i) == '['){
+      pbb_signs.push(expression.at(i));
+    } else if(expression.at(i) == ')' || expression.at(i) == '}' || expression.at(i) == ']'){
+      pbb_signs.pop();
+    }
+    i++;
+  }
+  while(!pbb_signs.empty()){
+    pbb_signs.pop();
+  }
+  if(!tokenterm1.empty() && !tokenterm0.empty()){
+    if(TokenTerm(tokenterm0) && TokenTerm(tokenterm1)){
+      return true;
+    }
+  }else if(!tokenterm0.empty()){
+    if(TokenTerm(tokenterm0)){
+      return true;
+    }
+  }else{
+    if(TokenTerm(expression)){
+      return true;
+    }
   }
   return false;
 }
 
 bool Lexer::TokenTerm(string expression){
-  unsigned int delimeter = expression.find_first_of(")]}");
+  cout << "TokenTerm " << expression << endl;
   string tokenfactor0;
   string tokenfactor1;
-  cout << "TokenTerm " << expression << endl;
-  if(delimeter < expression.size()){
-    cout << delimeter << endl;
-    cout << expression.size() << endl;
-    if(delimeter == expression.size() -1){
-      cout << "Just one token" << endl;
-      if(TokenFactor(expression)){
-        return true;
+  tokenfactor0 = expression;
+  unsigned int i = 0;
+  bool stop = false;
+  while(i<expression.size() && !stop){
+    if(expression.at(i) == '(' || expression.at(i) == '{' || expression.at(i) == '['){
+      if(i>0 && pbb_signs.empty()){
+        tokenfactor0 = expression.substr(0, i);
+        tokenfactor1 = expression.substr(i, expression.size()-i);
+        //cout << tokenfactor0 << endl;
+        //cout << tokenfactor1 << endl;
+        stop = true;
       }
-    } else {
-      cout << "Well.. multiple token" << endl;
-      tokenfactor0 = expression.substr(0, delimeter);
-      tokenfactor1 = expression.substr(delimeter, expression.size()-delimeter);
-      cout << tokenfactor0 << endl;
-      cout << tokenfactor1 << endl;
-      if(TokenFactor(tokenfactor0) && TokenFactor(tokenfactor1)){
-        return true;
-      }
+      pbb_signs.push(expression.at(i));
+    } else if(expression.at(i) == ')' || expression.at(i) == '}' || expression.at(i) == ']'){
+      pbb_signs.pop();
     }
-  } else {
-    if(TokenFactor(expression)){
+    i++;
+  }
+  while(!pbb_signs.empty()){
+    pbb_signs.pop();
+  }
+  if(!tokenfactor0.empty() && !tokenfactor1.empty()){
+    if(TokenFactor(tokenfactor0) && TokenFactor(tokenfactor1)){
+      return true;
+    }
+  }else{
+    if(TokenFactor(tokenfactor0)){
       return true;
     }
   }
@@ -272,27 +306,26 @@ bool Lexer::TokenTerm(string expression){
 }
 
 bool Lexer::TokenFactor(string expression){
-  unsigned int parentheses = expression.find('(');
-  unsigned int braces = expression.find('{');
-  unsigned int brackets = expression.find('[');
   cout << "TokenFactor " << expression << endl;
-  if(parentheses < expression.size() && braces > expression.size() && brackets > expression.size()){
-    expression.pop_back();
-    expression.erase(0,1);
-    cout << expression << endl;
-    return TokenExpr(expression);
-  } else if(parentheses > expression.size() && braces > expression.size() && brackets < expression.size()){
-    expression.pop_back();
-    expression.erase(0,1);
-    cout << expression << endl;
-    return TokenExpr(expression);
-  } else if(parentheses > expression.size() && braces < expression.size() && brackets > expression.size()){
-    expression.pop_back();
-    expression.erase(0,1);
-    cout << expression << endl;
-    return TokenExpr(expression);
+  string tokenterm0;
+  tokenterm0 = expression.substr(1, expression.size()-2);
+  if(expression.at(0) == '(' && expression.at(expression.size()-1) == ')'){
+    if(TokenExpr(tokenterm0)){
+        return true;
+    }
+  } else if(expression.at(0) == '[' && expression.at(expression.size()-1) == ']'){
+    if(TokenExpr(tokenterm0)){
+        return true;
+    }
+  } else if(expression.at(0) == '{' && expression.at(expression.size()-1) == '}'){
+    if(TokenExpr(tokenterm0)){
+        return true;
+    }
   } else {
-    return Symbol(expression);
+    tokenterm0 = expression;
+    if(Symbol(tokenterm0)){
+      return true;
+    }
   }
   return false;
 }

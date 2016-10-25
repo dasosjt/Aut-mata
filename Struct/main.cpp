@@ -13,13 +13,28 @@ using namespace std;
 int main(int argc, char *argv[]){
   Lexer* lex = new Lexer("cocol.txt");
   //lex->Parse();
-  /*if(lex->SetDecl("aaaa = CHR(9)..CHR(10)+CHR(11)..CHR(11).")){
+  if(lex->SetDecl("letter = \"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ\".")){
+    cout << "SetDecl.. check" << endl;
+  };
+  if(lex->SetDecl("digit = \"0123456789\".")){
+    cout << "SetDecl.. check" << endl;
+  };
+  if(lex->SetDecl("hexdigit = digit+\"ABCDEF\".")){
     cout << "SetDecl.. check" << endl;
   };
   if(lex->KeywordDecl("aaaa = \"bbbb\" .")){
     cout << "KeywordDecl.. check" << endl;
-  };*/
-  if(lex->TokenDecl("aaaa = {aaa | [bbbb] } | [abb].")){
+  };
+  if(lex->TokenDecl("aaa = {aaa | [bbbb] } | [abb].")){
+    cout << "TokenDecl.. check" << endl;
+  };
+  if(lex->TokenDecl("id = {letter}{letter}.")){
+    cout << "TokenDecl.. check" << endl;
+  };
+  if(lex->TokenDecl("number = digit{digit}.")){
+    cout << "TokenDecl.. check" << endl;
+  };
+  if(lex->TokenDecl("number = {digit}{digit}.")){
     cout << "TokenDecl.. check" << endl;
   };
   /*string letter = "a..z";

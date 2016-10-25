@@ -8,6 +8,8 @@
 #include "afd.h"
 #include <iostream>
 #include <fstream>
+#include <unordered_map>
+#include <stack>
 
 using namespace std;
 
@@ -28,6 +30,8 @@ class Lexer{
     bool TokenFactor(string expression);
     bool Symbol(string expression);
     bool Number(string expression);
+    void cout_symbol_table();
+
   private:
     ifstream file;
     const char* file_name;
@@ -50,6 +54,8 @@ class Lexer{
     static AFD* number_AFD;
     static Tree* number_tree;
     static vector<char> number_lang;
+    static unordered_map<string,string> symbol_table;
+    stack<char> pbb_signs;
 };
 
 #endif
