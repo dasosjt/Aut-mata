@@ -147,8 +147,10 @@ bool Lexer::String(string expression){
   unsigned int n = count(expression.begin(), expression.end(), '"');
   cout << "String " << expression << endl;
   if(n==2){
+    cout << "YES" << endl;
     return true;
   }
+  cout << "NO" << endl;
   return false;
 }
 
@@ -161,6 +163,7 @@ bool Lexer::Char(string expression){
   unsigned int n = count(expression.begin(), expression.end(), '\'');
   if(n==2){
     cout << "Char " << expression << endl;
+    cout << "YES" << endl;
     return true;
   } else {
     unsigned int pp = expression.find("CHR(");
@@ -169,6 +172,7 @@ bool Lexer::Char(string expression){
       unsigned int p2 = expression.find(")");
       string number = expression.substr(p1+1, expression.size()-p2);
       if(Number(number)){
+        cout << "YES" << endl;
         return true;
       }
     }
@@ -272,21 +276,27 @@ bool Lexer::TokenTerm(string expression){
   cout << "TokenTerm " << expression << endl;
   string tokenfactor0;
   string tokenfactor1;
+  int quote_mark = 0;
   tokenfactor0 = expression;
   unsigned int i = 0;
   bool stop = false;
   while(i<expression.size() && !stop){
     if(expression.at(i) == '(' || expression.at(i) == '{' || expression.at(i) == '['){
-      if(i>0 && pbb_signs.empty()){
+      if(i>0 && pbb_signs.empty() && quote_mark%2 == 0){
         tokenfactor0 = expression.substr(0, i);
         tokenfactor1 = expression.substr(i, expression.size()-i);
-        //cout << tokenfactor0 << endl;
-        //cout << tokenfactor1 << endl;
         stop = true;
       }
       pbb_signs.push(expression.at(i));
     } else if(expression.at(i) == ')' || expression.at(i) == '}' || expression.at(i) == ']'){
       pbb_signs.pop();
+      if(i>0 && pbb_signs.empty() && quote_mark%2 == 0){
+        tokenfactor0 = expression.substr(0, i+1);
+        tokenfactor1 = expression.substr(i+1, expression.size()-i-1);
+        stop = true;
+      }
+    } else if(expression.at(i) == '\"'){
+      quote_mark += 1;
     }
     i++;
   }
@@ -294,7 +304,7 @@ bool Lexer::TokenTerm(string expression){
     pbb_signs.pop();
   }
   if(!tokenfactor0.empty() && !tokenfactor1.empty()){
-    if(TokenFactor(tokenfactor0) && TokenFactor(tokenfactor1)){
+    if(TokenFactor(tokenfactor0) && TokenTerm(tokenfactor1)){
       return true;
     }
   }else{
@@ -322,8 +332,7 @@ bool Lexer::TokenFactor(string expression){
         return true;
     }
   } else {
-    tokenterm0 = expression;
-    if(Symbol(tokenterm0)){
+    if(Symbol(expression)){
       return true;
     }
   }

@@ -22,19 +22,22 @@ int main(int argc, char *argv[]){
   if(lex->SetDecl("hexdigit = digit+\"ABCDEF\".")){
     cout << "SetDecl.. check" << endl;
   };
-  if(lex->KeywordDecl("aaaa = \"bbbb\" .")){
+  if(lex->KeywordDecl("if = \"if\" .")){
     cout << "KeywordDecl.. check" << endl;
   };
-  if(lex->TokenDecl("aaa = {aaa | [bbbb] } | [abb].")){
-    cout << "TokenDecl.. check" << endl;
+  if(lex->KeywordDecl("while = \"while\" .")){
+    cout << "KeywordDecl.. check" << endl;
   };
-  if(lex->TokenDecl("id = {letter}{letter}.")){
+  if(lex->TokenDecl("id = letter{letter}.")){
     cout << "TokenDecl.. check" << endl;
   };
   if(lex->TokenDecl("number = digit{digit}.")){
     cout << "TokenDecl.. check" << endl;
   };
-  if(lex->TokenDecl("number = {digit}{digit}.")){
+  if(lex->TokenDecl("number = digit{digit}{digit}.")){
+    cout << "TokenDecl.. check" << endl;
+  };
+  if(lex->TokenDecl("hexnumber = hexdigit{hexdigit}\"(H)\".")){
     cout << "TokenDecl.. check" << endl;
   };
   /*string letter = "a..z";
