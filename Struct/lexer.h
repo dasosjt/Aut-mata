@@ -31,6 +31,7 @@ class Lexer{
     bool Symbol(string expression);
     bool Number(string expression);
     void cout_symbol_table();
+    void add_symbol_table(string symbol_to_append, string typeSymbol);
 
   private:
     ifstream file;
@@ -48,14 +49,23 @@ class Lexer{
     string set;
     string setDecl;
     string ident;
+    string constr;
+    string endof_line;
+    string whitespace;
     static AFD* ident_AFD;
     static Tree* ident_tree;
     static vector<char> ident_lang;
     static AFD* number_AFD;
     static Tree* number_tree;
     static vector<char> number_lang;
+    static AFD* constr_AFD;
+    static Tree* constr_tree;
+    static vector<char> constr_lang;
     static unordered_map<string,string> symbol_table;
     stack<char> pbb_signs;
+    string current_ident;
+    string typeDecl;
+    string file_contents;
 };
 
 #endif

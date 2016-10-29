@@ -14,6 +14,9 @@ vector<char> Lexer::ident_lang;
 AFD* Lexer::number_AFD;
 Tree* Lexer::number_tree;
 vector<char> Lexer::number_lang;
+AFD* Lexer::constr_AFD;
+Tree* Lexer::constr_tree;
+vector<char> Lexer::constr_lang;
 unordered_map<string,string> Lexer::symbol_table;
 
 Lexer::Lexer(const char* file_name){
@@ -27,11 +30,14 @@ Lexer::Lexer(const char* file_name){
   close_brackets = char(213);
   quote = char(34);
   apostrophe = char(39);
+  endof_line = char(10);
+  whitespace = open_brackets+char(32)+close_brackets;
   this->file_name = file_name;
   this->letter = open_paranthesis+"a"+point+point+"z"+or_operation+"A"+point+point+"Z"+close_paranthesis;
   this->digit = open_paranthesis+"0"+point+point+"9"+close_paranthesis;
   this->ident = open_paranthesis+this->letter+open_brackets+this->letter+or_operation+this->digit+close_brackets+close_paranthesis;
   this->number = this->digit+open_brackets+this->digit+close_brackets;
+  this->constr = open_paranthesis+"COMPILER"+whitespace+this->ident+whitespace+endof_line+"CHARACTERS"+whitespace+endof_line+"KEYWORDS"+whitespace+endof_line+"TOKENS"+whitespace+endof_line+"PRODUCTIONS"+whitespace+endof_line+"END"+whitespace+this->ident+endof_line+close_paranthesis;
   ident_tree = new Tree();
   ident_tree->parse(this->ident);
   ident_lang = ident_tree->getL();
@@ -42,20 +48,22 @@ Lexer::Lexer(const char* file_name){
   number_lang = number_tree->getL();
   number_AFD = new AFD();
   number_AFD->createAFD(number_tree->getRoot(), number_lang);
+  constr_tree = new Tree();
+  constr_tree->parse(this->constr);
+  constr_lang = constr_tree->getL();
+  constr_AFD = new AFD();
+  constr_AFD->createAFD(constr_tree->getRoot(), constr_lang);
 }
 
 void Lexer::Parse(){
   file.open(file_name);
-  string line;
-  int number_line;
   if(file.is_open()){
-    number_line = 1;
-    while(getline(file, line)){
-      cout << number_line << " " << line << endl;
-      number_line ++;
-    }
+    file_contents = {istreambuf_iterator<char>(file), istreambuf_iterator<char>()};
+    //file_contents.erase(remove(file_contents.begin(), file_contents.end(), char(10)), file_contents.end());
+    cout << file_contents << endl;
     file.close();
   }
+  constr_AFD->simulationAFD(file_contents);
 }
 
 void Lexer::cout_symbol_table(){
@@ -66,8 +74,17 @@ void Lexer::cout_symbol_table(){
   cout << endl;
 }
 
+void Lexer::add_symbol_table(string symbol_to_append, string typeSymbol){
+  if(typeDecl == "SetDecl"){
+    if(typeSymbol == "String"){
+        symbol_table[current_ident]=symbol_to_append;
+    }
+  }
+}
+
 bool Lexer::SetDecl(string expression){
   cout << "SetDecl" << endl;
+  typeDecl = "SetDecl";
   expression.erase(remove(expression.begin(), expression.end(), ' '), expression.end());
   if(expression.at(expression.size()-1) == '.'){
     expression.pop_back();
@@ -79,10 +96,12 @@ bool Lexer::SetDecl(string expression){
       cout << "found =" << endl;
       ident = expression.substr(0, delimeter);
       set = expression.substr(delimeter+1, expression.size()-delimeter-1);
-      if(Ident(ident) && Set(set)){
-        symbol_table[ident]=set;
-        cout_symbol_table();
-        return true;
+      if(Ident(ident)){
+        current_ident = ident;
+        if(Set(set)){
+          cout_symbol_table();
+          return true;
+        }
       }
     } else {
       cout << "fuckin.. = " << endl;
@@ -95,7 +114,20 @@ bool Lexer::SetDecl(string expression){
 
 bool Lexer::Ident(string expression){
   cout << "Ident " << expression << endl;
-  return ident_AFD->simulationAFD(expression);
+  bool simulationAFD = ident_AFD->simulationAFD(expression);
+  if(simulationAFD){
+    auto search = symbol_table.find(expression);
+    if(search != symbol_table.end()) {
+      cout << "Found " << search->first << " " << search->second << endl;
+      add_symbol_table(expression, search->second);
+    }
+    else {
+      cout << "Not found" << endl;
+      add_symbol_table(expression, "Ident");
+    }
+    cout_symbol_table();
+  }
+  return simulationAFD;
 }
 
 bool Lexer::Set(string expression){
@@ -148,6 +180,7 @@ bool Lexer::String(string expression){
   cout << "String " << expression << endl;
   if(n==2){
     cout << "YES" << endl;
+    add_symbol_table(expression, "String");
     return true;
   }
   cout << "NO" << endl;
@@ -164,6 +197,7 @@ bool Lexer::Char(string expression){
   if(n==2){
     cout << "Char " << expression << endl;
     cout << "YES" << endl;
+    add_symbol_table(expression, "Char");
     return true;
   } else {
     unsigned int pp = expression.find("CHR(");
@@ -173,6 +207,7 @@ bool Lexer::Char(string expression){
       string number = expression.substr(p1+1, expression.size()-p2);
       if(Number(number)){
         cout << "YES" << endl;
+        add_symbol_table(expression, "CHR");
         return true;
       }
     }
@@ -194,6 +229,8 @@ bool Lexer::KeywordDecl(string expression){
       cout << ident << endl;
       cout << str << endl;
       if(Ident(ident) && String(str)){
+          symbol_table[ident]=str;
+          cout_symbol_table();
           return true;
       }
     } else {
@@ -221,10 +258,14 @@ bool Lexer::TokenDecl(string expression){
       cout << "Ident " << ident << endl;
       cout << "Token expression " << tokenexpr << endl;
       if(Ident(ident) && TokenExpr(tokenexpr)){
+        symbol_table[ident]=tokenexpr;
+        cout_symbol_table();
         return true;
       }
     } else {
       if(Ident(expression)){
+        symbol_table[expression]="";
+        cout_symbol_table();
         return true;
       }
     }
@@ -240,6 +281,7 @@ bool Lexer::TokenExpr(string expression){
   string tokenterm1;
   unsigned int i = 0;
   bool stop = false;
+  int quote_mark = 0;
   while(i<expression.size() && !stop){
     if(expression.at(i) == '|' and pbb_signs.empty()){
       tokenterm0 = expression.substr(0, i);
@@ -250,6 +292,8 @@ bool Lexer::TokenExpr(string expression){
       pbb_signs.push(expression.at(i));
     } else if(expression.at(i) == ')' || expression.at(i) == '}' || expression.at(i) == ']'){
       pbb_signs.pop();
+    } else if(expression.at(i) == '\"'){
+      quote_mark += 1;
     }
     i++;
   }
@@ -297,6 +341,11 @@ bool Lexer::TokenTerm(string expression){
       }
     } else if(expression.at(i) == '\"'){
       quote_mark += 1;
+      if(i>0 && pbb_signs.empty() && quote_mark%2 == 0){
+        tokenfactor0 = expression.substr(0, i+1);
+        tokenfactor1 = expression.substr(i+1, expression.size()-i-1);
+        stop = true;
+      }
     }
     i++;
   }
