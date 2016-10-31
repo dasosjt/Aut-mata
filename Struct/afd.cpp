@@ -30,6 +30,8 @@ AFD::AFD(string file_name, string token_id){
   temp_node_nextpos = new node;
   this->file_name = file_name;
   this->token_id = token_id;
+  AFD_output_t.str("");
+  AFD_output_t.clear();
 }
 
 void AFD::set_root(node* root){
@@ -344,6 +346,10 @@ node* AFD::search_node(node* root, int id_number){
   }
 }
 
+vector<vertex* > AFD::get_allvertex_final(){
+  return this->final_states;
+}
+
 void AFD::tran_to_text(int from, int to, char a){
   ostringstream temp;
   /*agrego a temp en forma ordena la informacion brindada y la devuelvo como string*/
@@ -458,6 +464,10 @@ bool AFD::simulationAFD(string exprsn){
   }
   AFD_file.close();
   return final_state;
+}
+
+vertex* AFD::get_vertex_init(){
+  return this->init_vertex;
 }
 
 void AFD::minAFD(){

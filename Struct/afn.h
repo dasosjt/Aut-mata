@@ -33,6 +33,8 @@ class AFN{
     \param v es un conjunto de vertices/estados a los cuales se les aplica el movimiento eclosure
     \return un grupo de vertices/estados de resultado del movimiento eclosure
     */
+    void newfi_vertex();
+
     vector<vertex*> eclosure(vector<vertex*> v);
     /** Movimiento move
     \param v es un conjunto de vertices/estados a los cuales se les aplica el movimiento move

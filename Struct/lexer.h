@@ -35,6 +35,7 @@ class Lexer{
     string tokenToHash(string expression);
     string signToSpecialChar(string string);
     void symbol_to_AFN();
+    void printExpression(string exprsn);
 
   private:
     ifstream file;

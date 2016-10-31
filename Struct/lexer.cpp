@@ -42,12 +42,12 @@ Lexer::Lexer(const char* file_name){
   ident_tree = new Tree();
   ident_tree->parse(this->ident);
   ident_lang = ident_tree->getL();
-  ident_AFD = new AFD("ident.txt", "ident_cocol");
+  ident_AFD = new AFD("ident_cocol.txt", "ident_cocol");
   ident_AFD->createAFD(ident_tree->getRoot(), ident_lang);
   number_tree = new Tree();
   number_tree->parse(this->number);
   number_lang = number_tree->getL();
-  number_AFD = new AFD("number.txt", "number_cocol");
+  number_AFD = new AFD("number_cocol.txt", "number_cocol");
   number_AFD->createAFD(number_tree->getRoot(), number_lang);
   /*constr_tree = new Tree();
   constr_tree->parse(this->constr);
@@ -89,16 +89,31 @@ void Lexer::add_symbol_table(string symbol_to_append){
 }
 
 void Lexer::symbol_to_AFN(){
+  Tree* primitive0_tree;
+  vector<char > primitive0_lang;
+  AFD* primitive0_AFD;
   for (auto it = symbol_table.begin(); it != symbol_table.end(); ++it){
-    Tree* primitive0_tree = new Tree();
+    primitive0_tree = new Tree();
     primitive0_tree->parse(it->second);
-    vector<char > primitive0_lang = primitive0_tree->getL();
-    AFD* primitive0_AFD = new AFD(it->first+".txt", it->first);
+    primitive0_tree->display();
+    primitive0_lang = primitive0_tree->getL();
+    primitive0_AFD = new AFD(""+it->first+".txt", it->first);
     primitive0_AFD->createAFD(primitive0_tree->getRoot(), primitive0_lang);
     primitives_AFD.push_back(primitive0_AFD);
     cout << "AFD done! " << it->first << " : " << it->second << endl;
+    primitive0_lang.clear();
   }
-  primitives_AFD[0]->simulationAFD("lalalalal000000");
+  AFN* big_one = new AFN();
+  big_one->newfi_vertex();
+  for(AFD* current : primitives_AFD){
+    big_one->get_vertex_init()->vertex_to.push_back(make_pair(char(238), current->get_vertex_init()));
+    for(vertex* v : current->get_allvertex_final()){
+      v->vertex_to.push_back(make_pair(char(238), big_one->get_vertex_final()));
+    }
+  }
+  cout << endl;
+  cout << "SIMULATE BIG AFN IF" << endl;
+  big_one->simulationAFN("if");
 }
 
 bool Lexer::SetDecl(string expression){
@@ -210,6 +225,7 @@ bool Lexer::String(string expression){
       unsigned int n = expression.size()-1;
       for(unsigned int i = 0; i<n; i++){
         expression.insert(2*i+1, signToSpecialChar("|"));
+        //expression.insert(2*i+1,1,'|');
       }
     }else{
       current_pbb_signs.push("p");
@@ -298,10 +314,10 @@ bool Lexer::TokenDecl(string expression){
         current_ident = ident;
         if(TokenExpr(tokenexpr)){
           string hash_expression = tokenToHash(tokenexpr);
-            cout << hash_expression << endl;
-            typeDecl = "";
-            add_symbol_table(hash_expression);
-            return true;
+          printExpression(hash_expression);
+          typeDecl = "";
+          add_symbol_table(hash_expression);
+          return true;
         }
       }
     } else {
@@ -442,11 +458,11 @@ string Lexer::signToSpecialChar(string r0){
     r0 = open_paranthesis;
   }else if(r0 == ")"){
     r0 = close_paranthesis;
-  }if(r0 == "{"){
+  }else if(r0 == "{"){
     r0 = open_brackets;
   }else if(r0 == "}"){
     r0 = close_brackets;
-  }if(r0 == "["){
+  }else if(r0 == "["){
     r0 = open_braces;
   }else if(r0 == "]"){
     r0 = close_braces;
@@ -463,17 +479,25 @@ string Lexer::tokenToHash(string expression){
   unsigned int delimeter = expression.find_first_of("{}()[]]|\"");
   if(delimeter == 0){
     //signo
-    r0 = expression.substr(0, 1);
-    r0 = signToSpecialChar(r0);
+    r0 = expression.substr(0,1);
+    auto found = symbol_table.find(r1);
+    if(found != symbol_table.end()){
+        r0 = signToSpecialChar("(")+found->second+signToSpecialChar(")");
+        //r1 = "("+found->second+")";
+    }else{
+      r0 = signToSpecialChar(r0);
+    }
+
     if(r0 == "\""){
       r0 = "";
     }
 
     //expression
     r1 = expression.substr(1,expression.size());
-    auto found = symbol_table.find(r1);
+    found = symbol_table.find(r1);
     if(found != symbol_table.end()){
         r1 = signToSpecialChar("(")+found->second+signToSpecialChar(")");
+        //r1 = "("+found->second+")";
     }else{
       r1 = signToSpecialChar(r1);
     }
@@ -481,14 +505,15 @@ string Lexer::tokenToHash(string expression){
   }else if(delimeter<expression.size()){
     //expression fijo!
     r0 = expression.substr(0, delimeter);
-    if(r0 == "\""){
-      r0 = "";
-    }
     auto found = symbol_table.find(r0);
     if(found != symbol_table.end()){
         r0 = signToSpecialChar("(")+found->second+signToSpecialChar(")");
+        //r0 = "("+found->second+")";
     }else{
       r0 = signToSpecialChar(r0);
+    }
+    if(r0 == "\""){
+      r0 = "";
     }
 
     //expression
@@ -496,16 +521,53 @@ string Lexer::tokenToHash(string expression){
     found = symbol_table.find(r1);
     if(found != symbol_table.end()){
         r1 = signToSpecialChar("(")+found->second+signToSpecialChar(")");
+        //r1 = "("+found->second+")";
     }else{
       r1 = signToSpecialChar(r1);
     }
+  }else if(delimeter != 0){
+    //cout << "HEY IM LOST :(" << endl;
+    return expression;
   }
-  //cout << "R0 " << r0 << endl;
-  //cout << "R1 " << r1 << endl;
-  if(!r1.empty()){
-      result = r0 + tokenToHash(r1);
-  }else{
-    result = r0;
+  //cout << "R0 ";
+  printExpression(r0);
+  //cout << "R1 ";
+  printExpression(r1);
+  if(!r1.empty() && !r0.empty()){
+    //cout << "R0 and R1" << endl;
+    result = r0 + tokenToHash(r1);
+  }else if(!r0.empty()){
+    //cout << "R0" << endl;
+    result = tokenToHash(r0);
+  }else if(!r1.empty()){
+    //cout << "R1" << endl;
+    result = tokenToHash(r1);
   }
   return result;
+}
+
+
+void Lexer::printExpression(string exprsn){
+  for(auto i: exprsn){
+    if(i == char(167)){
+      cout << '^';
+    }else if(i == char(179)){
+      cout << '|';
+    }else if(i == char(241)){
+      cout << '*';
+    }else if(i == char(238)){
+      cout << "epsilon";
+    }else if(i == char(212)){
+      cout << "{";
+    }else if(i == char(213)){
+      cout << "}";
+    }else if(i == char(244)){
+      cout << "(";
+    }else if(i == char(245)){
+      cout << ")";
+    }else{
+     cout << i;
+    }
+  }
+  cout << endl;
 }

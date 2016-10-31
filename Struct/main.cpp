@@ -13,7 +13,7 @@ using namespace std;
 int main(int argc, char *argv[]){
   Lexer* lex = new Lexer("cocol.txt");
   //lex->Parse();
-  if(lex->SetDecl("letter = \"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ\".")){
+  if(lex->SetDecl("letter = \"abcdefghijklmnopqrstuvwxyz\".")){
     cout << "SetDecl.. check" << endl;
   };
   if(lex->SetDecl("digit = \"0123456789\".")){
@@ -21,11 +21,11 @@ int main(int argc, char *argv[]){
   };
   /*if(lex->SetDecl("hexdigit = digit+\"ABCDEF\".")){
     cout << "SetDecl.. check" << endl;
-  };
+  };*/
   if(lex->KeywordDecl("if = \"if\" .")){
     cout << "KeywordDecl.. check" << endl;
   };
-  if(lex->KeywordDecl("while = \"while\" .")){
+  /*if(lex->KeywordDecl("while = \"while\" .")){
     cout << "KeywordDecl.. check" << endl;
   };*/
   if(lex->TokenDecl("ident = letter{letter|digit}.")){

@@ -61,6 +61,7 @@ class Tree{
     \return vector de caracteres
     */
     vector<char > getL();
+    void printExpression(string exprsn);
 
   private:
     stack<char> expressionRPN; /**< stacke de expresiones que no son operaciones */

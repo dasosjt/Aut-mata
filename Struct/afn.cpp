@@ -1,11 +1,13 @@
 #include "tree.h"
 #include "afn.h"
+#include "afd.h"
 #include <iostream>
 #include <string>
 #include <algorithm>
 #include <fstream>
 #include <sstream>
 #include <iterator>
+#include <vector>
 
 
 using namespace std;
@@ -17,6 +19,16 @@ ostringstream AFN::AFN_output_t;
 AFN::AFN(){
   result = NULL;
 }
+
+void AFN::newfi_vertex(){
+  this->init_vertex = new vertex;
+  this->final_vertex = new vertex;
+}
+
+/*void AFN::createAFN_AFD(vector<AFD* > list_AFD){
+  this->init_vertex = new vertex;
+  this->final_vertex = new vertex;
+}*/
 
 int AFN::get_new_state(){
   /*Agrego 1 al estado anterior y lo devuelvo*/
@@ -40,15 +52,21 @@ void AFN::simulationAFN(string exprsn){
   /*Agrego un caracter que denota que es el final de leer caracteres, en este caso es el f*/
   vector<vertex*> s0, S;
   vector<char> expression(exprsn.begin(), exprsn.end());
-  expression.push_back('f');
-  s0.push_back(result->init_vertex);
+  expression.push_back(char(254));
+  s0.push_back(init_vertex);
   S = eclosure(s0);
   char c = expression[0];
   expression.erase(expression.begin());
   /*mientras no sea f... */
-  while(c!='f'){
+  while(c!=char(254)){
     /*Hago el move correspondiente*/
     S = eclosure(move(S, c));
+    cout << c << endl;
+    for(auto v : S){
+      if(!v->token_id.empty()){
+        cout << " TOKEN ID " << v->token_id << endl;
+      }
+    }
     c = expression[0];
     expression.erase(expression.begin());
   };
@@ -67,7 +85,7 @@ void AFN::simulationAFN(string exprsn){
     cout << "NO" << endl;
   }
   /*Guardo en el archivo segun la rubrica*/
-  AFN_file.open("AFN.txt", ios::out);
+  /*AFN_file.open("AFN.txt", ios::out);
   if (AFN_file.is_open()) {
     AFN_file << "ESTADOS = ";
     AFN_file << states_to_text() << endl;
@@ -80,7 +98,7 @@ void AFN::simulationAFN(string exprsn){
     AFN_file << "TRANSICION = ";
     AFN_file << AFN_output_t.str() << endl;
   }
-  AFN_file.close();
+  AFN_file.close();*/
 }
 
 vector<vertex* > AFN::eclosure(vector<vertex* > v){

@@ -107,6 +107,8 @@ class AFD{
     \return el resultado en forma de grupo
     */
     vector<vertex* > searchForBelong(vector<vector<vertex* > > PI, int state);
+    vertex* get_vertex_init();
+    vector<vertex* > get_allvertex_final();
 
   private:
     string file_name;
