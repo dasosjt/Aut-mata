@@ -59,7 +59,7 @@ int Tree::priority(char a){
 void Tree::parse(string exprsn){
   // delete whitespace
   //exprsn.erase(remove(exprsn.begin(), exprsn.end(), ' '), exprsn.end());
-  cout << exprsn << endl;
+  //cout << exprsn << endl;
   // .. as range
   for (unsigned int i = 0; i<exprsn.size(); i++){
     if(exprsn.at(i) == char(176)){
@@ -81,7 +81,7 @@ void Tree::parse(string exprsn){
     }
   }
   //braces as ?
-  cout << "After Range "<< exprsn << endl;
+  //cout << "After Range "<< exprsn << endl;
   for (unsigned int i = 0; i<exprsn.size(); i++){
     if(exprsn.at(i) == char(191)){
       exprsn.insert(i+1, 1, char(244));
@@ -94,7 +94,7 @@ void Tree::parse(string exprsn){
     }
   }
   //brackets as a kleene
-  cout << "After braces as ? " << exprsn << endl;
+  //cout << "After braces as ? " << exprsn << endl;
   for (unsigned int i = 0; i<exprsn.size(); i++){
     if(exprsn.at(i) == char(212)){
       exprsn.insert(i+1, 1, char(244));
@@ -106,7 +106,7 @@ void Tree::parse(string exprsn){
     }
   }
   //add concatenation
-  cout << "After brackets as kleene " << exprsn << endl;
+  //cout << "After brackets as kleene " << exprsn << endl;
   for(unsigned int i = 0; i<exprsn.size(); i++){
     if(isalpha(exprsn.at(i)) || exprsn.at(i) == char(245) || exprsn.at(i) == char(241) || exprsn.at(i) == '(' || exprsn.at(i) == ')' || exprsn.at(i) == '.' || exprsn.at(i) == '+' || exprsn.at(i) == '-' || exprsn.at(i) == char(34) || exprsn.at(i) == '=' || exprsn.at(i) == char(39) || exprsn.at(i) == char(10) || exprsn.at(i) == char(32)){
       if(i+1<exprsn.size()){
@@ -117,7 +117,7 @@ void Tree::parse(string exprsn){
     }
   }
   //print the result after the first parse
-  cout << "After concatenation " << exprsn << endl;
+  //cout << "After concatenation " << exprsn << endl;
   for(int i = 0; i<exprsn.size(); i++){
     //cout << "stack RPN size " << expressionRPN.size() << endl;
     //cout << "stack operations size " << operations.size() << endl;

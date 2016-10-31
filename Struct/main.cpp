@@ -19,7 +19,7 @@ int main(int argc, char *argv[]){
   if(lex->SetDecl("digit = \"0123456789\".")){
     cout << "SetDecl.. check" << endl;
   };
-  if(lex->SetDecl("hexdigit = digit+\"ABCDEF\".")){
+  /*if(lex->SetDecl("hexdigit = digit+\"ABCDEF\".")){
     cout << "SetDecl.. check" << endl;
   };
   if(lex->KeywordDecl("if = \"if\" .")){
@@ -27,20 +27,24 @@ int main(int argc, char *argv[]){
   };
   if(lex->KeywordDecl("while = \"while\" .")){
     cout << "KeywordDecl.. check" << endl;
-  };
+  };*/
+  if(lex->TokenDecl("ident = letter{letter|digit}.")){
+    cout << "TokenDecl.. check" << endl;
+  };/*
   if(lex->TokenDecl("id = letter{letter}.")){
     cout << "TokenDecl.. check" << endl;
   };
-  if(lex->TokenDecl("number = digit{digit}.")){
+  if(lex->TokenDecl("number = digit[digit].")){
     cout << "TokenDecl.. check" << endl;
   };
   if(lex->TokenDecl("hexnumber = hexdigit{hexdigit}\"(H)\".")){
     cout << "TokenDecl.. check" << endl;
-  };
+  };*/
   if(lex->TokenDecl("decnumber = digit{digit}\".\"digit{digit}.")){
     cout << "TokenDecl.. check" << endl;
   };
-  lex->Parse();
+  lex->symbol_to_AFN();
+  /*lex->Parse();*/
   /*string letter = "a..z";
   string digit = "0|1|2|3|4|5|6|7|8|9";
   string hexdigit = digit+"A..F";*/

@@ -14,6 +14,7 @@ using namespace std;
 */
 struct vertex{
   /*@{*/
+  string token_id;
   int number_of; /**< representacion del estado. */
   vector<int> afdx_set; /**< subconjunto de estados que se crea de AFN -> AFDX */
   vector< pair<char, vertex*> > vertex_to; /**< vector de pares, que contiene el caracter para moverse y el puntero al vertex hacia donde se dirige */

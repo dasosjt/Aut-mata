@@ -12,7 +12,7 @@ using namespace std;
 class AFD{
   public:
     /** Constructor */
-    AFD();
+    AFD(string file_name, string token_id);
     /** Colocamos el root a partir de un puntero del arbol.
     \param root es un puntero de nodo que pertenece al arbol
     \return void
@@ -109,12 +109,15 @@ class AFD{
     vector<vertex* > searchForBelong(vector<vector<vertex* > > PI, int state);
 
   private:
+    string file_name;
+    string token_id;
     node* root;
     vertex* init_vertex; /**< representacion del estado inicial */
     vertex* final_vertex; /**< representacion del estado final */
     int new_id_number; /**< representacion del id number actual */
     int state; /**< representacion del estado actual */
     vector<vertex* > states_afd; /**< representacion de los estados actuales */
+    vector<vertex* > final_states;
     vector<char> L; /**< representacion del lenguaje aceptado */
     bool final_state; /**< guardar en memoria la aceptacion */
     static ofstream AFD_file; /**< genera el archivo de texto */

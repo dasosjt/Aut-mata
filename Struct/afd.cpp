@@ -19,7 +19,7 @@ node* AFD::temp_search_node_right;
 node* AFD::temp_node_nextpos;
 
 
-AFD::AFD(){
+AFD::AFD(string file_name, string token_id){
   root = NULL;
   state = 0;
   new_id_number = 0;
@@ -28,7 +28,8 @@ AFD::AFD(){
   temp_search_node_left = new node;
   temp_search_node_right = new node;
   temp_node_nextpos = new node;
-
+  this->file_name = file_name;
+  this->token_id = token_id;
 }
 
 void AFD::set_root(node* root){
@@ -66,6 +67,11 @@ void AFD::createAFD(node* root, vector<char> L){
   Dstates.push(this->root->firstpos);
   init_vertex->number_of = get_new_state();
   init_vertex->afdx_set = this->root->firstpos;
+  auto token_id_found = find(init_vertex->afdx_set.begin(), init_vertex->afdx_set.end(), final_vertex->number_of);
+  if(token_id_found != init_vertex->afdx_set.end()){
+    //cout << "FOUND final_vertex in init_vertex " << endl;
+    init_vertex->token_id = this->token_id;
+  }
   states_afd.push_back(init_vertex);
   //L.push_back('#');
   //copy(L.begin(), L.end(), ostream_iterator<char>(cout, " "));
@@ -110,6 +116,11 @@ void AFD::createAFD(node* root, vector<char> L){
           //cout << "New AFD state found { " ;
           //copy(U.begin(), U.end(), ostream_iterator<int>(cout, " "));
           //cout << "}"<< endl;
+          auto token_id_found = find(U.begin(), U.end(), final_vertex->number_of);
+          if(token_id_found != U.end()){
+            v_to->token_id = this->token_id;
+            final_states.push_back(v_to);
+          }
           v_to->number_of = get_new_state();
           states_afd.push_back(v_to);
           Dstates.push(U);
@@ -152,7 +163,7 @@ void AFD::set_id_number(node* root){
       root->id_number = get_new_id_number();
       if(root->key_value == '#'){
         final_vertex->number_of = new_id_number;
-        cout << "FINAL VERTEX ID NUMBER "<< new_id_number << endl;
+        //cout << "FINAL VERTEX ID NUMBER "<< new_id_number << endl;
       }
       //cout << root->key_value << " with id number " << root->id_number << endl;
     }
@@ -402,6 +413,9 @@ bool AFD::simulationAFD(string exprsn){
     //copy(expression.begin(), expression.end(), ostream_iterator<char>(cout, " "));
     //cout << endl;
     cout << c << endl;
+    if(!S.empty()){
+      cout << S[0]->token_id << endl;
+    }
     if (find(this->L.begin(), this->L.end(), c) != this->L.end()){
       S = move(S, c);
       c = expression[0];
@@ -422,13 +436,14 @@ bool AFD::simulationAFD(string exprsn){
       };
     }
   }
+  cout << "Size final states " << final_states.size() << endl;
   if(final_state){
     cout << "YES" << endl;
   } else {
     cout << "NO" << endl;
   }
   /*Guardo en el archivo segun la rubrica*/
-  AFD_file.open("AFD.txt", ios::out);
+  AFD_file.open(this->file_name, ios::out);
   if (AFD_file.is_open()) {
     AFD_file << "ESTADOS = ";
     AFD_file << states_to_text() << endl;
