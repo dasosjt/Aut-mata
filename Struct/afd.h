@@ -109,6 +109,7 @@ class AFD{
     vector<vertex* > searchForBelong(vector<vector<vertex* > > PI, int state);
     vertex* get_vertex_init();
     vector<vertex* > get_allvertex_final();
+    int get_state();
 
   private:
     string file_name;
@@ -117,7 +118,7 @@ class AFD{
     vertex* init_vertex; /**< representacion del estado inicial */
     vertex* final_vertex; /**< representacion del estado final */
     int new_id_number; /**< representacion del id number actual */
-    int state; /**< representacion del estado actual */
+    static int state; /**< representacion del estado actual */
     vector<vertex* > states_afd; /**< representacion de los estados actuales */
     vector<vertex* > final_states;
     vector<char> L; /**< representacion del lenguaje aceptado */

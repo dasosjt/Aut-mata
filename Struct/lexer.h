@@ -31,7 +31,9 @@ class Lexer{
     bool Symbol(string expression);
     bool Number(string expression);
     void cout_symbol_table();
+    void cout_type_table();
     void add_symbol_table(string symbol_to_append);
+    void add_type_table(string ident);
     string tokenToHash(string expression);
     string signToSpecialChar(string string);
     void symbol_to_AFN();
@@ -67,6 +69,7 @@ class Lexer{
     static Tree* constr_tree;
     static vector<char> constr_lang;
     static unordered_map<string,string> symbol_table;
+    static unordered_map<string,string> type_table;
     stack<char> pbb_signs;
     stack<string> current_pbb_signs;
     int count_or;
@@ -74,6 +77,7 @@ class Lexer{
     string typeDecl;
     string file_contents;
     vector<AFD* > primitives_AFD;
+    string cocol_name;
 };
 
 #endif

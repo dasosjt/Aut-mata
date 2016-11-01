@@ -8,14 +8,6 @@
 
 using namespace std;
 
-/**
-* Estructura que compara los estados/vertices segun su numero
-*/
-struct compare_by_number_of {
-    bool operator()(vertex const * a, vertex const * b) {
-        return a->number_of < b->number_of;
-    }
-};
 
 /**
 * Estructura que compara los estados/vertices segun el conjunto de estados que se encuentran en su adfx_set
@@ -27,6 +19,16 @@ struct compare_by_afdx_set{
     }
     vector<int> afdx_set;
 };
+
+/**
+* Estructura que compara los estados/vertices segun su numero
+*/
+struct compare_by_number_of {
+    bool operator()(vertex const * a, vertex const * b) {
+        return a->number_of < b->number_of;
+    }
+};
+
 
 /**
 * Clase AFDX generada a partir de un AFN, un Automata Finito no determinista,

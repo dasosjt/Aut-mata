@@ -17,11 +17,11 @@ ostringstream AFD::AFD_output_t;
 node* AFD::temp_search_node_left;
 node* AFD::temp_search_node_right;
 node* AFD::temp_node_nextpos;
+int AFD::state;
 
 
 AFD::AFD(string file_name, string token_id){
   root = NULL;
-  state = 0;
   new_id_number = 0;
   init_vertex = new vertex;
   final_vertex = new vertex;
@@ -155,7 +155,9 @@ int AFD::get_new_state(){
   //cout <<"new state "<< state << endl;
   return state;
 }
-
+int AFD::get_state(){
+  return state;
+}
 void AFD::set_id_number(node* root){
   /*coloco el numero de id number solo si no es un operador*/
   if(root != NULL){

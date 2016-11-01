@@ -33,7 +33,7 @@ class AFN{
     \param v es un conjunto de vertices/estados a los cuales se les aplica el movimiento eclosure
     \return un grupo de vertices/estados de resultado del movimiento eclosure
     */
-    void newfi_vertex();
+    void newfi_vertex(int state);
 
     vector<vertex*> eclosure(vector<vertex*> v);
     /** Movimiento move
@@ -125,6 +125,11 @@ class AFN{
     \return un nuevo estado integer
     */
     int get_new_state();
+    void setL(vector<char> L);
+    void writeToFile(const char* file_name);
+    int get_state();
+    void mapAFN(vertex* current_vertex);
+    void coutTraveled();
 
   private:
     vertex* init_vertex; /**< representacion del estado inicial */
@@ -135,7 +140,9 @@ class AFN{
     static int state; /**< representacion del estado actual */
     static ofstream AFN_file; /**< genera el archivo de texto */
     static ostringstream AFN_output_t; /**< guardar en memoria las transiciones antes de guardarlas en texto */
+    static ostringstream AFN_output_f;
     vector<char> L; /**< representacion del lenguaje aceptado */
+    vector<int > traveled;
 };
 
 #endif

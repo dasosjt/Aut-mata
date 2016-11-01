@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <iterator>
 #include <unordered_map>
+#include <sstream>
 
 AFD* Lexer::ident_AFD;
 Tree* Lexer::ident_tree;
@@ -18,6 +19,7 @@ AFD* Lexer::constr_AFD;
 Tree* Lexer::constr_tree;
 vector<char> Lexer::constr_lang;
 unordered_map<string,string> Lexer::symbol_table;
+unordered_map<string,string> Lexer::type_table;
 
 Lexer::Lexer(const char* file_name){
   this->file_name = file_name;
@@ -37,8 +39,6 @@ Lexer::Lexer(const char* file_name){
   this->digit = open_paranthesis+"0"+point+point+"9"+close_paranthesis;
   this->ident = open_paranthesis+this->letter+open_brackets+this->letter+or_operation+this->digit+close_brackets+close_paranthesis;
   this->number = this->digit+open_brackets+this->digit+close_brackets;
-  anything = open_paranthesis+open_brackets+this->letter+or_operation+this->ident+or_operation+this->number+or_operation+quote+or_operation+apostrophe+or_operation+endof_line+or_operation+whitespace+close_brackets+close_paranthesis;
-  this->constr = open_paranthesis+"COMPILER"+whitespace+this->ident+whitespace+endof_line+"CHARACTERS"+whitespace+endof_line+anything+"KEYWORDS"+whitespace+endof_line+anything+"TOKENS"+whitespace+endof_line+anything+"PRODUCTIONS"+whitespace+endof_line+"END"+whitespace+this->ident+endof_line+close_paranthesis;
   ident_tree = new Tree();
   ident_tree->parse(this->ident);
   ident_lang = ident_tree->getL();
@@ -49,22 +49,43 @@ Lexer::Lexer(const char* file_name){
   number_lang = number_tree->getL();
   number_AFD = new AFD("number_cocol.txt", "number_cocol");
   number_AFD->createAFD(number_tree->getRoot(), number_lang);
-  /*constr_tree = new Tree();
-  constr_tree->parse(this->constr);
-  constr_lang = constr_tree->getL();
-  constr_AFD = new AFD();
-  constr_AFD->createAFD(constr_tree->getRoot(), constr_lang);*/
 }
 
 void Lexer::Parse(){
   file.open(file_name);
   if(file.is_open()){
     file_contents = {istreambuf_iterator<char>(file), istreambuf_iterator<char>()};
-    //file_contents.erase(remove(file_contents.begin(), file_contents.end(), char(10)), file_contents.end());
-    cout << file_contents << endl;
     file.close();
   }
-  /*constr_AFD->simulationAFD(file_contents);*/
+  unsigned int compiler_pos = file_contents.find("COMPILER ");
+  unsigned int characters_pos = file_contents.find("CHARACTERS");
+  unsigned int keywords_pos = file_contents.find("KEYWORDS");
+  unsigned int tokens_pos = file_contents.find("TOKENS");
+  unsigned int productions_pos = file_contents.find("PRODUCTIONS");
+  unsigned int end_pos = file_contents.find("END ");
+  string segment;
+  bool error = false;
+  if(characters_pos<file_contents.size() && keywords_pos<file_contents.size()){
+      stringstream characters(file_contents.substr(characters_pos+11, keywords_pos-characters_pos-11));
+      while(getline(characters, segment, char(10))){
+        error = SetDecl(segment);
+      }
+  }
+  if(keywords_pos<file_contents.size() && tokens_pos<file_contents.size()){
+      stringstream keywords(file_contents.substr(keywords_pos+9, tokens_pos-keywords_pos-9));
+      while(getline(keywords, segment, char(10))){
+        error = KeywordDecl(segment);
+      }
+  }
+  if(tokens_pos<file_contents.size() && productions_pos<file_contents.size()){
+      stringstream tokens(file_contents.substr(tokens_pos+7, productions_pos-tokens_pos-7));
+      while(getline(tokens, segment, char(10))){
+        error = TokenDecl(segment);
+      }
+  }
+  if(end_pos<file_contents.size()){
+      string end = file_contents.substr(end_pos+4, file_contents.size()-end_pos-4);
+  }
 }
 
 void Lexer::cout_symbol_table(){
@@ -88,23 +109,46 @@ void Lexer::add_symbol_table(string symbol_to_append){
   cout_symbol_table();
 }
 
+void Lexer::cout_type_table(){
+  cout << endl;
+  cout << "type_table: " << endl;
+  for (auto it = type_table.begin(); it != type_table.end(); ++it){
+      cout << " " << it->first << " : " << it->second << endl;
+  }
+  cout << endl;
+}
+
+void Lexer::add_type_table(string ident){
+  type_table[ident] = typeDecl;
+  cout_type_table();
+}
+
 void Lexer::symbol_to_AFN(){
   Tree* primitive0_tree;
-  vector<char > primitive0_lang;
+  vector<char > L;
   AFD* primitive0_AFD;
   for (auto it = symbol_table.begin(); it != symbol_table.end(); ++it){
+    vector<char > primitive0_lang;
     primitive0_tree = new Tree();
     primitive0_tree->parse(it->second);
-    primitive0_tree->display();
     primitive0_lang = primitive0_tree->getL();
-    primitive0_AFD = new AFD(""+it->first+".txt", it->first);
-    primitive0_AFD->createAFD(primitive0_tree->getRoot(), primitive0_lang);
-    primitives_AFD.push_back(primitive0_AFD);
-    cout << "AFD done! " << it->first << " : " << it->second << endl;
+    auto found = type_table.find(it->first);
+    if(found->second != "set"){
+        primitive0_AFD = new AFD(""+it->first+".txt", found->second+"-"+it->first);
+        primitive0_AFD->createAFD(primitive0_tree->getRoot(), primitive0_lang);
+        primitives_AFD.push_back(primitive0_AFD);
+        cout << "AFD done! " << it->first << " : " << it->second << endl;
+        L.insert(L.end(), primitive0_lang.begin(), primitive0_lang.end());
+        sort(L.begin(), L.end());
+        L.erase(unique(L.begin(),L.end() ),L.end());
+    }
     primitive0_lang.clear();
   }
   AFN* big_one = new AFN();
-  big_one->newfi_vertex();
+  big_one->newfi_vertex(primitive0_AFD->get_state());
+  cout << big_one->get_state() << endl;
+  copy(L.begin(), L.end(), ostream_iterator<char>(cout, " "));
+  cout << endl;
   for(AFD* current : primitives_AFD){
     big_one->get_vertex_init()->vertex_to.push_back(make_pair(char(238), current->get_vertex_init()));
     for(vertex* v : current->get_allvertex_final()){
@@ -112,8 +156,16 @@ void Lexer::symbol_to_AFN(){
     }
   }
   cout << endl;
-  cout << "SIMULATE BIG AFN IF" << endl;
-  big_one->simulationAFN("if");
+  big_one->setL(L);
+  string exprsn;
+  while(true){
+    cout << "SIMULATE BIG AFN with ? " << endl;
+    cin >> exprsn;
+    cout << endl;
+    big_one->simulationAFN(exprsn);
+  }
+  //big_one->mapAFN(big_one->get_vertex_init());
+  //big_one->writeToFile("bigone.txt");
 }
 
 bool Lexer::SetDecl(string expression){
@@ -132,6 +184,7 @@ bool Lexer::SetDecl(string expression){
       set = expression.substr(delimeter+1, expression.size()-delimeter-1);
       if(Ident(ident)){
         current_ident = ident;
+        add_type_table(ident);
         if(Set(set)){
           return true;
         }
@@ -168,6 +221,7 @@ bool Lexer::Set(string expression){
   unsigned int np = count(expression.begin(), expression.end(), '+');
   unsigned int mp = count(expression.begin(), expression.end(), '-');
   cout << "Set " << expression << endl;
+  typeDecl = "set";
   if(np > 0 || mp > 0){
     unsigned int delimeter = expression.find_first_of("+-");
     string basicset0;
@@ -180,7 +234,11 @@ bool Lexer::Set(string expression){
       if(BasicSet(basicset0)){
         string mp = expression.substr(delimeter,1);
         if(mp == "+"){
-          add_symbol_table(mp);
+          add_symbol_table(or_operation);
+        }else{
+          //auto found = symbol_table.find(current_ident);
+          //cout <<" Minus XXXXXXXXXXXXXXXXXXXXXXXXXXX " << found->second << endl;
+          add_symbol_table("-");
         }
         if(Set(basicset1)){
           return true;
@@ -281,6 +339,7 @@ bool Lexer::KeywordDecl(string expression){
       cout << str << endl;
       if(Ident(ident)){
         current_ident = ident;
+        add_type_table(ident);
         if(String(str)){
            return true;
         }
@@ -312,6 +371,7 @@ bool Lexer::TokenDecl(string expression){
       cout << "Token expression " << tokenexpr << endl;
       if(Ident(ident)){
         current_ident = ident;
+        add_type_table(ident);
         if(TokenExpr(tokenexpr)){
           string hash_expression = tokenToHash(tokenexpr);
           printExpression(hash_expression);

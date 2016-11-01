@@ -56,6 +56,10 @@ void Tree::printExpression(string exprsn){
       cout << "(";
     }else if(i == char(245)){
       cout << ")";
+    }else if(i == char(191)){
+      cout << "[";
+    }else if(i == char(192)){
+      cout << "]";
     }else{
      cout << i;
     }

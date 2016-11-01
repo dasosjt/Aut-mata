@@ -1,13 +1,14 @@
 COMPILER Ejemplo
 CHARACTERS
-letter =
+letter = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".
+digit = "0123456789".
+hexdigit = digit+"ABCDEF".
 KEYWORDS
-if = "if"
-while = "while"
+if = "if".
+while = "while".
 TOKENS
-id = letter{letter} EXCEPT KEYWORDS.
+id = letter{letter}.
 number = digit{digit}.
-hexnumber = hexdigit{hexdigit}"(H)".
-ident = {letter|digit}.
+ident = letter{letter|digit}.
 PRODUCTIONS
 END Ejemplo

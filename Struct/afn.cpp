@@ -15,14 +15,26 @@ using namespace std;
 int AFN::state;
 ofstream AFN::AFN_file;
 ostringstream AFN::AFN_output_t;
+ostringstream AFN::AFN_output_f;
 
 AFN::AFN(){
   result = NULL;
 }
 
-void AFN::newfi_vertex(){
+void AFN::newfi_vertex(int state){
+  this->state = state;
   this->init_vertex = new vertex;
+  this->init_vertex->number_of = get_new_state();
   this->final_vertex = new vertex;
+  this->final_vertex->number_of = get_new_state();
+}
+
+void AFN::setL(vector<char> L){
+  this->L = L;
+}
+
+int AFN::get_state(){
+  return this->state;
 }
 
 /*void AFN::createAFN_AFD(vector<AFD* > list_AFD){
@@ -66,6 +78,7 @@ void AFN::simulationAFN(string exprsn){
       if(!v->token_id.empty()){
         cout << " TOKEN ID " << v->token_id << endl;
       }
+      cout << " NUMBER OF " << v->number_of << endl;
     }
     c = expression[0];
     expression.erase(expression.begin());
@@ -84,21 +97,82 @@ void AFN::simulationAFN(string exprsn){
   } else {
     cout << "NO" << endl;
   }
-  /*Guardo en el archivo segun la rubrica*/
-  /*AFN_file.open("AFN.txt", ios::out);
+}
+
+void AFN::writeToFile(const char* file_name){
+  AFN_file.open(file_name, ios::out);
   if (AFN_file.is_open()) {
     AFN_file << "ESTADOS = ";
-    AFN_file << states_to_text() << endl;
+    AFN_file << state << endl;
     AFN_file << "SIMBOLOS = ";
     AFN_file << symbols_to_text() << endl;
     AFN_file << "INICIO = ";
-    AFN_file << init_to_text() << endl;
+    AFN_file << state-1 << endl;
     AFN_file << "ACEPTACION = ";
-    AFN_file << final_to_text() << endl;
+    AFN_file << AFN_output_f.str() << endl;
     AFN_file << "TRANSICION = ";
     AFN_file << AFN_output_t.str() << endl;
   }
-  AFN_file.close();*/
+  AFN_file.close();
+}
+
+/*void AFN::mapAFN(){
+  vector<int > traveled;
+  stack<vertex* > not_traveled;
+  not_traveled.push(this->init_vertex);
+  vertex *traveling = new vertex;
+  while(!not_traveled.empty()){
+    traveling = not_traveled.top();
+    not_traveled.pop();
+    unsigned int vertex_from = traveling->number_of;
+    traveled.push_back(vertex_from);
+    sort(traveled.begin(), traveled.end());
+    cout << "Traveling from " << vertex_from << endl;
+    for(auto trans : traveling->vertex_to){
+      unsigned int vertex_to = trans.second->number_of;
+      char letter = trans.first;
+      if(count(traveled.begin(), traveled.end(), vertex_to) == 0){
+        cout << "Not found " << vertex_to << " from " << vertex_from << endl;
+        not_traveled.push(trans.second);
+      }
+      if(letter == char(238)){
+        cout << "Traveled from '" << vertex_from << "' to '" << vertex_to << "' with epsilon " << endl;
+      }else{
+        cout << "Traveled from '" << vertex_from << "' to '" << vertex_to << "' with " << trans.first << endl;
+      }
+    }
+  }
+  copy(traveled.begin(), traveled.end(), ostream_iterator<int>(cout, ", "));
+  cout << endl;
+}*/
+
+void AFN::mapAFN(vertex* current_vertex){
+  unsigned int vertex_from = current_vertex->number_of;
+  if(current_vertex->token_id != ""){
+      AFN_output_f << "(" << current_vertex->number_of << ", " << current_vertex->token_id << ")";
+  }
+  traveled.push_back(vertex_from);
+  for(auto trans : current_vertex->vertex_to){
+    unsigned int vertex_to = trans.second->number_of;
+    char letter = trans.first;
+    if(count(traveled.begin(), traveled.end(), vertex_to) == 0){
+      //cout << "Found new path " << vertex_from << " to "  << vertex_to << endl;
+      mapAFN(trans.second);
+      //cout << "Comeback to " << vertex_from << endl;
+    }
+    if(letter == char(238)){
+      //cout << "Traveled from '" << vertex_from << "' to '" << vertex_to << "' with epsilon " << endl;
+    }else{
+      //cout << "Traveled from '" << vertex_from << "' to '" << vertex_to << "' with " << trans.first << endl;
+    }
+    AFN_output_t << "(" << vertex_from << ", " << trans.first << ", " << vertex_to << ")" ;
+  }
+  //cout << endl << endl << endl;
+}
+
+void AFN::coutTraveled(){
+  copy(traveled.begin(), traveled.end(), ostream_iterator<int>(cout, ", "));
+  cout << endl;
 }
 
 vector<vertex* > AFN::eclosure(vector<vertex* > v){
