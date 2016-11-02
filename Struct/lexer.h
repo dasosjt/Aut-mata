@@ -38,6 +38,7 @@ class Lexer{
     string signToSpecialChar(string string);
     void symbol_to_AFN();
     void printExpression(string exprsn);
+    void cleanMinusSigns();
 
   private:
     ifstream file;

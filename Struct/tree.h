@@ -62,6 +62,7 @@ class Tree{
     */
     vector<char > getL();
     void printExpression(string exprsn);
+    bool isoneDigit(char c);
 
   private:
     stack<char> expressionRPN; /**< stacke de expresiones que no son operaciones */

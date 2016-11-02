@@ -3,12 +3,16 @@ CHARACTERS
 letter = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".
 digit = "0123456789".
 hexdigit = digit+"ABCDEF".
+tab = CHR(9).
+eol = CHR(10).
+blanco = eol+CHR(13)+tab+' '.
 KEYWORDS
 if = "if".
 while = "while".
+else = "else".
 TOKENS
-id = letter{letter}.
 number = digit{digit}.
 ident = letter{letter|digit}.
+white = blanco{blanco}.
 PRODUCTIONS
 END Ejemplo

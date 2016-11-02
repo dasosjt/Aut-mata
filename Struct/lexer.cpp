@@ -70,6 +70,7 @@ void Lexer::Parse(){
       while(getline(characters, segment, char(10))){
         error = SetDecl(segment);
       }
+      cleanMinusSigns();
   }
   if(keywords_pos<file_contents.size() && tokens_pos<file_contents.size()){
       stringstream keywords(file_contents.substr(keywords_pos+9, tokens_pos-keywords_pos-9));
@@ -88,13 +89,77 @@ void Lexer::Parse(){
   }
 }
 
+void Lexer::cleanMinusSigns(){
+  for (auto it = symbol_table.begin(); it != symbol_table.end(); ++it){
+    size_t pos = 0;
+    string temp;
+    string positive;
+    string negative;
+    string last_sign;
+    temp = it->second;
+    while((pos = temp.find_first_of("-+")) != string::npos){
+      if(last_sign == ""){
+        last_sign = temp.substr(pos,1);
+        positive += temp.substr(0, pos);
+        temp = temp.substr(pos+1, temp.size()-pos-1);
+      }else if(last_sign == "+"){
+        last_sign = temp.substr(pos,1);
+        if(!temp.substr(0, pos).empty()){
+          positive += or_operation+temp.substr(0, pos);
+        }
+        temp = temp.substr(pos+1, temp.size()-pos-1);
+      }else if(last_sign == "-"){
+        last_sign = temp.substr(pos,1);
+        if(!temp.substr(0, pos).empty()){
+            negative += temp.substr(0, pos);
+        }
+        temp = temp.substr(pos+1, temp.size()-pos-1);
+      }
+      //cout << "Last sign " << last_sign << endl;
+      //cout << "Positive "<< positive << endl;
+      //cout << "Negative " << negative << endl;
+      //cout << "Temp " << temp << endl;
+    };
+    if(last_sign == "+"){
+      positive += or_operation+temp;
+    }else if(last_sign == "-"){
+      if(!temp.empty()){
+          negative += temp;
+      }
+    }
+    if(!negative.empty()){
+      negative.erase(remove_if(negative.begin(), negative.end(), [](char c){ return c == char(179) || c == char(244) || c == char(245);}),negative.end());
+    }
+    while((pos = positive.find_first_of(negative)) != string::npos){
+      if(pos+1 < positive.size() && positive.at(pos+1) == char(179)){
+        //cout << "FIRST" << endl;
+          positive.erase(pos,pos+2);
+      }else if(pos - 1 >= 0 && positive.at(pos-1) == char(179)){
+        //cout << "SECOND" << endl;
+        positive.erase(pos-1,pos+1);
+      }else{
+        //cout << "LAST" << endl;
+        positive.erase(pos,pos+1);
+      }
+    }
+    if(!positive.empty()){
+      it->second = positive;
+    }
+    //cout << "END OF ";
+    printExpression(it->second);
+    cout << endl;
+  }
+}
+
 void Lexer::cout_symbol_table(){
   cout << endl;
   cout << "Current Ident: " << current_ident << endl;
   cout << "Type Decl: " << typeDecl << endl;
   cout << "symbol_table: " << endl;
   for (auto it = symbol_table.begin(); it != symbol_table.end(); ++it){
-      cout << " " << it->first << " : " << it->second << endl;
+      cout << " " << it->first << " : " ;
+      printExpression(it->second);
+      cout << endl;
   }
   cout << endl;
 }
@@ -159,13 +224,13 @@ void Lexer::symbol_to_AFN(){
   big_one->setL(L);
   string exprsn;
   big_one->mapAFN(big_one->get_vertex_init());
-  big_one->writeToFile("scanner.cpp");
-  /*while(true){
+  //big_one->writeToFile("scanner.cpp");
+  while(true){
     cout << "SIMULATE BIG AFN with ? " << endl;
     cin >> exprsn;
     cout << endl;
     big_one->simulationAFN(exprsn);
-  }*/
+  }
 }
 
 bool Lexer::SetDecl(string expression){
@@ -234,7 +299,7 @@ bool Lexer::Set(string expression){
       if(BasicSet(basicset0)){
         string mp = expression.substr(delimeter,1);
         if(mp == "+"){
-          add_symbol_table(or_operation);
+          add_symbol_table("+");
         }else{
           //auto found = symbol_table.find(current_ident);
           //cout <<" Minus XXXXXXXXXXXXXXXXXXXXXXXXXXX " << found->second << endl;
