@@ -80,9 +80,10 @@ void AFN::simulationAFN(string exprsn){
     cout << c << endl;
     for(auto v : S){
       if(!v->token_id.empty()){
-        cout << " TOKEN ID " << v->token_id << endl;
+        cout << " TOKEN ID " << v->token_id << " NUMBER OF " << v->number_of << endl;
+      }else{
+        cout << " NUMBER OF " << v->number_of << endl;
       }
-      cout << " NUMBER OF " << v->number_of << endl;
     }
     c = expression[0];
     expression.erase(expression.begin());

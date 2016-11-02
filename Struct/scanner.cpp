@@ -400,8 +400,19 @@ Scanner::Scanner(){
 void Scanner::Parse(){
   string line;
   ifstream file("texto.txt");
+  size_t pos = 0;
+  string token;
   while (std::getline(file, line)){
-    compiler_AFN->simulationAFN(line);
-    cout << line << endl;
+    if(line.find(' ') == string::npos){
+      cout << line << endl;
+      compiler_AFN->simulationAFN(line);
+    }else{
+      while((pos = line.find(' ')) != string::npos){
+        token = line.substr(0, pos);
+        cout << token << endl;
+        compiler_AFN->simulationAFN(token);
+        line.erase(0, pos+1);
+      }
+    }
   }
 }
