@@ -158,14 +158,14 @@ void Lexer::symbol_to_AFN(){
   cout << endl;
   big_one->setL(L);
   string exprsn;
-  while(true){
+  big_one->mapAFN(big_one->get_vertex_init());
+  big_one->writeToFile("scanner.cpp");
+  /*while(true){
     cout << "SIMULATE BIG AFN with ? " << endl;
     cin >> exprsn;
     cout << endl;
     big_one->simulationAFN(exprsn);
-  }
-  //big_one->mapAFN(big_one->get_vertex_init());
-  //big_one->writeToFile("bigone.txt");
+  }*/
 }
 
 bool Lexer::SetDecl(string expression){

@@ -3,6 +3,7 @@
 #include "afdx.h"
 #include "afd.h"
 #include "lexer.h"
+#include "scanner.h"
 #include <string>
 #include <iostream>
 #include <iterator>
@@ -10,7 +11,9 @@
 using namespace std;
 
 int main(int argc, char *argv[]){
-  Lexer* lex = new Lexer("cocol.txt");
+  /*Lexer* lex = new Lexer("cocol.txt");
   lex->Parse();
-  lex->symbol_to_AFN();
+  lex->symbol_to_AFN();*/
+  Scanner* scan = new Scanner();
+  scan->Parse();
 }

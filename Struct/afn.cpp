@@ -13,7 +13,7 @@
 using namespace std;
 
 int AFN::state;
-ofstream AFN::AFN_file;
+fstream AFN::AFN_file;
 ostringstream AFN::AFN_output_t;
 ostringstream AFN::AFN_output_f;
 
@@ -27,6 +27,10 @@ void AFN::newfi_vertex(int state){
   this->init_vertex->number_of = get_new_state();
   this->final_vertex = new vertex;
   this->final_vertex->number_of = get_new_state();
+}
+void AFN::set_init_state(vertex* init){
+  this->init_vertex = new vertex;
+  this->init_vertex = init;
 }
 
 void AFN::setL(vector<char> L){
@@ -100,56 +104,38 @@ void AFN::simulationAFN(string exprsn){
 }
 
 void AFN::writeToFile(const char* file_name){
-  AFN_file.open(file_name, ios::out);
-  if (AFN_file.is_open()) {
-    AFN_file << "ESTADOS = ";
-    AFN_file << state << endl;
-    AFN_file << "SIMBOLOS = ";
-    AFN_file << symbols_to_text() << endl;
-    AFN_file << "INICIO = ";
-    AFN_file << state-1 << endl;
-    AFN_file << "ACEPTACION = ";
-    AFN_file << AFN_output_f.str() << endl;
-    AFN_file << "TRANSICION = ";
-    AFN_file << AFN_output_t.str() << endl;
+  string file_contents;
+  string temp;
+  ostringstream converter;
+  AFN_file.open(file_name);
+  if(AFN_file.is_open()){
+    file_contents = {istreambuf_iterator<char>(AFN_file), istreambuf_iterator<char>()};
+    AFN_file.close();
   }
-  AFN_file.close();
-}
+  //cout << file_contents << endl;
+  unsigned int size = file_contents.find("//-->size");
+  converter << state;
+  file_contents.insert(size+10, "   unsigned int n = " + converter.str() + ";\n");
+  converter.str("");
+  converter.clear();
+  converter << state - 2;
+  unsigned int init = file_contents.find("//-->init");
+  file_contents.insert(init+10, "   init_vertex = AFN_lineal[" + converter.str() + "];\n");
+  unsigned int transitions = file_contents.find("//-->transitions");
+  file_contents.insert(transitions+17, AFN_output_t.str());
+  unsigned int finals = file_contents.find("//-->finals");
+  file_contents.insert(finals+12, AFN_output_f.str());
+  //cout << file_contents << endl;
 
-/*void AFN::mapAFN(){
-  vector<int > traveled;
-  stack<vertex* > not_traveled;
-  not_traveled.push(this->init_vertex);
-  vertex *traveling = new vertex;
-  while(!not_traveled.empty()){
-    traveling = not_traveled.top();
-    not_traveled.pop();
-    unsigned int vertex_from = traveling->number_of;
-    traveled.push_back(vertex_from);
-    sort(traveled.begin(), traveled.end());
-    cout << "Traveling from " << vertex_from << endl;
-    for(auto trans : traveling->vertex_to){
-      unsigned int vertex_to = trans.second->number_of;
-      char letter = trans.first;
-      if(count(traveled.begin(), traveled.end(), vertex_to) == 0){
-        cout << "Not found " << vertex_to << " from " << vertex_from << endl;
-        not_traveled.push(trans.second);
-      }
-      if(letter == char(238)){
-        cout << "Traveled from '" << vertex_from << "' to '" << vertex_to << "' with epsilon " << endl;
-      }else{
-        cout << "Traveled from '" << vertex_from << "' to '" << vertex_to << "' with " << trans.first << endl;
-      }
-    }
-  }
-  copy(traveled.begin(), traveled.end(), ostream_iterator<int>(cout, ", "));
-  cout << endl;
-}*/
+  ofstream write(file_name);
+  write << file_contents;
+  write.close();
+}
 
 void AFN::mapAFN(vertex* current_vertex){
   unsigned int vertex_from = current_vertex->number_of;
   if(current_vertex->token_id != ""){
-      AFN_output_f << "(" << current_vertex->number_of << ", " << current_vertex->token_id << ")";
+      AFN_output_f << "   AFN_lineal[" << current_vertex->number_of-1 << "]->token_id = \"" << current_vertex->token_id << "\";" << endl;
   }
   traveled.push_back(vertex_from);
   for(auto trans : current_vertex->vertex_to){
@@ -161,11 +147,10 @@ void AFN::mapAFN(vertex* current_vertex){
       //cout << "Comeback to " << vertex_from << endl;
     }
     if(letter == char(238)){
-      //cout << "Traveled from '" << vertex_from << "' to '" << vertex_to << "' with epsilon " << endl;
+      AFN_output_t << "   AFN_lineal[" << vertex_from-1 << "]->vertex_to.push_back(make_pair(char(" << 238 << "), AFN_lineal[" << vertex_to-1 << "]));" << endl ;
     }else{
-      //cout << "Traveled from '" << vertex_from << "' to '" << vertex_to << "' with " << trans.first << endl;
+      AFN_output_t << "   AFN_lineal[" << vertex_from-1 << "]->vertex_to.push_back(make_pair('" << trans.first << "', AFN_lineal[" << vertex_to-1 << "]));" << endl ;
     }
-    AFN_output_t << "(" << vertex_from << ", " << trans.first << ", " << vertex_to << ")" ;
   }
   //cout << endl << endl << endl;
 }

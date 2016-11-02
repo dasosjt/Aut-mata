@@ -130,6 +130,8 @@ class AFN{
     int get_state();
     void mapAFN(vertex* current_vertex);
     void coutTraveled();
+    void write_to_Line(const char* filename, unsigned line, string to_write);
+    void set_init_state(vertex* init);
 
   private:
     vertex* init_vertex; /**< representacion del estado inicial */
@@ -138,11 +140,12 @@ class AFN{
     stack<vertex* > actual_states; /**< representacion de los estados actuales */
     stack<vertex* > new_states; /**< representacion de los nuevos estados */
     static int state; /**< representacion del estado actual */
-    static ofstream AFN_file; /**< genera el archivo de texto */
+    static fstream AFN_file; /**< genera el archivo de texto */
     static ostringstream AFN_output_t; /**< guardar en memoria las transiciones antes de guardarlas en texto */
     static ostringstream AFN_output_f;
     vector<char> L; /**< representacion del lenguaje aceptado */
     vector<int > traveled;
+
 };
 
 #endif
