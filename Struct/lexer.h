@@ -39,6 +39,10 @@ class Lexer{
     void symbol_to_AFN();
     void printExpression(string exprsn);
     void cleanMinusSigns();
+    bool ProductionsDecl(string expression);
+    bool Expression(string expression);
+    bool Factor(string expression);
+    bool Term(string expression);
 
   private:
     ifstream file;
@@ -58,6 +62,8 @@ class Lexer{
     string ident;
     string constr;
     string endof_line;
+    string tab;
+    string creturn;
     string whitespace;
     string anything;
     static AFD* ident_AFD;

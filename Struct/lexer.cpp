@@ -34,6 +34,8 @@ Lexer::Lexer(const char* file_name){
   quote = char(34);
   apostrophe = char(39);
   endof_line = char(10);
+  tab = char(9);
+  creturn = char(13);
   whitespace = open_brackets+char(32)+close_brackets;
   this->letter = open_paranthesis+"a"+point+point+"z"+or_operation+"A"+point+point+"Z"+close_paranthesis;
   this->digit = open_paranthesis+"0"+point+point+"9"+close_paranthesis;
@@ -84,6 +86,12 @@ void Lexer::Parse(){
         error = TokenDecl(segment);
       }
   }
+  if(productions_pos<file_contents.size() && end_pos<file_contents.size()){
+      stringstream tokens(file_contents.substr(productions_pos+12, end_pos - productions_pos-12));
+      while(getline(tokens, segment, char(10))){
+        error = ProductionsDecl(segment);
+      }
+  }
   if(end_pos<file_contents.size()){
       string end = file_contents.substr(end_pos+4, file_contents.size()-end_pos-4);
   }
@@ -115,10 +123,6 @@ void Lexer::cleanMinusSigns(){
         }
         temp = temp.substr(pos+1, temp.size()-pos-1);
       }
-      //cout << "Last sign " << last_sign << endl;
-      //cout << "Positive "<< positive << endl;
-      //cout << "Negative " << negative << endl;
-      //cout << "Temp " << temp << endl;
     };
     if(last_sign == "+"){
       positive += or_operation+temp;
@@ -151,6 +155,193 @@ void Lexer::cleanMinusSigns(){
   }
 }
 
+bool Lexer::ProductionsDecl(string expression){
+  cout << expression << endl;
+  //expression.erase(remove(expression.begin(), expression.end(), ' '), expression.end());
+  if(expression.at(expression.size()-1) == '.'){
+    expression.pop_back();
+    cout << "found ." << endl;
+    unsigned int delimeter = expression.find('=');
+    if(delimeter < expression.size()){
+      cout << "found =" << endl;
+
+      string ident;
+      string attributes;
+      string sem_action;
+      string expression_production;
+      unsigned int del_first;
+      unsigned int del_last;
+
+      ident = expression.substr(0, delimeter);
+      cout << "Ident + Attributes + SemAction "<< ident << endl;
+      expression_production = expression.substr(delimeter+1, expression.size()-delimeter-1);
+      cout << "Expression "<< expression_production << endl;
+      del_first = ident.find("<.");
+      del_last = ident.find(".>");
+      if(del_first < ident.size() && del_last < ident.size()){
+        attributes = ident.substr(del_first, del_last-del_first+2);
+        ident.erase(del_first, del_last-del_first+2);
+        cout << "Attributes " << attributes << endl;
+      }
+
+      del_first = ident.find("(.");
+      del_last = ident.find(".)");
+      if(del_first < ident.size() && del_last < ident.size()){
+        sem_action = ident.substr(del_first, del_last-del_first+2);
+        ident.erase(del_first, del_last-del_first+2);
+        cout << "SemAction " << sem_action << endl;
+      }
+
+      ident.erase(remove(ident.begin(), ident.end(), ' '), ident.end());
+
+      if(Ident(ident)){
+        if(Expression(expression_production)){
+          cout << "HEY " << endl;
+        }
+        return true;
+      }
+
+    } else {
+      cout << "fuckin.. = " << endl;
+    }
+  } else {
+    cout << "fuckin.. punto" << endl;
+  }
+  return false;
+}
+
+bool Lexer::Expression(string expression){
+  cout << "Expression Production " << expression << endl;
+  string productionterm0;
+  string productionterm1;
+  unsigned int i = 0;
+  bool stop = false;
+  int quote_mark = 0;
+  while(i<expression.size() && !stop){
+    if(expression.at(i) == '|' and pbb_signs.empty()){
+      productionterm0 = expression.substr(0, i);
+      productionterm1 = expression.substr(i+1, expression.size()-i-1);
+      stop = true;
+    }
+    if(expression.at(i) == '(' || expression.at(i) == '{' || expression.at(i) == '['){
+      pbb_signs.push(expression.at(i));
+    } else if(expression.at(i) == ')' || expression.at(i) == '}' || expression.at(i) == ']'){
+      pbb_signs.pop();
+    } else if(expression.at(i) == '\"'){
+      quote_mark += 1;
+    }
+    i++;
+  }
+  while(!pbb_signs.empty()){
+    pbb_signs.pop();
+  }
+  if(!productionterm1.empty() && !productionterm0.empty()){
+    if(Term(productionterm0)){
+      if(Expression(productionterm1)){
+          return true;
+      }
+    }
+  }else if(!productionterm0.empty()){
+    if(Term(productionterm0)){
+      return true;
+    }
+  }else{
+    if(Term(expression)){
+      return true;
+    }
+  }
+  return false;
+}
+
+bool Lexer::Term(string expression){
+  cout << "Term " << expression << endl;
+  string factor0;
+  string factor1;
+  int quote_mark = 0;
+  factor0 = expression;
+  unsigned int i = 0;
+  bool stop = false;
+  while(i<expression.size() && !stop){
+    if(expression.at(i) == '(' || expression.at(i) == '{' || expression.at(i) == '['){
+      if(i>0 && pbb_signs.empty() && quote_mark%2 == 0){
+        factor0 = expression.substr(0, i);
+        factor1 = expression.substr(i, expression.size()-i);
+        stop = true;
+      }
+      pbb_signs.push(expression.at(i));
+    } else if(expression.at(i) == ')' || expression.at(i) == '}' || expression.at(i) == ']'){
+      pbb_signs.pop();
+      if(i>0 && pbb_signs.empty() && quote_mark%2 == 0){
+        factor0 = expression.substr(0, i+1);
+        factor1 = expression.substr(i+1, expression.size()-i-1);
+        stop = true;
+      }
+    } else if(expression.at(i) == '\"'){
+      quote_mark += 1;
+      if(i>0 && pbb_signs.empty() && quote_mark%2 == 0){
+        factor0 = expression.substr(0, i+1);
+        factor1 = expression.substr(i+1, expression.size()-i-1);
+        stop = true;
+      }
+    }
+    i++;
+  }
+  while(!pbb_signs.empty()){
+    pbb_signs.pop();
+  }
+  if(!factor0.empty() && !factor1.empty()){
+    if(Factor(factor0) && Term(factor1)){
+      return true;
+    }
+  }else{
+    if(Factor(factor0)){
+      return true;
+    }
+  }
+  return false;
+}
+
+bool Lexer::Factor(string expression){
+  cout << "Factor " << expression << endl;
+  string productionterm0;
+  productionterm0 = expression.substr(1, expression.size()-2);
+  if(expression.at(0) == '(' && expression.at(1) == '.' && expression.at(expression.size()-2) == '.' && expression.at(expression.size()-1) == ')'){
+    cout << "Found Semantic Action :D " << expression << endl;
+    return true;
+  }
+  if(expression.at(0) == '(' && expression.at(expression.size()-1) == ')'){
+    if(Expression(productionterm0)){
+        return true;
+    }
+  } else if(expression.at(0) == '[' && expression.at(expression.size()-1) == ']'){
+    if(Expression(productionterm0)){
+        return true;
+    }
+  } else if(expression.at(0) == '{' && expression.at(expression.size()-1) == '}'){
+    if(Expression(productionterm0)){
+        return true;
+    }
+  } else {
+    cout << "ELSE FACTOR  " << endl;
+    string attributes;
+    unsigned int del_first;
+    unsigned int del_last;
+
+    del_first = expression.find("<.");
+    del_last = expression.find(".>");
+
+    if(del_first < expression.size() && del_last < expression.size()){
+      attributes = expression.substr(del_first, del_last-del_first+2);
+      expression.erase(del_first, del_last-del_first+2);
+      cout << "Attributes " << attributes << endl;
+    }
+
+    if(Symbol(expression)){
+      return true;
+    }
+  }
+  return false;
+}
 void Lexer::cout_symbol_table(){
   cout << endl;
   cout << "Current Ident: " << current_ident << endl;
@@ -224,13 +415,13 @@ void Lexer::symbol_to_AFN(){
   big_one->setL(L);
   string exprsn;
   big_one->mapAFN(big_one->get_vertex_init());
-  //big_one->writeToFile("scanner.cpp");
-  while(true){
+  big_one->writeToFile("scanner.cpp");
+  /*while(true){
     cout << "SIMULATE BIG AFN with ? " << endl;
     cin >> exprsn;
     cout << endl;
     big_one->simulationAFN(exprsn);
-  }
+  }*/
 }
 
 bool Lexer::SetDecl(string expression){
@@ -377,10 +568,24 @@ bool Lexer::Char(string expression){
     if(pp < expression.size()){
       unsigned int p1 = expression.find("(");
       unsigned int p2 = expression.find(")");
-      string number = expression.substr(p1+1, expression.size()-p2);
+      string number = expression.substr(p1+1, p2-p1-1);
+      cout << number << endl;
       if(Number(number)){
         cout << "YES" << endl;
-        add_symbol_table(expression);
+        cout << "CHAR ACEPTED !" << number << endl ;
+        if(number == "10"){
+          printExpression(endof_line);
+          add_symbol_table(endof_line);
+        }else if(number == "9"){
+          printExpression(tab);
+          add_symbol_table(tab);
+        }else if(number == "13"){
+          printExpression(creturn);
+          add_symbol_table(creturn);
+        }else if(number == "32"){
+          printExpression("whitespace");
+          add_symbol_table(whitespace);
+        }
         return true;
       }
     }
@@ -690,6 +895,12 @@ void Lexer::printExpression(string exprsn){
       cout << "(";
     }else if(i == char(245)){
       cout << ")";
+    }else if(i == char(9)){
+      cout << "tab_";
+    }else if(i == char(10)){
+      cout << "eol_";
+    }else if(i == char(13)){
+      cout << "carriage_return";
     }else{
      cout << i;
     }

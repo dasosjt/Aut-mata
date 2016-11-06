@@ -5,14 +5,14 @@ digit = "0123456789".
 hexdigit = digit+"ABCDEF".
 tab = CHR(9).
 eol = CHR(10).
-blanco = eol+CHR(13)+tab+' '.
+space = CHR(32).
 KEYWORDS
 if = "if".
 while = "while".
-else = "else".
 TOKENS
 number = digit{digit}.
 ident = letter{letter|digit}.
-white = blanco{blanco}.
 PRODUCTIONS
+lala0<.lala.>(.jaja.)=a<.lol.>|(.lalalalala.).
+lala0<.lala.>=a<.lol.>|(.lalalalala.).
 END Ejemplo

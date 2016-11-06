@@ -421,9 +421,9 @@ bool AFD::simulationAFD(string exprsn){
     //copy(expression.begin(), expression.end(), ostream_iterator<char>(cout, " "));
     //cout << endl;
     cout << c << endl;
-    if(!S.empty()){
+    /*if(!S.empty()){
       cout << S[0]->token_id << endl;
-    }
+    }*/
     if (find(this->L.begin(), this->L.end(), c) != this->L.end()){
       S = move(S, c);
       c = expression[0];

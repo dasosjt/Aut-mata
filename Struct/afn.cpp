@@ -149,6 +149,14 @@ void AFN::mapAFN(vertex* current_vertex){
     }
     if(letter == char(238)){
       AFN_output_t << "   AFN_lineal[" << vertex_from-1 << "]->vertex_to.push_back(make_pair(char(" << 238 << "), AFN_lineal[" << vertex_to-1 << "]));" << endl ;
+    }else if(letter == char(10)){
+      AFN_output_t << "   AFN_lineal[" << vertex_from-1 << "]->vertex_to.push_back(make_pair(char(" << 10 << "), AFN_lineal[" << vertex_to-1 << "]));" << endl ;
+    }else if(letter == char(9)){
+      AFN_output_t << "   AFN_lineal[" << vertex_from-1 << "]->vertex_to.push_back(make_pair(char(" << 9 << "), AFN_lineal[" << vertex_to-1 << "]));" << endl ;
+    }else if(letter == char(13)){
+      AFN_output_t << "   AFN_lineal[" << vertex_from-1 << "]->vertex_to.push_back(make_pair(char(" << 13 << "), AFN_lineal[" << vertex_to-1 << "]));" << endl ;
+    }else if(letter == char(32)){
+      AFN_output_t << "   AFN_lineal[" << vertex_from-1 << "]->vertex_to.push_back(make_pair(char(" << 32 << "), AFN_lineal[" << vertex_to-1 << "]));" << endl ;
     }else{
       AFN_output_t << "   AFN_lineal[" << vertex_from-1 << "]->vertex_to.push_back(make_pair('" << trans.first << "', AFN_lineal[" << vertex_to-1 << "]));" << endl ;
     }

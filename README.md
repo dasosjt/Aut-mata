@@ -13,3 +13,6 @@ or            char(179)</br>
 kleene        char(241)</br>
 epsilon       char(238)</br>
 end-of-string char(254)</br>
+eol           char(220)</br>
+cr            char(223)</br>
+tab           char(219)</br>
