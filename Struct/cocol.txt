@@ -10,9 +10,9 @@ KEYWORDS
 if = "if".
 while = "while".
 TOKENS
-number = digit{digit}.
-ident = letter{letter|digit}.
+whitespace = {tab|eol|space}.
 PRODUCTIONS
-lala0<.lala.>(.jaja.)=a<.lol.>|(.lalalalala.).
-lala0<.lala.>=a<.lol.>|(.lalalalala.).
+E = E "+" T | T.
+T = T "*" F | F.
+F = "(" E ")" | id.
 END Ejemplo

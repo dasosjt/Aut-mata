@@ -67,9 +67,16 @@ void Lexer::Parse(){
   unsigned int end_pos = file_contents.find("END ");
   string segment;
   bool error = false;
+  /*cout << "COMPILER POS "<<  compiler_pos << endl;
+  cout << "CHARACTERS POS "<< characters_pos << endl;
+  cout << "KEYWORDS POS "<< keywords_pos << endl;
+  cout << "TOKENS POS " << tokens_pos << endl;
+  cout << "PRODUCTIONS POS " << productions_pos << endl;
+  cout << "END POS " << end_pos << endl;*/
   if(characters_pos<file_contents.size() && keywords_pos<file_contents.size()){
       stringstream characters(file_contents.substr(characters_pos+11, keywords_pos-characters_pos-11));
       while(getline(characters, segment, char(10))){
+        //cout << segment << endl;
         error = SetDecl(segment);
       }
       cleanMinusSigns();
@@ -77,18 +84,21 @@ void Lexer::Parse(){
   if(keywords_pos<file_contents.size() && tokens_pos<file_contents.size()){
       stringstream keywords(file_contents.substr(keywords_pos+9, tokens_pos-keywords_pos-9));
       while(getline(keywords, segment, char(10))){
+        //cout << segment << endl;
         error = KeywordDecl(segment);
       }
   }
   if(tokens_pos<file_contents.size() && productions_pos<file_contents.size()){
       stringstream tokens(file_contents.substr(tokens_pos+7, productions_pos-tokens_pos-7));
       while(getline(tokens, segment, char(10))){
+        //cout << segment << endl;
         error = TokenDecl(segment);
       }
   }
   if(productions_pos<file_contents.size() && end_pos<file_contents.size()){
       stringstream tokens(file_contents.substr(productions_pos+12, end_pos - productions_pos-12));
       while(getline(tokens, segment, char(10))){
+        //cout << segment << endl;
         error = ProductionsDecl(segment);
       }
   }
@@ -157,6 +167,7 @@ void Lexer::cleanMinusSigns(){
 
 bool Lexer::ProductionsDecl(string expression){
   cout << expression << endl;
+  typeDecl = "productions";
   //expression.erase(remove(expression.begin(), expression.end(), ' '), expression.end());
   if(expression.at(expression.size()-1) == '.'){
     expression.pop_back();
@@ -258,6 +269,7 @@ bool Lexer::Term(string expression){
   string factor0;
   string factor1;
   int quote_mark = 0;
+  int first_quote_pos = 0;
   factor0 = expression;
   unsigned int i = 0;
   bool stop = false;
@@ -278,10 +290,23 @@ bool Lexer::Term(string expression){
       }
     } else if(expression.at(i) == '\"'){
       quote_mark += 1;
+      if(quote_mark == 1){
+        first_quote_pos = i;
+      }
       if(i>0 && pbb_signs.empty() && quote_mark%2 == 0){
-        factor0 = expression.substr(0, i+1);
-        factor1 = expression.substr(i+1, expression.size()-i-1);
-        stop = true;
+        if(first_quote_pos == 0){
+          factor0 = expression.substr(0, i+1);
+          factor1 = expression.substr(i+1, expression.size()-i-1);
+          cout << factor0 << endl;
+          cout << factor1 << endl;
+          stop = true;
+        }else{
+          factor0 = expression.substr(0, first_quote_pos);
+          factor1 = expression.substr(first_quote_pos, expression.size()-first_quote_pos);
+          cout << factor0 << endl;
+          cout << factor1 << endl;
+          stop = true;
+        }
       }
     }
     i++;
@@ -359,10 +384,10 @@ void Lexer::add_symbol_table(string symbol_to_append){
   cout << "Current Ident: " << current_ident << endl;
   cout << "Type Decl: " << typeDecl << endl;
   cout << "Symbol to append: " << symbol_to_append << endl;
-  if(typeDecl != "token"){
+  if(typeDecl != "token" && typeDecl != "productions"){
     symbol_table[current_ident]+=symbol_to_append;
+    cout_symbol_table();
   }
-  cout_symbol_table();
 }
 
 void Lexer::cout_type_table(){
@@ -456,6 +481,7 @@ bool Lexer::SetDecl(string expression){
 
 bool Lexer::Ident(string expression){
   cout << "Ident " << expression << endl;
+  expression.erase(remove(expression.begin(), expression.end(), ' '), expression.end());
   bool simulationAFD = ident_AFD->simulationAFD(expression);
   if(simulationAFD){
     if(typeDecl != "token"){
@@ -709,6 +735,7 @@ bool Lexer::TokenTerm(string expression){
   string tokenfactor0;
   string tokenfactor1;
   int quote_mark = 0;
+  int first_quote_pos = 0;
   tokenfactor0 = expression;
   unsigned int i = 0;
   bool stop = false;
@@ -729,10 +756,23 @@ bool Lexer::TokenTerm(string expression){
       }
     } else if(expression.at(i) == '\"'){
       quote_mark += 1;
+      if(quote_mark == 1){
+        first_quote_pos = i;
+      }
       if(i>0 && pbb_signs.empty() && quote_mark%2 == 0){
-        tokenfactor0 = expression.substr(0, i+1);
-        tokenfactor1 = expression.substr(i+1, expression.size()-i-1);
-        stop = true;
+        if(first_quote_pos == 0){
+          tokenfactor0 = expression.substr(0, i+1);
+          tokenfactor1 = expression.substr(i+1, expression.size()-i-1);
+          cout << tokenfactor0 << endl;
+          cout << tokenfactor1 << endl;
+          stop = true;
+        }else{
+          tokenfactor0 = expression.substr(0, first_quote_pos);
+          tokenfactor1 = expression.substr(first_quote_pos, expression.size()-first_quote_pos);
+          cout << tokenfactor0 << endl;
+          cout << tokenfactor1 << endl;
+          stop = true;
+        }
       }
     }
     i++;
