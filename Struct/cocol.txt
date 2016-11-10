@@ -9,8 +9,10 @@ space = CHR(32).
 KEYWORDS
 if = "if".
 while = "while".
+else = "else".
 TOKENS
-whitespace = {tab|eol|space}.
+whitespace = {space}.
+ident = letter{letter|digit}.
 PRODUCTIONS
 E = E "+" T | T.
 T = T "*" F | F.

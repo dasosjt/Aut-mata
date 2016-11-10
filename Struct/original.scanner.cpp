@@ -33,16 +33,13 @@ void Scanner::Parse(){
   size_t pos = 0;
   string token;
   while (std::getline(file, line)){
-    if(line.find(' ') == string::npos){
+    cout << "Start of line: "<< endl << line << endl << endl;
+    bool got_token = true;
+    while(!line.empty()){
       cout << line << endl;
-      compiler_AFN->simulationAFN(line);
-    }else{
-      while((pos = line.find(' ')) != string::npos){
-        token = line.substr(0, pos);
-        cout << token << endl;
-        compiler_AFN->simulationAFN(token);
-        line.erase(0, pos+1);
-      }
+      string c = line.substr(0,1);
+      line.erase(0,1);
+      got_token = compiler_AFN->simulationAFN(c, got_token);
     }
   }
 }*/

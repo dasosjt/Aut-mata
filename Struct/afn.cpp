@@ -16,6 +16,7 @@ int AFN::state;
 fstream AFN::AFN_file;
 ostringstream AFN::AFN_output_t;
 ostringstream AFN::AFN_output_f;
+vector<vertex* > AFN::last_state;
 
 AFN::AFN(){
   result = NULL;
@@ -64,20 +65,36 @@ vertex* AFN::get_vertex_init_result(){
   return result->init_vertex;
 }
 
-void AFN::simulationAFN(string exprsn){
+bool AFN::simulationAFN(string exprsn, bool got_token){
   /*Agrego un caracter que denota que es el final de leer caracteres, en este caso es el f*/
   vector<vertex*> s0, S;
   vector<char> expression(exprsn.begin(), exprsn.end());
   expression.push_back(char(254));
   s0.push_back(init_vertex);
-  S = eclosure(s0);
+  if(!got_token){
+    cout << "Start from last_state " << endl;
+    S = last_state;
+  }else{
+    cout << "Start from init_vertex " << endl;
+    S = eclosure(s0);
+  }
   char c = expression[0];
   expression.erase(expression.begin());
   /*mientras no sea f... */
   while(c!=char(254)){
     /*Hago el move correspondiente*/
     S = eclosure(move(S, c));
-    cout << c << endl;
+    if(c == char(9)){
+      cout << "tab_" << endl;
+    }else if(c == char(10)){
+      cout << "eol_" << endl;
+    }else if(c == char(13)){
+      cout << "carriage_return" << endl;
+    }else if(c == char(32)){
+      cout << "whitespace" << endl;
+    }else{
+     cout << c << endl;
+    }
     for(auto v : S){
       if(!v->token_id.empty()){
         cout << " TOKEN ID " << v->token_id << " NUMBER OF " << v->number_of << endl;
@@ -90,9 +107,22 @@ void AFN::simulationAFN(string exprsn){
   };
   bool final_state = false;
   /*Si el estado resultante no tiene el estado final, entonces respondo NO; pero si lo tiene entonces SI*/
+  last_state = S;
+  if(!got_token){
+    cout << "Last state {" << endl;
+    for(auto v : last_state){
+      if(!v->token_id.empty()){
+        cout << " TOKEN ID " << v->token_id << " NUMBER OF " << v->number_of << endl;
+      }else{
+        cout << " NUMBER OF " << v->number_of << endl;
+      }
+    }
+    cout << "}" << endl;
+  }
   if(S.size() != 0){
     for(unsigned int i = 0; i< S.size(); i++){
-      if (S[i]->vertex_to.size() == 0){
+      cout << "Finals " << S[i]->number_of << endl;
+      if (S[i]->vertex_to.size() == 0 || !S[i]->token_id.empty()){
         final_state = true;
       };
     };
@@ -102,6 +132,7 @@ void AFN::simulationAFN(string exprsn){
   } else {
     cout << "NO" << endl;
   }
+  return final_state;
 }
 
 void AFN::writeToFile(const char* file_name){

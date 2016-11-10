@@ -97,7 +97,7 @@ class AFN{
     \param exprsn es un string que se verificara si es o no es aceptada por el AFN
     \return void
     */
-    void simulationAFN(string exprsn);
+    bool simulationAFN(string exprsn, bool got_token);
     /** Traduce los transiciones a texto
     \param from es es un vertice/estado desde donde se realiza la transicion
     \param to es es un vertice/estado hacia donde se realiza la transicion
@@ -143,6 +143,7 @@ class AFN{
     static fstream AFN_file; /**< genera el archivo de texto */
     static ostringstream AFN_output_t; /**< guardar en memoria las transiciones antes de guardarlas en texto */
     static ostringstream AFN_output_f;
+    static vector<vertex* > last_state;
     vector<char> L; /**< representacion del lenguaje aceptado */
     vector<int > traveled;
 

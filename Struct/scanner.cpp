@@ -13,7 +13,7 @@ Scanner::Scanner(){
   init_vertex = new vertex;
   unsigned int c = 0;
 //-->size
-   unsigned int n = 26;
+   unsigned int n = 28;
   AFN_lineal.reserve(n);
   while(c<n){
     vertex* v = new vertex;
@@ -22,7 +22,7 @@ Scanner::Scanner(){
     c++;
   }
 //-->init
-   init_vertex = AFN_lineal[24];
+   init_vertex = AFN_lineal[26];
 //-->transitions
    AFN_lineal[6]->vertex_to.push_back(make_pair('a', AFN_lineal[6]));
    AFN_lineal[6]->vertex_to.push_back(make_pair('b', AFN_lineal[6]));
@@ -86,7 +86,7 @@ Scanner::Scanner(){
    AFN_lineal[6]->vertex_to.push_back(make_pair('7', AFN_lineal[6]));
    AFN_lineal[6]->vertex_to.push_back(make_pair('8', AFN_lineal[6]));
    AFN_lineal[6]->vertex_to.push_back(make_pair('9', AFN_lineal[6]));
-   AFN_lineal[6]->vertex_to.push_back(make_pair(char(238), AFN_lineal[25]));
+   AFN_lineal[6]->vertex_to.push_back(make_pair(char(238), AFN_lineal[27]));
    AFN_lineal[5]->vertex_to.push_back(make_pair('a', AFN_lineal[6]));
    AFN_lineal[5]->vertex_to.push_back(make_pair('b', AFN_lineal[6]));
    AFN_lineal[5]->vertex_to.push_back(make_pair('c', AFN_lineal[6]));
@@ -211,99 +211,82 @@ Scanner::Scanner(){
    AFN_lineal[5]->vertex_to.push_back(make_pair('7', AFN_lineal[7]));
    AFN_lineal[5]->vertex_to.push_back(make_pair('8', AFN_lineal[7]));
    AFN_lineal[5]->vertex_to.push_back(make_pair('9', AFN_lineal[7]));
-   AFN_lineal[24]->vertex_to.push_back(make_pair(char(238), AFN_lineal[5]));
-   AFN_lineal[9]->vertex_to.push_back(make_pair(char(10), AFN_lineal[9]));
-   AFN_lineal[9]->vertex_to.push_back(make_pair(char(13), AFN_lineal[9]));
-   AFN_lineal[9]->vertex_to.push_back(make_pair(char(9), AFN_lineal[9]));
-   AFN_lineal[9]->vertex_to.push_back(make_pair(char(32), AFN_lineal[9]));
-   AFN_lineal[9]->vertex_to.push_back(make_pair(char(238), AFN_lineal[25]));
-   AFN_lineal[8]->vertex_to.push_back(make_pair(char(10), AFN_lineal[9]));
-   AFN_lineal[8]->vertex_to.push_back(make_pair(char(13), AFN_lineal[9]));
-   AFN_lineal[8]->vertex_to.push_back(make_pair(char(9), AFN_lineal[9]));
-   AFN_lineal[10]->vertex_to.push_back(make_pair(char(10), AFN_lineal[9]));
-   AFN_lineal[10]->vertex_to.push_back(make_pair(char(13), AFN_lineal[9]));
-   AFN_lineal[10]->vertex_to.push_back(make_pair(char(9), AFN_lineal[9]));
-   AFN_lineal[10]->vertex_to.push_back(make_pair(char(32), AFN_lineal[10]));
-   AFN_lineal[10]->vertex_to.push_back(make_pair(char(238), AFN_lineal[25]));
-   AFN_lineal[8]->vertex_to.push_back(make_pair(char(32), AFN_lineal[10]));
-   AFN_lineal[24]->vertex_to.push_back(make_pair(char(238), AFN_lineal[8]));
-   AFN_lineal[12]->vertex_to.push_back(make_pair('0', AFN_lineal[12]));
-   AFN_lineal[12]->vertex_to.push_back(make_pair('1', AFN_lineal[12]));
-   AFN_lineal[12]->vertex_to.push_back(make_pair('2', AFN_lineal[12]));
-   AFN_lineal[12]->vertex_to.push_back(make_pair('3', AFN_lineal[12]));
-   AFN_lineal[12]->vertex_to.push_back(make_pair('4', AFN_lineal[12]));
-   AFN_lineal[12]->vertex_to.push_back(make_pair('5', AFN_lineal[12]));
-   AFN_lineal[12]->vertex_to.push_back(make_pair('6', AFN_lineal[12]));
-   AFN_lineal[12]->vertex_to.push_back(make_pair('7', AFN_lineal[12]));
-   AFN_lineal[12]->vertex_to.push_back(make_pair('8', AFN_lineal[12]));
-   AFN_lineal[12]->vertex_to.push_back(make_pair('9', AFN_lineal[12]));
-   AFN_lineal[12]->vertex_to.push_back(make_pair(char(238), AFN_lineal[25]));
-   AFN_lineal[11]->vertex_to.push_back(make_pair('0', AFN_lineal[12]));
-   AFN_lineal[11]->vertex_to.push_back(make_pair('1', AFN_lineal[12]));
-   AFN_lineal[11]->vertex_to.push_back(make_pair('2', AFN_lineal[12]));
-   AFN_lineal[11]->vertex_to.push_back(make_pair('3', AFN_lineal[12]));
-   AFN_lineal[11]->vertex_to.push_back(make_pair('4', AFN_lineal[12]));
-   AFN_lineal[11]->vertex_to.push_back(make_pair('5', AFN_lineal[12]));
-   AFN_lineal[11]->vertex_to.push_back(make_pair('6', AFN_lineal[12]));
-   AFN_lineal[11]->vertex_to.push_back(make_pair('7', AFN_lineal[12]));
-   AFN_lineal[11]->vertex_to.push_back(make_pair('8', AFN_lineal[12]));
-   AFN_lineal[11]->vertex_to.push_back(make_pair('9', AFN_lineal[12]));
-   AFN_lineal[24]->vertex_to.push_back(make_pair(char(238), AFN_lineal[11]));
-   AFN_lineal[15]->vertex_to.push_back(make_pair('w', AFN_lineal[15]));
-   AFN_lineal[15]->vertex_to.push_back(make_pair('h', AFN_lineal[15]));
-   AFN_lineal[15]->vertex_to.push_back(make_pair('i', AFN_lineal[15]));
-   AFN_lineal[15]->vertex_to.push_back(make_pair('l', AFN_lineal[15]));
-   AFN_lineal[15]->vertex_to.push_back(make_pair('e', AFN_lineal[15]));
-   AFN_lineal[14]->vertex_to.push_back(make_pair('w', AFN_lineal[15]));
-   AFN_lineal[16]->vertex_to.push_back(make_pair('w', AFN_lineal[15]));
-   AFN_lineal[16]->vertex_to.push_back(make_pair('h', AFN_lineal[15]));
-   AFN_lineal[17]->vertex_to.push_back(make_pair('w', AFN_lineal[15]));
-   AFN_lineal[17]->vertex_to.push_back(make_pair('h', AFN_lineal[15]));
-   AFN_lineal[17]->vertex_to.push_back(make_pair('i', AFN_lineal[15]));
-   AFN_lineal[18]->vertex_to.push_back(make_pair('w', AFN_lineal[15]));
-   AFN_lineal[18]->vertex_to.push_back(make_pair('h', AFN_lineal[15]));
-   AFN_lineal[18]->vertex_to.push_back(make_pair('i', AFN_lineal[15]));
-   AFN_lineal[18]->vertex_to.push_back(make_pair('l', AFN_lineal[15]));
-   AFN_lineal[19]->vertex_to.push_back(make_pair('w', AFN_lineal[15]));
-   AFN_lineal[19]->vertex_to.push_back(make_pair('h', AFN_lineal[15]));
-   AFN_lineal[19]->vertex_to.push_back(make_pair('i', AFN_lineal[15]));
-   AFN_lineal[19]->vertex_to.push_back(make_pair('l', AFN_lineal[15]));
-   AFN_lineal[19]->vertex_to.push_back(make_pair('e', AFN_lineal[15]));
-   AFN_lineal[19]->vertex_to.push_back(make_pair(char(238), AFN_lineal[25]));
-   AFN_lineal[18]->vertex_to.push_back(make_pair('e', AFN_lineal[19]));
-   AFN_lineal[17]->vertex_to.push_back(make_pair('l', AFN_lineal[18]));
-   AFN_lineal[17]->vertex_to.push_back(make_pair('e', AFN_lineal[15]));
+   AFN_lineal[26]->vertex_to.push_back(make_pair(char(238), AFN_lineal[5]));
+   AFN_lineal[10]->vertex_to.push_back(make_pair('w', AFN_lineal[10]));
+   AFN_lineal[10]->vertex_to.push_back(make_pair('h', AFN_lineal[10]));
+   AFN_lineal[10]->vertex_to.push_back(make_pair('i', AFN_lineal[10]));
+   AFN_lineal[10]->vertex_to.push_back(make_pair('l', AFN_lineal[10]));
+   AFN_lineal[10]->vertex_to.push_back(make_pair('e', AFN_lineal[10]));
+   AFN_lineal[9]->vertex_to.push_back(make_pair('w', AFN_lineal[10]));
+   AFN_lineal[11]->vertex_to.push_back(make_pair('w', AFN_lineal[10]));
+   AFN_lineal[11]->vertex_to.push_back(make_pair('h', AFN_lineal[10]));
+   AFN_lineal[12]->vertex_to.push_back(make_pair('w', AFN_lineal[10]));
+   AFN_lineal[12]->vertex_to.push_back(make_pair('h', AFN_lineal[10]));
+   AFN_lineal[12]->vertex_to.push_back(make_pair('i', AFN_lineal[10]));
+   AFN_lineal[13]->vertex_to.push_back(make_pair('w', AFN_lineal[10]));
+   AFN_lineal[13]->vertex_to.push_back(make_pair('h', AFN_lineal[10]));
+   AFN_lineal[13]->vertex_to.push_back(make_pair('i', AFN_lineal[10]));
+   AFN_lineal[13]->vertex_to.push_back(make_pair('l', AFN_lineal[10]));
+   AFN_lineal[14]->vertex_to.push_back(make_pair('w', AFN_lineal[10]));
+   AFN_lineal[14]->vertex_to.push_back(make_pair('h', AFN_lineal[10]));
+   AFN_lineal[14]->vertex_to.push_back(make_pair('i', AFN_lineal[10]));
+   AFN_lineal[14]->vertex_to.push_back(make_pair('l', AFN_lineal[10]));
+   AFN_lineal[14]->vertex_to.push_back(make_pair('e', AFN_lineal[10]));
+   AFN_lineal[14]->vertex_to.push_back(make_pair(char(238), AFN_lineal[27]));
+   AFN_lineal[13]->vertex_to.push_back(make_pair('e', AFN_lineal[14]));
+   AFN_lineal[12]->vertex_to.push_back(make_pair('l', AFN_lineal[13]));
+   AFN_lineal[12]->vertex_to.push_back(make_pair('e', AFN_lineal[10]));
+   AFN_lineal[11]->vertex_to.push_back(make_pair('i', AFN_lineal[12]));
+   AFN_lineal[11]->vertex_to.push_back(make_pair('l', AFN_lineal[10]));
+   AFN_lineal[11]->vertex_to.push_back(make_pair('e', AFN_lineal[10]));
+   AFN_lineal[9]->vertex_to.push_back(make_pair('h', AFN_lineal[11]));
+   AFN_lineal[9]->vertex_to.push_back(make_pair('i', AFN_lineal[10]));
+   AFN_lineal[9]->vertex_to.push_back(make_pair('l', AFN_lineal[10]));
+   AFN_lineal[9]->vertex_to.push_back(make_pair('e', AFN_lineal[10]));
+   AFN_lineal[8]->vertex_to.push_back(make_pair('w', AFN_lineal[9]));
+   AFN_lineal[8]->vertex_to.push_back(make_pair('h', AFN_lineal[10]));
+   AFN_lineal[8]->vertex_to.push_back(make_pair('i', AFN_lineal[10]));
+   AFN_lineal[8]->vertex_to.push_back(make_pair('l', AFN_lineal[10]));
+   AFN_lineal[8]->vertex_to.push_back(make_pair('e', AFN_lineal[10]));
+   AFN_lineal[26]->vertex_to.push_back(make_pair(char(238), AFN_lineal[8]));
+   AFN_lineal[17]->vertex_to.push_back(make_pair('i', AFN_lineal[17]));
+   AFN_lineal[17]->vertex_to.push_back(make_pair('f', AFN_lineal[17]));
    AFN_lineal[16]->vertex_to.push_back(make_pair('i', AFN_lineal[17]));
-   AFN_lineal[16]->vertex_to.push_back(make_pair('l', AFN_lineal[15]));
-   AFN_lineal[16]->vertex_to.push_back(make_pair('e', AFN_lineal[15]));
-   AFN_lineal[14]->vertex_to.push_back(make_pair('h', AFN_lineal[16]));
-   AFN_lineal[14]->vertex_to.push_back(make_pair('i', AFN_lineal[15]));
-   AFN_lineal[14]->vertex_to.push_back(make_pair('l', AFN_lineal[15]));
-   AFN_lineal[14]->vertex_to.push_back(make_pair('e', AFN_lineal[15]));
-   AFN_lineal[13]->vertex_to.push_back(make_pair('w', AFN_lineal[14]));
-   AFN_lineal[13]->vertex_to.push_back(make_pair('h', AFN_lineal[15]));
-   AFN_lineal[13]->vertex_to.push_back(make_pair('i', AFN_lineal[15]));
-   AFN_lineal[13]->vertex_to.push_back(make_pair('l', AFN_lineal[15]));
-   AFN_lineal[13]->vertex_to.push_back(make_pair('e', AFN_lineal[15]));
-   AFN_lineal[24]->vertex_to.push_back(make_pair(char(238), AFN_lineal[13]));
-   AFN_lineal[22]->vertex_to.push_back(make_pair('i', AFN_lineal[22]));
-   AFN_lineal[22]->vertex_to.push_back(make_pair('f', AFN_lineal[22]));
-   AFN_lineal[21]->vertex_to.push_back(make_pair('i', AFN_lineal[22]));
-   AFN_lineal[23]->vertex_to.push_back(make_pair('i', AFN_lineal[22]));
-   AFN_lineal[23]->vertex_to.push_back(make_pair('f', AFN_lineal[22]));
-   AFN_lineal[23]->vertex_to.push_back(make_pair(char(238), AFN_lineal[25]));
-   AFN_lineal[21]->vertex_to.push_back(make_pair('f', AFN_lineal[23]));
-   AFN_lineal[20]->vertex_to.push_back(make_pair('i', AFN_lineal[21]));
-   AFN_lineal[20]->vertex_to.push_back(make_pair('f', AFN_lineal[22]));
-   AFN_lineal[24]->vertex_to.push_back(make_pair(char(238), AFN_lineal[20]));
+   AFN_lineal[18]->vertex_to.push_back(make_pair('i', AFN_lineal[17]));
+   AFN_lineal[18]->vertex_to.push_back(make_pair('f', AFN_lineal[17]));
+   AFN_lineal[18]->vertex_to.push_back(make_pair(char(238), AFN_lineal[27]));
+   AFN_lineal[16]->vertex_to.push_back(make_pair('f', AFN_lineal[18]));
+   AFN_lineal[15]->vertex_to.push_back(make_pair('i', AFN_lineal[16]));
+   AFN_lineal[15]->vertex_to.push_back(make_pair('f', AFN_lineal[17]));
+   AFN_lineal[26]->vertex_to.push_back(make_pair(char(238), AFN_lineal[15]));
+   AFN_lineal[21]->vertex_to.push_back(make_pair('e', AFN_lineal[21]));
+   AFN_lineal[21]->vertex_to.push_back(make_pair('l', AFN_lineal[21]));
+   AFN_lineal[21]->vertex_to.push_back(make_pair('s', AFN_lineal[21]));
+   AFN_lineal[20]->vertex_to.push_back(make_pair('e', AFN_lineal[21]));
+   AFN_lineal[22]->vertex_to.push_back(make_pair('e', AFN_lineal[21]));
+   AFN_lineal[22]->vertex_to.push_back(make_pair('l', AFN_lineal[21]));
+   AFN_lineal[24]->vertex_to.push_back(make_pair('e', AFN_lineal[21]));
+   AFN_lineal[24]->vertex_to.push_back(make_pair('l', AFN_lineal[21]));
+   AFN_lineal[24]->vertex_to.push_back(make_pair('s', AFN_lineal[21]));
+   AFN_lineal[24]->vertex_to.push_back(make_pair(char(238), AFN_lineal[27]));
+   AFN_lineal[23]->vertex_to.push_back(make_pair('e', AFN_lineal[24]));
+   AFN_lineal[23]->vertex_to.push_back(make_pair('l', AFN_lineal[21]));
+   AFN_lineal[23]->vertex_to.push_back(make_pair('s', AFN_lineal[21]));
+   AFN_lineal[22]->vertex_to.push_back(make_pair('s', AFN_lineal[23]));
+   AFN_lineal[20]->vertex_to.push_back(make_pair('l', AFN_lineal[22]));
+   AFN_lineal[20]->vertex_to.push_back(make_pair('s', AFN_lineal[21]));
+   AFN_lineal[19]->vertex_to.push_back(make_pair('e', AFN_lineal[20]));
+   AFN_lineal[19]->vertex_to.push_back(make_pair('l', AFN_lineal[21]));
+   AFN_lineal[19]->vertex_to.push_back(make_pair('s', AFN_lineal[21]));
+   AFN_lineal[26]->vertex_to.push_back(make_pair(char(238), AFN_lineal[19]));
+   AFN_lineal[25]->vertex_to.push_back(make_pair(char(32), AFN_lineal[25]));
+   AFN_lineal[26]->vertex_to.push_back(make_pair(char(238), AFN_lineal[25]));
 //-->finals
-   AFN_lineal[6]->token_id = "token-ident";
-   AFN_lineal[8]->token_id = "token-white";
-   AFN_lineal[9]->token_id = "token-white";
-   AFN_lineal[10]->token_id = "token-white";
-   AFN_lineal[12]->token_id = "token-number";
-   AFN_lineal[19]->token_id = "keyword-while";
-   AFN_lineal[23]->token_id = "keyword-if";
+   AFN_lineal[6]->token_id = "token";
+   AFN_lineal[14]->token_id = "keyword";
+   AFN_lineal[18]->token_id = "keyword";
+   AFN_lineal[24]->token_id = "keyword";
+   AFN_lineal[25]->token_id = "token";
    compiler_AFN = new AFN();
    compiler_AFN->set_init_state(init_vertex);
 }
@@ -314,15 +297,28 @@ void Scanner::Parse(){
   size_t pos = 0;
   string token;
   while (std::getline(file, line)){
-    if(line.find(' ') == string::npos){
+    cout << "Start of line: "<< endl << line << endl << endl;
+    bool got_token = true;
+    bool got_token_last = false;
+    while(!line.empty()){
       cout << line << endl;
-      compiler_AFN->simulationAFN(line);
-    }else{
-      while((pos = line.find(' ')) != string::npos){
-        token = line.substr(0, pos);
-        cout << token << endl;
-        compiler_AFN->simulationAFN(token);
-        line.erase(0, pos+1);
+      string c = line.substr(0,1);
+      got_token = compiler_AFN->simulationAFN(c, got_token);
+      line.erase(0,1);
+      got_token_last = !got_token;
+      while(!got_token_last && !line.empty()){
+        cout << "GO FOR THE MAXIMUM POWER " << endl;
+        cout << line << endl;
+        got_token = false;
+        string c = line.substr(0,1);
+        got_token = compiler_AFN->simulationAFN(c, got_token);
+        if(!got_token){
+          got_token_last = !got_token;
+          cout << "WELCOME BACK " << endl;
+          got_token = true;
+        }else{
+          line.erase(0,1);
+        }
       }
     }
   }

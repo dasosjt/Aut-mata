@@ -415,7 +415,7 @@ void Lexer::symbol_to_AFN(){
     primitive0_lang = primitive0_tree->getL();
     auto found = type_table.find(it->first);
     if(found->second != "set"){
-        primitive0_AFD = new AFD(""+it->first+".txt", found->second+"-"+it->first);
+        primitive0_AFD = new AFD(""+it->first+".txt", found->second);
         primitive0_AFD->createAFD(primitive0_tree->getRoot(), primitive0_lang);
         primitives_AFD.push_back(primitive0_AFD);
         cout << "AFD done! " << it->first << " : " << it->second << endl;
@@ -428,8 +428,10 @@ void Lexer::symbol_to_AFN(){
   AFN* big_one = new AFN();
   big_one->newfi_vertex(primitive0_AFD->get_state());
   cout << big_one->get_state() << endl;
-  copy(L.begin(), L.end(), ostream_iterator<char>(cout, " "));
-  cout << endl;
+  //copy(L.begin(), L.end(), ostream_iterator<char>(cout, " "));
+  //cout << endl;
+  string Lang(L.begin(), L.end());
+  printExpression(Lang);
   for(AFD* current : primitives_AFD){
     big_one->get_vertex_init()->vertex_to.push_back(make_pair(char(238), current->get_vertex_init()));
     for(vertex* v : current->get_allvertex_final()){
@@ -926,7 +928,7 @@ void Lexer::printExpression(string exprsn){
     }else if(i == char(241)){
       cout << '*';
     }else if(i == char(238)){
-      cout << "epsilon";
+      cout << " epsilon ";
     }else if(i == char(212)){
       cout << "{";
     }else if(i == char(213)){
@@ -936,11 +938,13 @@ void Lexer::printExpression(string exprsn){
     }else if(i == char(245)){
       cout << ")";
     }else if(i == char(9)){
-      cout << "tab_";
+      cout << " tab_ ";
     }else if(i == char(10)){
-      cout << "eol_";
+      cout << " eol_ ";
     }else if(i == char(13)){
-      cout << "carriage_return";
+      cout << " carriage_return ";
+    }else if(i == char(32)){
+      cout << " space ";
     }else{
      cout << i;
     }
