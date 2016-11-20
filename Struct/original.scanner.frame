@@ -1,0 +1,62 @@
+#include "tree.h"
+#include "afn.h"
+#include "scanner.h"
+#include "string"
+#include <iostream>
+#include <fstream>
+#include <utility>
+#include <vector>
+
+using namespace std;
+
+Scanner::Scanner(){
+  init_vertex = new vertex;
+  unsigned int c = 0;
+//-->size
+  AFN_lineal.reserve(n);
+  while(c<n){
+    vertex* v = new vertex;
+    AFN_lineal[c] = v;
+    AFN_lineal[c]->number_of = c;
+    c++;
+  }
+//-->init
+//-->transitions
+//-->finals
+   compiler_AFN = new AFN();
+   compiler_AFN->set_init_state(init_vertex);
+}
+
+void Scanner::Parse(){
+  string line;
+  ifstream file("texto.txt");
+  size_t pos = 0;
+  string token;
+  while (std::getline(file, line)){
+    cout << endl;
+    cout << "Start of line: "<< endl << line << endl << endl;
+    bool got_token = true;
+    bool got_token_last = false;
+    while(!line.empty()){
+      cout << line << endl;
+      string c = line.substr(0,1);
+      got_token = compiler_AFN->simulationAFN(c, got_token);
+      line.erase(0,1);
+      got_token_last = !got_token;
+      while(!got_token_last && !line.empty()){
+        cout << "GO FOR THE MAXIMUM POWER " << endl;
+        cout << line << endl;
+        got_token = false;
+        string c = line.substr(0,1);
+        got_token = compiler_AFN->simulationAFN(c, got_token);
+        if(!got_token){
+          got_token_last = !got_token;
+          cout << "WELCOME BACK " << endl;
+          got_token = true;
+        }else{
+          line.erase(0,1);
+        }
+      }
+    }
+  }
+}
