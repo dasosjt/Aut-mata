@@ -22,6 +22,14 @@ unordered_map<string,string> Lexer::symbol_table;
 unordered_map<string,string> Lexer::type_table;
 unordered_map<ll1_Key, string, ll1_KeyHasher> Lexer::ll1_table;
 
+/*ll1_table = {
+  { {"John", "Doe"}, "example"},
+  { {"Mary", "Sue"}, "another"}
+};
+for (auto it = ll1_table.begin(); it != ll1_table.end(); ++it){
+    cout << it->first.row << " with " << it->first.column << " : " << it->second << endl;
+}*/
+
 Lexer::Lexer(const char* file_name){
   this->file_name = file_name;
   point = char(176);
@@ -103,14 +111,6 @@ void Lexer::Parse(){
         error = ProductionsDecl(segment);
       }
   }
-  /*ll1_table = {
-    { {"John", "Doe"}, "example"},
-    { {"Mary", "Sue"}, "another"}
-  };
-  for (auto it = ll1_table.begin(); it != ll1_table.end(); ++it){
-      cout << it->first.row << " with " << it->first.column << " : " << it->second << endl;
-  }*/
-
   if(end_pos<file_contents.size()){
       string end = file_contents.substr(end_pos+4, file_contents.size()-end_pos-4);
   }
@@ -215,6 +215,8 @@ bool Lexer::ProductionsDecl(string expression){
       ident.erase(remove(ident.begin(), ident.end(), ' '), ident.end());
 
       if(Ident(ident)){
+        /*current_ident = ident;
+        add_type_table(ident);*/
         if(Expression(expression_production)){
           cout << "HEY " << endl;
         }
@@ -388,7 +390,7 @@ void Lexer::cout_symbol_table(){
   cout << "Current Ident: " << current_ident << endl;
   cout << "Type Decl: " << typeDecl << endl;
   cout << "symbol_table: " << endl;
-  for (auto it = symbol_table.begin(); it != symbol_table.end(); ++it){
+  for(auto it = symbol_table.begin(); it != symbol_table.end(); ++it){
       cout << " " << it->first << " : " ;
       printExpression(it->second);
       cout << endl;
@@ -588,6 +590,14 @@ bool Lexer::String(string expression){
         current_pbb_signs.push("p");
       }
       add_symbol_table(expression);
+    }else{
+      cout << endl;
+      type_table["id"+expression]="token";
+      cout_type_table();
+      cout << endl;
+      symbol_table["id"+expression]=expression;
+      cout_symbol_table();
+      cout << endl;
     }
     return true;
   }
