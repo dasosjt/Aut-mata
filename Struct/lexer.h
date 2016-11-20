@@ -13,6 +13,24 @@
 
 using namespace std;
 
+struct ll1_Key{
+  string row;
+  string column;
+
+  bool operator==(const ll1_Key &other) const{
+    return (row == other.row && column == other.column);
+  }
+};
+
+struct ll1_KeyHasher{
+  size_t operator()(const ll1_Key& k) const{
+    using std::size_t;
+    using std::hash;
+    using std::string;
+    return ((hash<string>()(k.row) ^ (hash<string>()(k.column) << 1)));
+  }
+};
+
 class Lexer{
   public:
     Lexer(const char* file_name);
@@ -77,6 +95,7 @@ class Lexer{
     static vector<char> constr_lang;
     static unordered_map<string,string> symbol_table;
     static unordered_map<string,string> type_table;
+    static unordered_map<ll1_Key, string, ll1_KeyHasher> ll1_table;
     stack<char> pbb_signs;
     stack<string> current_pbb_signs;
     int count_or;

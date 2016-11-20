@@ -16,5 +16,5 @@ ident = letter{letter|digit}.
 PRODUCTIONS
 E = E "+" T | T.
 T = T "*" F | F.
-F = "(" E ")" | id.
+F = "(" E ")" F | id.
 END Ejemplo

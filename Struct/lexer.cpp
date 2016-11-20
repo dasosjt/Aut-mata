@@ -20,6 +20,7 @@ Tree* Lexer::constr_tree;
 vector<char> Lexer::constr_lang;
 unordered_map<string,string> Lexer::symbol_table;
 unordered_map<string,string> Lexer::type_table;
+unordered_map<ll1_Key, string, ll1_KeyHasher> Lexer::ll1_table;
 
 Lexer::Lexer(const char* file_name){
   this->file_name = file_name;
@@ -102,6 +103,14 @@ void Lexer::Parse(){
         error = ProductionsDecl(segment);
       }
   }
+  /*ll1_table = {
+    { {"John", "Doe"}, "example"},
+    { {"Mary", "Sue"}, "another"}
+  };
+  for (auto it = ll1_table.begin(); it != ll1_table.end(); ++it){
+      cout << it->first.row << " with " << it->first.column << " : " << it->second << endl;
+  }*/
+
   if(end_pos<file_contents.size()){
       string end = file_contents.substr(end_pos+4, file_contents.size()-end_pos-4);
   }
@@ -273,15 +282,20 @@ bool Lexer::Term(string expression){
   factor0 = expression;
   unsigned int i = 0;
   bool stop = false;
+  while(expression.find_first_of(" ", 0) == 0){
+    cout << "Found space in first pos" << endl;
+    expression.erase(0,1);
+  }
   while(i<expression.size() && !stop){
-    if(expression.at(i) == '(' || expression.at(i) == '{' || expression.at(i) == '['){
+    cout <<  expression.at(i) << " at position " << i <<  endl;
+    if((expression.at(i) == '(' || expression.at(i) == '{' || expression.at(i) == '[') && quote_mark == 0){
       if(i>0 && pbb_signs.empty() && quote_mark%2 == 0){
         factor0 = expression.substr(0, i);
         factor1 = expression.substr(i, expression.size()-i);
         stop = true;
       }
       pbb_signs.push(expression.at(i));
-    } else if(expression.at(i) == ')' || expression.at(i) == '}' || expression.at(i) == ']'){
+    } else if((expression.at(i) == ')' || expression.at(i) == '}' || expression.at(i) == ']') && quote_mark == 0){
       pbb_signs.pop();
       if(i>0 && pbb_signs.empty() && quote_mark%2 == 0){
         factor0 = expression.substr(0, i+1);
@@ -293,24 +307,26 @@ bool Lexer::Term(string expression){
       if(quote_mark == 1){
         first_quote_pos = i;
       }
-      if(i>0 && pbb_signs.empty() && quote_mark%2 == 0){
+      if(i>0 && quote_mark == 2){
         if(first_quote_pos == 0){
+          cout << " first_quote_pos == 0" << endl;
           factor0 = expression.substr(0, i+1);
           factor1 = expression.substr(i+1, expression.size()-i-1);
-          cout << factor0 << endl;
-          cout << factor1 << endl;
-          stop = true;
+          cout << " F0 " << factor0 << endl;
+          cout << " F1 " <<factor1 << endl;
         }else{
+          cout << " first_quote_pos != 0" << endl;
           factor0 = expression.substr(0, first_quote_pos);
           factor1 = expression.substr(first_quote_pos, expression.size()-first_quote_pos);
-          cout << factor0 << endl;
-          cout << factor1 << endl;
-          stop = true;
+          cout << " F0 " << factor0 << endl;
+          cout << " F1 " << factor1 << endl;
         }
+        stop = true;
       }
     }
     i++;
   }
+  cout << pbb_signs.size() << endl;
   while(!pbb_signs.empty()){
     pbb_signs.pop();
   }
@@ -486,7 +502,7 @@ bool Lexer::Ident(string expression){
   expression.erase(remove(expression.begin(), expression.end(), ' '), expression.end());
   bool simulationAFD = ident_AFD->simulationAFD(expression);
   if(simulationAFD){
-    if(typeDecl != "token"){
+    if(typeDecl != "token" && typeDecl != "productions"){
       auto found = symbol_table.find(expression);
       if(found == symbol_table.end()){
           cout << "Not found " << expression << " in the symbol table" << endl;
@@ -520,8 +536,6 @@ bool Lexer::Set(string expression){
         if(mp == "+"){
           add_symbol_table("+");
         }else{
-          //auto found = symbol_table.find(current_ident);
-          //cout <<" Minus XXXXXXXXXXXXXXXXXXXXXXXXXXX " << found->second << endl;
           add_symbol_table("-");
         }
         if(Set(basicset1)){
@@ -563,16 +577,18 @@ bool Lexer::String(string expression){
   if(n%2 == 0 && n >= 2){
     cout << "YES" << endl;
     expression = expression.substr(1, expression.size() - 2);
-    if(typeDecl == "set"){
-      unsigned int n = expression.size()-1;
-      for(unsigned int i = 0; i<n; i++){
-        expression.insert(2*i+1, signToSpecialChar("|"));
-        //expression.insert(2*i+1,1,'|');
+    if(typeDecl != "productions"){
+      if(typeDecl == "set"){
+        unsigned int n = expression.size()-1;
+        for(unsigned int i = 0; i<n; i++){
+          expression.insert(2*i+1, signToSpecialChar("|"));
+          //expression.insert(2*i+1,1,'|');
+        }
+      }else{
+        current_pbb_signs.push("p");
       }
-    }else{
-      current_pbb_signs.push("p");
+      add_symbol_table(expression);
     }
-    add_symbol_table(expression);
     return true;
   }
   cout << "NO" << endl;
