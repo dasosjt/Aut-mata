@@ -9,7 +9,7 @@ TOKENS
 number = digit{digit}.
 ident = letter{letter|digit}.
 PRODUCTIONS
-E = E "+"" T | T.
-T = T "*"" F | F.
+E = E "+" T | T.
+T = T "*" F | F.
 F = "(" E ")" | id.
 END Ejemplo

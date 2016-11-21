@@ -592,6 +592,7 @@ bool Lexer::String(string expression){
       add_symbol_table(expression);
     }else{
       cout << endl;
+      current_ident = "id"+expression;
       type_table["id"+expression]="token";
       cout_type_table();
       cout << endl;
