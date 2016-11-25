@@ -113,7 +113,7 @@ void Lexer::Parse(){
         error = ProductionsDecl(segment);
       }
   }
-  asg->create_ProductionsRoot(productions_root);
+  asg->create_ProductionsRoot(productions_root); //All productions name
   if(productions_pos<file_contents.size() && end_pos<file_contents.size()){
       stringstream tokens(file_contents.substr(productions_pos+12, end_pos - productions_pos-12));
       while(getline(tokens, segment, char(10))){
@@ -220,13 +220,7 @@ bool Lexer::ProductionsToASG(string expression){
 
   ident.erase(remove(ident.begin(), ident.end(), ' '), ident.end());
 
-  while(expression_production.find("|") != string::npos){
-    int pos = expression_production.find("|");
-    cout << expression_production.substr(0, pos) << endl;
-    expression_production = expression_production.substr(pos+1, expression_production.size());
-    cout << expression_production << endl;
-  }
-  return true;
+  return asg->create_ASG(ident, expression_production);
 }
 
 bool Lexer::ProductionsDecl(string expression){
