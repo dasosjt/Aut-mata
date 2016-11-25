@@ -192,7 +192,7 @@ vertex_asg* ASG::vertex_byFactor(string expression){
 
     vector< vertex_asg* >::iterator production_name_it = find_if(begin(productions_root), end(productions_root), lambda);
     if(production_name_it != end(productions_root)){
-      //cout << "FOUND " << (*production_name_it)->id <<  endl;
+      cout << "FOUND " << (*production_name_it)->id <<  endl;
       return (*production_name_it);
     }else{
       vertex_asg* vertex_result = new vertex_asg;
