@@ -6,6 +6,7 @@
 #include "afn.h"
 #include "afdx.h"
 #include "afd.h"
+#include "asg.h"
 #include <iostream>
 #include <fstream>
 #include <unordered_map>
@@ -61,6 +62,7 @@ class Lexer{
     bool Expression(string expression);
     bool Factor(string expression);
     bool Term(string expression);
+    bool ProductionsToASG(string expression);
 
   private:
     ifstream file;
@@ -104,6 +106,8 @@ class Lexer{
     string file_contents;
     vector<AFD* > primitives_AFD;
     string cocol_name;
+    vector< string > productions_root;
+    static ASG* asg;
 };
 
 #endif

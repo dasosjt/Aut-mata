@@ -10,6 +10,7 @@
 #include <sstream>
 
 AFD* Lexer::ident_AFD;
+ASG* Lexer::asg;
 Tree* Lexer::ident_tree;
 vector<char> Lexer::ident_lang;
 AFD* Lexer::number_AFD;
@@ -60,6 +61,7 @@ Lexer::Lexer(const char* file_name){
   number_lang = number_tree->getL();
   number_AFD = new AFD("number_cocol.txt", "number_cocol");
   number_AFD->createAFD(number_tree->getRoot(), number_lang);
+  asg = new ASG();
 }
 
 void Lexer::Parse(){
@@ -109,6 +111,14 @@ void Lexer::Parse(){
       while(getline(tokens, segment, char(10))){
         //cout << segment << endl;
         error = ProductionsDecl(segment);
+      }
+  }
+  asg->create_ProductionsRoot(productions_root);
+  if(productions_pos<file_contents.size() && end_pos<file_contents.size()){
+      stringstream tokens(file_contents.substr(productions_pos+12, end_pos - productions_pos-12));
+      while(getline(tokens, segment, char(10))){
+        cout << segment << endl;
+        error = ProductionsToASG(segment);
       }
   }
   if(end_pos<file_contents.size()){
@@ -174,6 +184,51 @@ void Lexer::cleanMinusSigns(){
   }
 }
 
+bool Lexer::ProductionsToASG(string expression){
+  expression.pop_back();
+
+  unsigned int delimeter = expression.find('=');
+
+  string ident;
+  string attributes;
+  string sem_action;
+  string expression_production;
+  unsigned int del_first;
+  unsigned int del_last;
+
+  ident = expression.substr(0, delimeter);
+  cout << "Ident + Attributes + SemAction "<< ident << endl;
+  expression_production = expression.substr(delimeter+1, expression.size()-delimeter-1);
+  cout << "Expression "<< expression_production << endl;
+
+  del_first = ident.find("<.");
+  del_last = ident.find(".>");
+
+  if(del_first < ident.size() && del_last < ident.size()){
+    attributes = ident.substr(del_first, del_last-del_first+2);
+    ident.erase(del_first, del_last-del_first+2);
+    cout << "Attributes " << attributes << endl;
+  }
+
+  del_first = ident.find("(.");
+  del_last = ident.find(".)");
+  if(del_first < ident.size() && del_last < ident.size()){
+    sem_action = ident.substr(del_first, del_last-del_first+2);
+    ident.erase(del_first, del_last-del_first+2);
+    cout << "SemAction " << sem_action << endl;
+  }
+
+  ident.erase(remove(ident.begin(), ident.end(), ' '), ident.end());
+
+  while(expression_production.find("|") != string::npos){
+    int pos = expression_production.find("|");
+    cout << expression_production.substr(0, pos) << endl;
+    expression_production = expression_production.substr(pos+1, expression_production.size());
+    cout << expression_production << endl;
+  }
+  return true;
+}
+
 bool Lexer::ProductionsDecl(string expression){
   cout << expression << endl;
   typeDecl = "productions";
@@ -215,6 +270,10 @@ bool Lexer::ProductionsDecl(string expression){
       ident.erase(remove(ident.begin(), ident.end(), ' '), ident.end());
 
       if(Ident(ident)){
+        productions_root.push_back(ident);
+        cout << "Productions until now "<< endl;
+        copy(productions_root.begin(), productions_root.end(), ostream_iterator< string >(cout, ", "));
+        cout << endl;
         /*current_ident = ident;
         add_type_table(ident);*/
         if(Expression(expression_production)){
@@ -290,14 +349,14 @@ bool Lexer::Term(string expression){
   }
   while(i<expression.size() && !stop){
     cout <<  expression.at(i) << " at position " << i <<  endl;
-    if((expression.at(i) == '(' || expression.at(i) == '{' || expression.at(i) == '[') && quote_mark == 0){
+    if((expression.at(i) == '(' || expression.at(i) == '{' || expression.at(i) == '[') && quote_mark%2 == 0){
       if(i>0 && pbb_signs.empty() && quote_mark%2 == 0){
         factor0 = expression.substr(0, i);
         factor1 = expression.substr(i, expression.size()-i);
         stop = true;
       }
       pbb_signs.push(expression.at(i));
-    } else if((expression.at(i) == ')' || expression.at(i) == '}' || expression.at(i) == ']') && quote_mark == 0){
+    } else if((expression.at(i) == ')' || expression.at(i) == '}' || expression.at(i) == ']') && quote_mark%2 == 0){
       pbb_signs.pop();
       if(i>0 && pbb_signs.empty() && quote_mark%2 == 0){
         factor0 = expression.substr(0, i+1);
@@ -309,7 +368,7 @@ bool Lexer::Term(string expression){
       if(quote_mark == 1){
         first_quote_pos = i;
       }
-      if(i>0 && quote_mark == 2){
+      if(i>0 && quote_mark == 2 && pbb_signs.empty()){
         if(first_quote_pos == 0){
           cout << " first_quote_pos == 0" << endl;
           factor0 = expression.substr(0, i+1);
@@ -768,15 +827,20 @@ bool Lexer::TokenTerm(string expression){
   tokenfactor0 = expression;
   unsigned int i = 0;
   bool stop = false;
+  while(expression.find_first_of(" ", 0) == 0){
+    cout << "Found space in first pos" << endl;
+    expression.erase(0,1);
+  }
   while(i<expression.size() && !stop){
-    if(expression.at(i) == '(' || expression.at(i) == '{' || expression.at(i) == '['){
+    cout <<  expression.at(i) << " at position " << i <<  endl;
+    if((expression.at(i) == '(' || expression.at(i) == '{' || expression.at(i) == '[') && quote_mark%2 == 0){
       if(i>0 && pbb_signs.empty() && quote_mark%2 == 0){
         tokenfactor0 = expression.substr(0, i);
         tokenfactor1 = expression.substr(i, expression.size()-i);
         stop = true;
       }
       pbb_signs.push(expression.at(i));
-    } else if(expression.at(i) == ')' || expression.at(i) == '}' || expression.at(i) == ']'){
+    } else if((expression.at(i) == ')' || expression.at(i) == '}' || expression.at(i) == ']') && quote_mark%2 == 0){
       pbb_signs.pop();
       if(i>0 && pbb_signs.empty() && quote_mark%2 == 0){
         tokenfactor0 = expression.substr(0, i+1);
@@ -788,20 +852,21 @@ bool Lexer::TokenTerm(string expression){
       if(quote_mark == 1){
         first_quote_pos = i;
       }
-      if(i>0 && pbb_signs.empty() && quote_mark%2 == 0){
+      if(i>0 && quote_mark == 2 && pbb_signs.empty()){
         if(first_quote_pos == 0){
+          cout << " first_quote_pos == 0" << endl;
           tokenfactor0 = expression.substr(0, i+1);
           tokenfactor1 = expression.substr(i+1, expression.size()-i-1);
-          cout << tokenfactor0 << endl;
-          cout << tokenfactor1 << endl;
-          stop = true;
+          cout << " F0 " << tokenfactor0 << endl;
+          cout << " F1 " << tokenfactor1 << endl;
         }else{
+          cout << " first_quote_pos != 0" << endl;
           tokenfactor0 = expression.substr(0, first_quote_pos);
           tokenfactor1 = expression.substr(first_quote_pos, expression.size()-first_quote_pos);
-          cout << tokenfactor0 << endl;
-          cout << tokenfactor1 << endl;
-          stop = true;
+          cout << " F0 " << tokenfactor0 << endl;
+          cout << " F1 " << tokenfactor1 << endl;
         }
+        stop = true;
       }
     }
     i++;

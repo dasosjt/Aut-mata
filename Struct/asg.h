@@ -14,6 +14,7 @@ struct vertex_asg{
 class ASG{
   public:
     ASG();
+    void create_ProductionsRoot(vector< string > productions);
   private:
     vertex_asg* root;
     vector< vertex_asg* > productions_root;
