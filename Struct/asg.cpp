@@ -33,7 +33,7 @@ bool ASG::create_ASG(string production_name, string expression){
 }
 
 vertex_asg* ASG::vertex_byExpression(string expression){
-  cout << "Expression looking for | " << expression << endl;
+  cout << "Expression looking for |: " << expression << endl;
   string productionterm0;
   string productionterm1;
   unsigned int i = 0;
@@ -71,7 +71,7 @@ vertex_asg* ASG::vertex_byExpression(string expression){
 }
 
 vertex_asg* ASG::vertex_byTerm(string expression){
-  cout << "Term looking for ^ " << expression << endl;
+  cout << "Term looking for ^: " << expression << endl;
   string factor0;
   string factor1;
   int quote_mark = 0;
@@ -141,7 +141,7 @@ vertex_asg* ASG::vertex_byTerm(string expression){
 }
 
 vertex_asg* ASG::vertex_byFactor(string expression){
-  cout << "Factor looking for * ? or Ident " << expression << endl;
+  cout << "Factor looking for * ? or Ident: " << expression << endl;
   string productionterm0;
   productionterm0 = expression.substr(1, expression.size()-2);
   if(expression.at(0) == '(' && expression.at(1) == '.' && expression.at(expression.size()-2) == '.' && expression.at(expression.size()-1) == ')'){
@@ -184,15 +184,16 @@ vertex_asg* ASG::vertex_byFactor(string expression){
       cout << "Attributes " << attributes << endl;
     }
 
-    possible_production_name = expression;
+    expression.erase(remove(expression.begin(), expression.end(), ' '), expression.end());
+    string possible_production_name = expression;
 
-    auto lambda = [production_name](const vertex_asg* current) {
-      return current->id == production_name;
+    auto lambda = [possible_production_name](const vertex_asg* current) {
+      return current->id == possible_production_name;
     };
 
     vector< vertex_asg* >::iterator production_name_it = find_if(begin(productions_root), end(productions_root), lambda);
     if(production_name_it != end(productions_root)){
-      cout << "FOUND " << (*production_name_it)->id <<  endl;
+      cout << "FOUND a non-Terminal " << (*production_name_it)->id <<  endl;
       return (*production_name_it);
     }else{
       vertex_asg* vertex_result = new vertex_asg;

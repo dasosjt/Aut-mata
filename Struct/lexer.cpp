@@ -119,6 +119,7 @@ void Lexer::Parse(){
       while(getline(tokens, segment, char(10))){
         cout << segment << endl;
         error = ProductionsToASG(segment);
+        cout << "Done " << segment << endl << endl;
       }
   }
   if(end_pos<file_contents.size()){
