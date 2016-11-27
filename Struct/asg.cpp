@@ -86,10 +86,16 @@ void ASG::setFollow(){
   productions_root[0]->follow.push_back("$");
 
   for(vertex_asg* current : productions_root){
-    cout << "Current " << current->id << endl;
+    cout << "R2 Current " << current->id << endl;
     followOfR2(current->vertex_to[0]);
+  }
+
+  for(vertex_asg* current : productions_root){
+    cout << "R3 Current " << current->id << endl;
+    current_production = current;
     followOfR3(current);
   }
+
   cout << "Final Follow " << endl;
   for(vertex_asg* current : productions_root){
     cout << current->id << " : ";
@@ -136,7 +142,40 @@ void ASG::followOfR2(vertex_asg* current){
 }
 
 void ASG::followOfR3(vertex_asg* current){
+  cout << "Follow R3 " << current->id << endl;
+  if(current->id == current_production->id){
+    followOfR3(current->vertex_to[0]);
+  }else if(current->id == "|"){
+    followOfR3(current->vertex_to[0]);
+    followOfR3(current->vertex_to[1]);
+  }else if(current->id == "^"){
+    string id = current->vertex_to[1]->id;
+    auto lambda = [id](const vertex_asg* current) {
+      return current->id == id;
+    };
+    vector< vertex_asg* >::iterator production_name_it = find_if(begin(productions_root), end(productions_root), lambda);
+    if(id != "^" && production_name_it != end(productions_root)){
+      if(current_production->id != id){
+          cout << "Found last non-Terminal of " << current_production->id << " : " << id << endl;
+          for(string follow0 : current_production->follow){
+            current->vertex_to[1]->follow.push_back(follow0);
+          }
 
+          current->vertex_to[0]->follow.erase(unique(begin(current->vertex_to[0]->follow), end(current->vertex_to[0]->follow)), end(current->vertex_to[0]->follow));
+
+          if(find(begin(current->vertex_to[1]->first), end(current->vertex_to[1]->first), "epsilon") != end(current->vertex_to[1]->first)){
+            for(string follow0 : current->vertex_to[1]->follow){
+              if(follow0 != "epsilon"){
+                current->vertex_to[0]->follow.push_back(follow0);
+              }
+            }
+            current->vertex_to[1]->follow.erase(unique(begin(current->vertex_to[1]->follow), end(current->vertex_to[1]->follow)), end(current->vertex_to[1]->follow));
+          }
+      }
+    }else{
+      followOfR3(current->vertex_to[1]);
+    }
+  }
 }
 
 vertex_asg* ASG::vertex_byExpression(string expression){

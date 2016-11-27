@@ -27,6 +27,7 @@ class ASG{
 
   private:
     vertex_asg* root;
+    vertex_asg* current_production;
     vector< vertex_asg* > productions_root;
     vector< vector< string > > productions_first;
     stack<char> pbb_signs;
