@@ -19,9 +19,16 @@ class ASG{
     vertex_asg* vertex_byTerm(string expression);
     vertex_asg* vertex_byFactor(string expression);
     bool create_ASG(string production_name, string expression);
+    void setFirst();
+    vector< string > firstOf(vertex_asg* current);
+    void setFollow();
+    void followOfR2(vertex_asg* current);
+    void followOfR3(vertex_asg* current);
+
   private:
     vertex_asg* root;
     vector< vertex_asg* > productions_root;
+    vector< vector< string > > productions_first;
     stack<char> pbb_signs;
     stack<string> current_pbb_signs;
     int count_or;

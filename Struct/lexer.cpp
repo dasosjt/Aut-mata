@@ -121,6 +121,7 @@ void Lexer::Parse(){
         error = ProductionsToASG(segment);
         cout << "Done " << segment << endl << endl;
       }
+      setFirstFollowASG();
   }
   if(end_pos<file_contents.size()){
       string end = file_contents.substr(end_pos+4, file_contents.size()-end_pos-4);
@@ -222,6 +223,11 @@ bool Lexer::ProductionsToASG(string expression){
   ident.erase(remove(ident.begin(), ident.end(), ' '), ident.end());
 
   return asg->create_ASG(ident, expression_production);
+}
+
+void Lexer::setFirstFollowASG(){
+  asg->setFirst();
+  asg->setFollow();
 }
 
 bool Lexer::ProductionsDecl(string expression){
@@ -378,6 +384,18 @@ bool Lexer::Term(string expression){
           cout << " F1 " << factor1 << endl;
         }
         stop = true;
+      }else if(expression.at(i) == ' '){
+        if(i>0 && quote_mark%2 == 0 && pbb_signs.empty()){
+          cout << " found space in the middle" << endl;
+          factor0 = expression.substr(0, i+1);
+          factor1 = expression.substr(i+1, expression.size()-i-1);
+          while(factor1.find_first_of(" ", 0) == 0){
+            factor1.erase(0,1);
+          }
+          cout << " F0 " << factor0 << endl;
+          cout << " F1 " <<factor1 << endl;
+          stop = true;
+        }
       }
     }
     i++;
@@ -862,6 +880,18 @@ bool Lexer::TokenTerm(string expression){
           cout << " F1 " << tokenfactor1 << endl;
         }
         stop = true;
+      }else if(expression.at(i) == ' '){
+        if(i>0 && quote_mark%2 == 0 && pbb_signs.empty()){
+          cout << " found space in the middle" << endl;
+          tokenfactor0 = expression.substr(0, i+1);
+          tokenfactor1 = expression.substr(i+1, expression.size()-i-1);
+          while(tokenfactor1.find_first_of(" ", 0) == 0){
+            tokenfactor1.erase(0,1);
+          }
+          cout << " F0 " << tokenfactor0 << endl;
+          cout << " F1 " << tokenfactor1 << endl;
+          stop = true;
+        }
       }
     }
     i++;

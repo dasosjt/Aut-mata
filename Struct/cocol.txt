@@ -14,7 +14,9 @@ TOKENS
 whitespace = {space}.
 ident = letter{letter|digit}.
 PRODUCTIONS
-E = E "+" T | T.
-T = T "*" F | F.
-F = "(" E ")" F | id.
+E = T Ep.
+Ep = "+" T Ep | epsilon.
+T = F Tp.
+Tp = "*" F Tp | epsilon.
+F = "(" E ")" | id.
 END Ejemplo

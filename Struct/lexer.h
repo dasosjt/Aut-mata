@@ -63,6 +63,7 @@ class Lexer{
     bool Factor(string expression);
     bool Term(string expression);
     bool ProductionsToASG(string expression);
+    void setFirstFollowASG();
 
   private:
     ifstream file;
