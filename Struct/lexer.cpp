@@ -122,6 +122,7 @@ void Lexer::Parse(){
         cout << "Done " << segment << endl << endl;
       }
       setFirstFollowASG();
+      createLLTable();
   }
   if(end_pos<file_contents.size()){
       string end = file_contents.substr(end_pos+4, file_contents.size()-end_pos-4);
@@ -228,6 +229,8 @@ bool Lexer::ProductionsToASG(string expression){
 void Lexer::setFirstFollowASG(){
   asg->setFirst();
   asg->setFollow();
+  //asg->printFirst();
+  //asg->printFollow();
 }
 
 bool Lexer::ProductionsDecl(string expression){
@@ -290,6 +293,55 @@ bool Lexer::ProductionsDecl(string expression){
     cout << "fuckin.. punto" << endl;
   }
   return false;
+}
+
+void Lexer::createLLTable(){
+  cout << endl << endl << endl;
+  cout << "LL(1) TABLE  " << endl;
+  for(vertex_asg* current : asg->get_ProductionsRoot()){
+    cout << "Production  " << current->id << endl;
+    cout << "   First : " ;
+    for(string first0 : current->first){
+      cout << first0 << ", ";
+    }
+    cout << endl;
+    cout << "   Follow : " ;
+    for(string follow0 : current->follow){
+      cout << follow0 << ", ";
+    }
+    cout << endl;
+    if(find(begin(current->first), end(current->first), "epsilon") != end(current->first)){
+      for(string follow0 : current->follow){
+        ll1_table[{current->id, follow0}] = "epsilon";
+      }
+    }
+    for(string first0 : current->first){
+      if(first0 != "epsilon"){
+          ll1_table[{current->id, first0}] = searchProduction(current->vertex_to[0], first0);
+      }
+    }
+  }
+  for (auto it = ll1_table.begin(); it != ll1_table.end(); ++it){
+      cout << it->first.row << " with " << it->first.column << " : " << it->second << endl;
+  }
+}
+
+string Lexer::searchProduction(vertex_asg* current, string first){
+  if(!current->vertex_to.empty()){
+    if(current->id == "|"){
+      string temp = searchProduction(current->vertex_to[0], first);
+      if(temp == ""){
+        return searchProduction(current->vertex_to[1], first);
+      }else{
+        return temp;
+      }
+    }else if(current->id == "^"){
+      if(current->vertex_to[0]->id == first || find(begin(current->vertex_to[0]->first), end(current->vertex_to[0]->first), first) != end(current->vertex_to[0]->first)){
+        return current->production_string;
+      }
+    }
+  }
+  return "";
 }
 
 bool Lexer::Expression(string expression){

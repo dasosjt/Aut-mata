@@ -22,6 +22,10 @@ void ASG::create_ProductionsRoot(vector< string > productions){
   }
 }
 
+vector< vertex_asg* > ASG::get_ProductionsRoot(){
+  return this->productions_root;
+}
+
 bool ASG::create_ASG(string production_name, string expression){
   auto lambda = [production_name](const vertex_asg* current) {
     return current->id == production_name;
@@ -33,17 +37,30 @@ bool ASG::create_ASG(string production_name, string expression){
   };
 }
 
-void ASG::setFirst(){
-  cout << "Set First " << endl;
-  for(vertex_asg* current : productions_root){
-      current->first = firstOf(current);
-  }
+void ASG::printFirst(){
   cout << "Final First " << endl;
   for(vertex_asg* current : productions_root){
     cout << current->id << " : ";
     copy(begin(current->first), end(current->first), std::ostream_iterator<string>(std::cout, ", "));
     cout << endl;
   }
+};
+
+void ASG::printFollow(){
+  cout << "Final Follow " << endl;
+  for(vertex_asg* current : productions_root){
+    cout << current->id << " : ";
+    copy(begin(current->follow), end(current->follow), std::ostream_iterator<string>(std::cout, ", "));
+    cout << endl;
+  }
+}
+
+void ASG::setFirst(){
+  cout << "Set First " << endl;
+  for(vertex_asg* current : productions_root){
+      current->first = firstOf(current);
+  }
+  this->printFirst();
 }
 
 vector< string > ASG::firstOf(vertex_asg* current){
@@ -96,12 +113,7 @@ void ASG::setFollow(){
     followOfR3(current);
   }
 
-  cout << "Final Follow " << endl;
-  for(vertex_asg* current : productions_root){
-    cout << current->id << " : ";
-    copy(begin(current->follow), end(current->follow), std::ostream_iterator<string>(std::cout, ", "));
-    cout << endl;
-  }
+  this->printFollow();
 }
 
 void ASG::followOfR2(vertex_asg* current){
@@ -294,6 +306,7 @@ vertex_asg* ASG::vertex_byTerm(string expression){
     vertex_result->id = "^";
     vertex_result->production_root = false;
     cout << "New node ASG with id ^" << endl;
+    vertex_result->production_string = expression;
     vertex_result->vertex_to.push_back(vertex_byFactor(factor0)); //vertice 1
     vertex_result->vertex_to.push_back(vertex_byTerm(factor1)); //vertice 2
     return vertex_result;

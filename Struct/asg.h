@@ -5,6 +5,7 @@ using namespace std;
 
 struct vertex_asg{
   string id;
+  string production_string;
   vector< string > first;
   vector< string > follow;
   bool production_root;
@@ -24,6 +25,9 @@ class ASG{
     void setFollow();
     void followOfR2(vertex_asg* current);
     void followOfR3(vertex_asg* current);
+    void printFirst();
+    void printFollow();
+    vector< vertex_asg* > get_ProductionsRoot();
 
   private:
     vertex_asg* root;

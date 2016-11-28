@@ -64,6 +64,8 @@ class Lexer{
     bool Term(string expression);
     bool ProductionsToASG(string expression);
     void setFirstFollowASG();
+    void createLLTable();
+    string searchProduction(vertex_asg* current, string first);
 
   private:
     ifstream file;
