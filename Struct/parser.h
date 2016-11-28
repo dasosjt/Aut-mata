@@ -15,6 +15,8 @@ class Parser{
 
   private:
     vector< string > nextTokens;
+    string id;
+    string $;
 };
 
 #endif

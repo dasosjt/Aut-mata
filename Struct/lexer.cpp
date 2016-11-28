@@ -172,17 +172,17 @@ void Lexer::writeToFileProductions(const char* file_name){
   string methods;
   for(vertex_asg* current : productions_root0){
     //cout << "    void Scanner::" << current->id << "(){\n";
-    methods = "bool Scanner::" + current->id + "(){\n";
+    methods = "bool Parser::" + current->id + "(){\n";
     productionsf[current->id] = methods;
   }
 
   for (auto it = ll1_table.begin(); it != ll1_table.end(); ++it){
     cout << it->first.row << endl;
-    productionsf[it->first.row] += "\n  if(la() == "+it->first.column+"){\n"+productionsToText(it->second)+"   }";
+    productionsf[it->first.row] += "  if(la() == "+it->first.column+"){\n"+productionsToText(it->second, 4)+"  }\n";
   }
 
   for(vertex_asg* current : productions_root0){
-    methods = "\n}\n";
+    methods = "}\n";
     productionsf[current->id] += methods;
   }
   methods = "";
@@ -202,23 +202,41 @@ void Lexer::writeToFileProductions(const char* file_name){
   write.close();
 }
 
-string Lexer::productionsToText(vertex_asg* current){
+string Lexer::productionsToText(vertex_asg* current, int ident){
   cout << current->id << endl;
   string result;
+  string tab;
+  for(unsigned int i = 0; i<ident; i++){
+    tab += " ";
+  }
   if(current->id == "^"){
     string id = current->vertex_to[0]->id;
     auto lambda = [id](const vertex_asg* current) {
       return current->id == id;
     };
     vector< vertex_asg* >::iterator production_name_it = find_if(begin(productions_root0), end(productions_root0), lambda);
-    if(production_name_it != end(productions_root0)){
-      result += "       if("+id+"()){\n"+productionsToText(current->vertex_to[1])+"  }\n";
+    if(production_name_it != end(productions_root0) && ident == 4){
+      result += tab+"consume();\n";
+      result += tab+"if("+id+"()){\n";
+      result += productionsToText(current->vertex_to[1], ident+2);
+      result += tab+"}\n";
+    }else if(production_name_it != end(productions_root0)){
+      result += tab+"if("+id+"()){\n";
+      result += productionsToText(current->vertex_to[1], ident+2);
+      result += tab+"}\n";
+    }else if(ident > 4 && current->vertex_to[1]->id != ""){
+      result += tab+"if(la() == "+current->vertex_to[0]->id+"){\n";
+      result += tab+"  consume();\n";
+      result += productionsToText(current->vertex_to[1], ident+2);
+      result += tab+"}\n";
+    }
+    else if(ident > 4 && current->vertex_to[1]->id == ""){
+      result += tab+"if(la() == "+current->vertex_to[0]->id+"){\n";
+      result += productionsToText(current->vertex_to[1], ident+2);
+      result += tab+"}\n";
     }else{
-      if(current->vertex_to[1]->id == "^"){
-          result += "       consumeconc();\n"+productionsToText(current->vertex_to[1])+"\n";
-      }else{
-        result += productionsToText(current->vertex_to[1])+"\n";
-      }
+      result += tab+"consume();\n";
+      result += productionsToText(current->vertex_to[1], ident+2);
     }
   }else{
     string id = current->id;
@@ -227,9 +245,18 @@ string Lexer::productionsToText(vertex_asg* current){
     };
     vector< vertex_asg* >::iterator production_name_it = find_if(begin(productions_root0), end(productions_root0), lambda);
     if(production_name_it != end(productions_root0)){
-      result += "       if("+id+"()){\n        return true;\n    }\n";
+      result += tab+"  if("+current->id+"()){\n";
+      result += tab+"    return true;\n";
+      result += tab+"  }\n";
+    }else if(ident > 4 && current->id != ""){
+      result += tab+"  if(la() == "+current->id+"){\n";
+      result += tab+"    consume();\n";
+      result += tab+"    return true;\n";
+      result += tab+"  }\n";
     }else{
-      result += "       consumeeps();\n        return true;\n";
+      result += tab+"consum();\n";
+      result += tab+"return true;\n";
+      return result;
     }
   }
   return result;
