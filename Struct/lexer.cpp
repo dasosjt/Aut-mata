@@ -125,8 +125,10 @@ void Lexer::Parse(){
         cout << "Done " << segment << endl << endl;
       }
       setFirstFollowASG();
+      productions_root0 = asg->get_ProductionsRoot();
       createLLTable();
       writeToFileProductionsHPP("parser.h");
+      writeToFileProductions("parser.cpp");
   }
   if(end_pos<file_contents.size()){
       string end = file_contents.substr(end_pos+4, file_contents.size()-end_pos-4);
@@ -144,8 +146,52 @@ void Lexer::writeToFileProductionsHPP(const char* file_name){
   //cout << file_contents << endl;
   unsigned int size = file_contents.find("//-->methods");
   string methods;
-  for(vertex_asg* current : asg->get_ProductionsRoot()){
-    methods += "    void " + current->id + "();\n";
+  for(vertex_asg* current : productions_root0){
+    methods += "    bool " + current->id + "();\n";
+  }
+
+  file_contents.insert(size+13, methods);
+  //cout << file_contents << endl;
+
+  ofstream write(file_name);
+  write << file_contents;
+  write.close();
+}
+
+void Lexer::writeToFileProductions(const char* file_name){
+  string file_contents;
+  string temp;
+  scannerh_file.open(file_name);
+  if(scannerh_file.is_open()){
+    file_contents = {istreambuf_iterator<char>(scannerh_file), istreambuf_iterator<char>()};
+    scannerh_file.close();
+  }
+  //cout << file_contents << endl;
+  unsigned int size = file_contents.find("//-->methods");
+
+  string methods;
+  for(vertex_asg* current : productions_root0){
+    //cout << "    void Scanner::" << current->id << "(){\n";
+    methods = "bool Scanner::" + current->id + "(){\n";
+    productionsf[current->id] = methods;
+  }
+
+  for (auto it = ll1_table.begin(); it != ll1_table.end(); ++it){
+    cout << it->first.row << endl;
+    productionsf[it->first.row] += "\n  if(la() == "+it->first.column+"){\n"+productionsToText(it->second)+"   }";
+  }
+
+  for(vertex_asg* current : productions_root0){
+    methods = "\n}\n";
+    productionsf[current->id] += methods;
+  }
+  methods = "";
+  for(vertex_asg* current : productions_root0){
+    methods += productionsf[current->id];
+  }
+
+  for (auto it = productionsf.begin(); it != productionsf.end(); ++it){
+    cout << it->first << " : " << endl << it->second << endl;
   }
 
   file_contents.insert(size+13, methods);
@@ -154,6 +200,39 @@ void Lexer::writeToFileProductionsHPP(const char* file_name){
   ofstream write(file_name);
   write << file_contents;
   write.close();
+}
+
+string Lexer::productionsToText(vertex_asg* current){
+  cout << current->id << endl;
+  string result;
+  if(current->id == "^"){
+    string id = current->vertex_to[0]->id;
+    auto lambda = [id](const vertex_asg* current) {
+      return current->id == id;
+    };
+    vector< vertex_asg* >::iterator production_name_it = find_if(begin(productions_root0), end(productions_root0), lambda);
+    if(production_name_it != end(productions_root0)){
+      result += "       if("+id+"()){\n"+productionsToText(current->vertex_to[1])+"  }\n";
+    }else{
+      if(current->vertex_to[1]->id == "^"){
+          result += "       consumeconc();\n"+productionsToText(current->vertex_to[1])+"\n";
+      }else{
+        result += productionsToText(current->vertex_to[1])+"\n";
+      }
+    }
+  }else{
+    string id = current->id;
+    auto lambda = [id](const vertex_asg* current) {
+      return current->id == id;
+    };
+    vector< vertex_asg* >::iterator production_name_it = find_if(begin(productions_root0), end(productions_root0), lambda);
+    if(production_name_it != end(productions_root0)){
+      result += "       if("+id+"()){\n        return true;\n    }\n";
+    }else{
+      result += "       consumeeps();\n        return true;\n";
+    }
+  }
+  return result;
 }
 
 void Lexer::cleanMinusSigns(){

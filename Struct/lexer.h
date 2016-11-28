@@ -67,6 +67,8 @@ class Lexer{
     void createLLTable();
     vertex_asg* searchProduction(vertex_asg* current, string first);
     void writeToFileProductionsHPP(const char* file_name);
+    void writeToFileProductions(const char* file_name);
+    string productionsToText(vertex_asg* current);
 
   private:
     ifstream file;
@@ -114,6 +116,8 @@ class Lexer{
     static ASG* asg;
     static fstream scannerh_file;
     vertex_asg* temp_vertex;
+    vector< vertex_asg* > productions_root0;
+    unordered_map<string, string> productionsf;
 };
 
 #endif
