@@ -65,7 +65,8 @@ class Lexer{
     bool ProductionsToASG(string expression);
     void setFirstFollowASG();
     void createLLTable();
-    string searchProduction(vertex_asg* current, string first);
+    vertex_asg* searchProduction(vertex_asg* current, string first);
+    void writeToFileProductionsHPP(const char* file_name);
 
   private:
     ifstream file;
@@ -100,7 +101,7 @@ class Lexer{
     static vector<char> constr_lang;
     static unordered_map<string,string> symbol_table;
     static unordered_map<string,string> type_table;
-    static unordered_map<ll1_Key, string, ll1_KeyHasher> ll1_table;
+    static unordered_map<ll1_Key, vertex_asg*, ll1_KeyHasher> ll1_table;
     stack<char> pbb_signs;
     stack<string> current_pbb_signs;
     int count_or;
@@ -111,6 +112,8 @@ class Lexer{
     string cocol_name;
     vector< string > productions_root;
     static ASG* asg;
+    static fstream scannerh_file;
+    vertex_asg* temp_vertex;
 };
 
 #endif

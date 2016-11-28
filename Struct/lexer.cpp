@@ -8,6 +8,7 @@
 #include <iterator>
 #include <unordered_map>
 #include <sstream>
+#include <fstream>
 
 AFD* Lexer::ident_AFD;
 ASG* Lexer::asg;
@@ -21,7 +22,8 @@ Tree* Lexer::constr_tree;
 vector<char> Lexer::constr_lang;
 unordered_map<string,string> Lexer::symbol_table;
 unordered_map<string,string> Lexer::type_table;
-unordered_map<ll1_Key, string, ll1_KeyHasher> Lexer::ll1_table;
+unordered_map<ll1_Key, vertex_asg*, ll1_KeyHasher> Lexer::ll1_table;
+fstream Lexer::scannerh_file;
 
 /*ll1_table = {
   { {"John", "Doe"}, "example"},
@@ -32,6 +34,7 @@ for (auto it = ll1_table.begin(); it != ll1_table.end(); ++it){
 }*/
 
 Lexer::Lexer(const char* file_name){
+  temp_vertex = new vertex_asg;
   this->file_name = file_name;
   point = char(176);
   or_operation = char(179);
@@ -123,10 +126,34 @@ void Lexer::Parse(){
       }
       setFirstFollowASG();
       createLLTable();
+      writeToFileProductionsHPP("parser.h");
   }
   if(end_pos<file_contents.size()){
       string end = file_contents.substr(end_pos+4, file_contents.size()-end_pos-4);
   }
+}
+
+void Lexer::writeToFileProductionsHPP(const char* file_name){
+  string file_contents;
+  string temp;
+  scannerh_file.open(file_name);
+  if(scannerh_file.is_open()){
+    file_contents = {istreambuf_iterator<char>(scannerh_file), istreambuf_iterator<char>()};
+    scannerh_file.close();
+  }
+  //cout << file_contents << endl;
+  unsigned int size = file_contents.find("//-->methods");
+  string methods;
+  for(vertex_asg* current : asg->get_ProductionsRoot()){
+    methods += "    void " + current->id + "();\n";
+  }
+
+  file_contents.insert(size+13, methods);
+  cout << file_contents << endl;
+
+  ofstream write(file_name);
+  write << file_contents;
+  write.close();
 }
 
 void Lexer::cleanMinusSigns(){
@@ -312,7 +339,7 @@ void Lexer::createLLTable(){
     cout << endl;
     if(find(begin(current->first), end(current->first), "epsilon") != end(current->first)){
       for(string follow0 : current->follow){
-        ll1_table[{current->id, follow0}] = "epsilon";
+        ll1_table[{current->id, follow0}] = searchProduction(current->vertex_to[0], "epsilon");
       }
     }
     for(string first0 : current->first){
@@ -322,29 +349,33 @@ void Lexer::createLLTable(){
     }
   }
   for (auto it = ll1_table.begin(); it != ll1_table.end(); ++it){
-      cout << it->first.row << " with " << it->first.column << " : " << it->second << endl;
+    if(it->second->production_string == ""){
+      cout << it->first.row << " with " << it->first.column << " : " << it->second->id << endl;
+    }else{
+      cout << it->first.row << " with " << it->first.column << " : " << it->second->production_string << endl;
+    }
   }
 }
 
-string Lexer::searchProduction(vertex_asg* current, string first){
+vertex_asg* Lexer::searchProduction(vertex_asg* current, string first){
   cout << "   Searching for Production " << current->id << " with first " << first << endl;
   if(!current->vertex_to.empty()){
     if(current->id == "|"){
-      string temp = searchProduction(current->vertex_to[0], first);
-      if(temp == ""){
+      temp_vertex = searchProduction(current->vertex_to[0], first);
+      if(temp_vertex == NULL){
         return searchProduction(current->vertex_to[1], first);
       }else{
-        return temp;
+        return temp_vertex;
       }
     }else if(current->id == "^"){
       if(current->vertex_to[0]->id == first || find(begin(current->vertex_to[0]->first), end(current->vertex_to[0]->first), first) != end(current->vertex_to[0]->first)){
-        return current->production_string;
+        return current;
       }
     }
   }else if(!current->production_root){
-    return current->id;
+    return current;
   }
-  return "";
+  return NULL;
 }
 
 bool Lexer::Expression(string expression){
