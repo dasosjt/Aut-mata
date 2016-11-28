@@ -7,7 +7,7 @@
 using namespace std;
 
 Parser::Parser(){
-
+  
 }
 
 void Parser::setNextTokens(vector< string > nextTokens0){

@@ -68,7 +68,7 @@ class Lexer{
     vertex_asg* searchProduction(vertex_asg* current, string first);
     void writeToFileProductionsHPP(const char* file_name);
     void writeToFileProductions(const char* file_name);
-    string productionsToText(vertex_asg* current, int ident);
+    string productionsToText(vertex_asg* current, int ident, string la);
 
   private:
     ifstream file;
