@@ -327,6 +327,7 @@ void Lexer::createLLTable(){
 }
 
 string Lexer::searchProduction(vertex_asg* current, string first){
+  cout << "   Searching for Production " << current->id << " with first " << first << endl;
   if(!current->vertex_to.empty()){
     if(current->id == "|"){
       string temp = searchProduction(current->vertex_to[0], first);
@@ -340,6 +341,8 @@ string Lexer::searchProduction(vertex_asg* current, string first){
         return current->production_string;
       }
     }
+  }else if(!current->production_root){
+    return current->id;
   }
   return "";
 }
